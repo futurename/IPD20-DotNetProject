@@ -1,0 +1,1 @@
+THis is a test doc edited with visual studio 2019 and then sync to github.
