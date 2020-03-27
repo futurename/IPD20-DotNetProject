@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using StockMonitor.Helpers;
 
 namespace StockMonitor
 {
@@ -23,6 +24,7 @@ namespace StockMonitor
         public MainWindow()
         {
             InitializeComponent();
+            tbResult.Text = RetriveJsonData.RetriveFmgDataDaily("AAPL").ToString();
         }
     }
 }
