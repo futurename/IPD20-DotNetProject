@@ -1,0 +1,14 @@
+2020/03/27 Weng Wei
+1. Done since last scrum:
+-None
+2. To do until next Scrum:
+
+3. Need assistance / figure things out
+
+
+2020/03/27 Donghyeok Seo
+1. Done since last srum
+-None
+2. To do until next Scrum:
+- Create test UI( Search Window, 
+3. Need assistance / figure things out
