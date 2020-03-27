@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("20200326TestDatabase")]
+[assembly: AssemblyTitle("20200326EFMySqlConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("20200326TestDatabase")]
+[assembly: AssemblyProduct("20200326EFMySqlConsole")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("010e9c5a-d225-4fe6-ae66-18bbdb52e551")]
+[assembly: Guid("9a670047-d4a4-4eaa-8e70-adafb2cfc157")]
 
 // Version information for an assembly consists of the following four values:
 //

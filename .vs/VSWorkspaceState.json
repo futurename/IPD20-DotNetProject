@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\TestAPIWpf\\Properties"
+    "\\AllTechTestFolder",
+    "\\AllTechTestFolder\\20200326EFMySqlConsole",
+    "\\AllTechTestFolder\\20200326EFMySqlConsole\\20200326EFMySqlConsole",
+    "\\AllTechTestFolder\\20200326TestDatabase"
   ],
-  "SelectedNode": "\\TestAPIWpf",
+  "SelectedNode": "\\AllTechTestFolder\\20200326TestFinnAPI",
   "PreviewInSolutionExplorer": false
 }

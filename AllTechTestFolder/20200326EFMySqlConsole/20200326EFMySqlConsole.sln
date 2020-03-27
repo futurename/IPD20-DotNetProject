@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20200326TestDatabase", "20200326TestDatabase\20200326TestDatabase.csproj", "{010E9C5A-D225-4FE6-AE66-18BBDB52E551}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "20200326EFMySqlConsole", "20200326EFMySqlConsole\20200326EFMySqlConsole.csproj", "{9A670047-D4A4-4EAA-8E70-ADAFB2CFC157}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{010E9C5A-D225-4FE6-AE66-18BBDB52E551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{010E9C5A-D225-4FE6-AE66-18BBDB52E551}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{010E9C5A-D225-4FE6-AE66-18BBDB52E551}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{010E9C5A-D225-4FE6-AE66-18BBDB52E551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A670047-D4A4-4EAA-8E70-ADAFB2CFC157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A670047-D4A4-4EAA-8E70-ADAFB2CFC157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A670047-D4A4-4EAA-8E70-ADAFB2CFC157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A670047-D4A4-4EAA-8E70-ADAFB2CFC157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5C8C5270-390D-4307-96A9-32698D1487CB}
+		SolutionGuid = {4C7BBE12-6522-439B-B2FC-465043084EDF}
 	EndGlobalSection
 EndGlobal
