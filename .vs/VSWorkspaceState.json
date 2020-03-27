@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\TestAPIWpf",
     "\\TestAPIWpf\\Properties"
   ],
-  "SelectedNode": "\\TestAPIWpf\\MainWindow.xaml.cs",
+  "SelectedNode": "\\TestAPIWpf",
   "PreviewInSolutionExplorer": false
 }
