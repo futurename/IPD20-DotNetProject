@@ -27,8 +27,15 @@ namespace StockMonitor
             Console.Out.WriteLine(profle.ToString());*/
 
 
-           FinnQuote quote = RetrieveJsonData.RetrieveFinnQuote("AAPL");
-           Console.Out.WriteLine(quote);
+          /* FinnQuote quote = RetrieveJsonData.RetrieveFinnQuote("AAPL");
+           Console.Out.WriteLine(quote);*/
+
+
+          List<FmgMajorIndex> indexList = RetrieveJsonData.RetrieveFmgMajorIndexes();
+          foreach (var index in indexList)
+          {
+              Console.Out.WriteLine(index.ToString());
+          }
 
             Console.ReadKey();
         }

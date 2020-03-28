@@ -17,7 +17,7 @@ namespace StockMonitor.Models.JSONModels
 
         public override string ToString()
         {
-            return $"CurPirce: {C}, High: {H}, Low: {L}, Timestamp: {T}";
+            return $"CurPrice: {C}, High: {H}, Low: {L}, Timestamp: {T}";
         }
     }
 }

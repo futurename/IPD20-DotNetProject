@@ -16,12 +16,28 @@ namespace StockMonitor.Helpers
         private const string FmgBaseUrl = "https://financialmodelingprep.com/api/v3";
         private const string FmgDataDailyUrl = "/historical-price-full/";
         private const string FmgCompanyProfileUrl = "/company/profile/";
+        private const string FmgMajorIndexesUrl = "/majors-indexes/";
 
         private const string FinnToken = "&token=bpuhd3nrh5rbbhoij1og";
         private const string FinnBaseUrl = "https://finnhub.io/api/v1";
         private const string FinnCompanyProfileUrl = "/stock/profile/?symbol=";
         private const string FinnQuoteUrl = "/quote?symbol=";
 
+
+        public static List<FmgMajorIndex> RetrieveFmgMajorIndexes()
+        {
+            string url = FmgBaseUrl + FmgMajorIndexesUrl;
+            string response = RetriveFromUrl(url).Result;
+            List<FmgMajorIndex> result = ParseStringToFmgMajorIndexList(response);
+            return result;
+        }
+
+        private static List<FmgMajorIndex> ParseStringToFmgMajorIndexList(string response)
+        {
+            List<FmgMajorIndex> majorIndexList = JObject.Parse(response).GetValue("majorIndexesList").ToObject<List<FmgMajorIndex>>();
+            
+            return majorIndexList;
+        }
 
         public static FinnQuote RetrieveFinnQuote(string symbol)
         {

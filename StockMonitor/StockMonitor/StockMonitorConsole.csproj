@@ -49,6 +49,7 @@
     <Compile Include="Helpers\RetrieveJsonData.cs" />
     <Compile Include="Models\JSONModels\FinnQuote.cs" />
     <Compile Include="Models\JSONModels\FmgCompanyProfile.cs" />
+    <Compile Include="Models\JSONModels\FmgMajorIndex.cs" />
     <Compile Include="Models\POCO\Candle.cs" />
     <Compile Include="Models\POCO\Company.cs" />
     <Compile Include="Models\JSONModels\FinnCompanyProfile.cs" />
