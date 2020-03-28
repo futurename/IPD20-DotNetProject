@@ -25,7 +25,7 @@ namespace StockMonitor.Models.JSONModels
         public override string ToString()
         {
             return
-                $"{Date},{Open},{High},{Low},{Close},{Volume},{UnadjustedVolume},{Change},{ChangePercent},{Vwap},{Label},{ChangeOverTime}";
+                $"FmgCandleDaily: {Date},{Open},{High},{Low},{Close},{Volume},{UnadjustedVolume},{Change},{ChangePercent},{Vwap},{Label},{ChangeOverTime}";
         }
     }
 }

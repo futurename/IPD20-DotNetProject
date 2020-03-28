@@ -27,7 +27,7 @@ namespace StockMonitor.Models.JSONModels
 
         public override string ToString()
         {
-            return $"{Price},{Industry},{Description}";
+            return $"FmgCompanyProfile: {Price},{Industry},{Description}";
         }
     }
 }

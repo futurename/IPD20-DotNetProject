@@ -31,7 +31,7 @@ namespace StockMonitor
            Console.Out.WriteLine(quote);*/
 
 
-          List<FmgMajorIndex> indexList = RetrieveJsonData.RetrieveFmgMajorIndexes();
+          List<FmgMajorIndex> indexList = RetrieveJsonDataHelper.RetrieveFmgMajorIndexes();
           foreach (var index in indexList)
           {
               Console.Out.WriteLine(index.ToString());

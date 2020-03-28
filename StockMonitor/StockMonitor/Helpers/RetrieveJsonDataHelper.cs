@@ -11,14 +11,14 @@ using StockMonitor.Models.JSONModels;
 
 namespace StockMonitor.Helpers
 {
-    public static class RetrieveJsonData
+    public static class RetrieveJsonDataHelper
     {
         private const string FmgBaseUrl = "https://financialmodelingprep.com/api/v3";
         private const string FmgDataDailyUrl = "/historical-price-full/";
         private const string FmgCompanyProfileUrl = "/company/profile/";
         private const string FmgMajorIndexesUrl = "/majors-indexes/";
 
-        private const string FinnToken = "&token=bpuhd3nrh5rbbhoij1og";
+        private const string FinnToken = "&token=bpvnfqnrh5rddd65blo0";
         private const string FinnBaseUrl = "https://finnhub.io/api/v1";
         private const string FinnCompanyProfileUrl = "/stock/profile/?symbol=";
         private const string FinnQuoteUrl = "/quote?symbol=";
@@ -71,7 +71,7 @@ namespace StockMonitor.Helpers
 
         public static FinnCompanyProfile RetrieveFinnCompanyProfile(string companySymbol)
         {
-            string url = FmgBaseUrl + FinnCompanyProfileUrl + companySymbol + FinnToken;
+            string url = FinnBaseUrl + FinnCompanyProfileUrl + companySymbol + FinnToken;
             string response = RetriveFromUrl(url).Result;
             FinnCompanyProfile result = ParseStringToFinnCompanyProfile(response);
             return result;

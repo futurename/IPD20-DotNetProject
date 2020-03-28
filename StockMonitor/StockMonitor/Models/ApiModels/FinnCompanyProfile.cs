@@ -23,7 +23,7 @@ namespace StockMonitor.Models.JSONModels
         public string GsubInd { get; set; }
         public DateTime IpoDate { get; set; }
         public string Isin { get; set; }
-        public int MarketCapitalization { get; set; }
+        public string MarketCapitalization { get; set; }
         public string Naics { get; set; }
         public string NaicsNationalIndustry { get; set; }
         public string NaicsSector { get; set; }
@@ -37,7 +37,7 @@ namespace StockMonitor.Models.JSONModels
 
         public override string ToString()
         {
-            return $"{Symbol},{Description}";
+            return $"FinnCompanyProfile: {Symbol},{Description}";
         }
     }
 }

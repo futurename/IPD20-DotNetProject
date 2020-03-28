@@ -15,7 +15,7 @@ namespace StockMonitor.Models.JSONModels
 
         public override string ToString()
         {
-            return $"{IndexName}:{Price},{Changes},{Ticker}";
+            return $"FmgMajorIndex: {IndexName}:{Price},{Changes},{Ticker}";
         }
     }
 }

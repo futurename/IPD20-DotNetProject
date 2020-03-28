@@ -36,26 +36,30 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\RetrieveJsonData.cs" />
-    <Compile Include="Models\JSONModels\FinnQuote.cs" />
-    <Compile Include="Models\JSONModels\FmgCompanyProfile.cs" />
-    <Compile Include="Models\JSONModels\FmgMajorIndex.cs" />
+    <Compile Include="Helpers\ExtractApiDataToPoCoHelper.cs" />
+    <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
+    <Compile Include="Models\ApiModels\FinnQuote.cs" />
+    <Compile Include="Models\ApiModels\FmgCompanyProfile.cs" />
+    <Compile Include="Models\ApiModels\FmgMajorIndex.cs" />
     <Compile Include="Models\POCO\Candle.cs" />
-    <Compile Include="Models\POCO\Company.cs" />
-    <Compile Include="Models\JSONModels\FinnCompanyProfile.cs" />
-    <Compile Include="Models\JSONModels\FmgCandleDaily.cs" />
+    <Compile Include="Models\ApiModels\FinnCompanyProfile.cs" />
+    <Compile Include="Models\ApiModels\FmgCandleDaily.cs" />
+    <Compile Include="Models\POCO\CompanyDataRow.cs" />
     <Compile Include="Models\POCO\News.cs" />
-    <Compile Include="Models\POCO\Quote.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -63,6 +67,5 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

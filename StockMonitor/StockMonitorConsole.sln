@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockMonitorConsole", "StockMonitor\StockMonitorConsole.csproj", "{F197A330-8A06-4D22-AF98-6A42D9E29C2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstWindowTest", "FirstWindowTest\FirstWindowTest.csproj", "{0D4EDC0B-4E1E-48A4-95FA-F6630C157B06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F197A330-8A06-4D22-AF98-6A42D9E29C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F197A330-8A06-4D22-AF98-6A42D9E29C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F197A330-8A06-4D22-AF98-6A42D9E29C2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D4EDC0B-4E1E-48A4-95FA-F6630C157B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D4EDC0B-4E1E-48A4-95FA-F6630C157B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D4EDC0B-4E1E-48A4-95FA-F6630C157B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D4EDC0B-4E1E-48A4-95FA-F6630C157B06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
