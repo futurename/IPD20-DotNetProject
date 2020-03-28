@@ -18,9 +18,18 @@ namespace StockMonitor
                 Console.Out.WriteLine(candleDaily.ToString());
             }
             Console.ReadKey();*/
+/*
+            FinnCompanyProfile profle = RetrieveJsonData.RetrieveFinnCompanyProfile("AAPL");
+            Console.Out.WriteLine(profle.ToString());*/
 
-            FinnCompanyProfile profle = RetrieveJsonData.RetriveFinnCompanyProfile("AAPL");
-            Console.Out.WriteLine(profle.ToString());
+            
+           /* FmgCompanyProfile profle = RetrieveJsonData.RetrieveFmgCompanyProfile("AAPL");
+            Console.Out.WriteLine(profle.ToString());*/
+
+
+           FinnQuote quote = RetrieveJsonData.RetrieveFinnQuote("AAPL");
+           Console.Out.WriteLine(quote);
+
             Console.ReadKey();
         }
     }

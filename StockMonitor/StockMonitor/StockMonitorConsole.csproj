@@ -47,13 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\RetrieveJsonData.cs" />
-    <Compile Include="Models\Candle.cs" />
-    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\JSONModels\FinnQuote.cs" />
+    <Compile Include="Models\JSONModels\FmgCompanyProfile.cs" />
+    <Compile Include="Models\POCO\Candle.cs" />
+    <Compile Include="Models\POCO\Company.cs" />
     <Compile Include="Models\JSONModels\FinnCompanyProfile.cs" />
     <Compile Include="Models\JSONModels\FmgCandleDaily.cs" />
-    <Compile Include="Models\JSONModels\FmgDataDaily.cs" />
-    <Compile Include="Models\News.cs" />
-    <Compile Include="Models\Quote.cs" />
+    <Compile Include="Models\POCO\News.cs" />
+    <Compile Include="Models\POCO\Quote.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,5 +62,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

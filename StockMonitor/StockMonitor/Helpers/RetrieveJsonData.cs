@@ -15,14 +15,47 @@ namespace StockMonitor.Helpers
     {
         private const string FmgBaseUrl = "https://financialmodelingprep.com/api/v3";
         private const string FmgDataDailyUrl = "/historical-price-full/";
+        private const string FmgCompanyProfileUrl = "/company/profile/";
 
-        private const string FinnToken = "token=bpuhd3nrh5rbbhoij1og";
+        private const string FinnToken = "&token=bpuhd3nrh5rbbhoij1og";
         private const string FinnBaseUrl = "https://finnhub.io/api/v1";
         private const string FinnCompanyProfileUrl = "/stock/profile/?symbol=";
+        private const string FinnQuoteUrl = "/quote?symbol=";
 
-        public static FinnCompanyProfile RetriveFinnCompanyProfile(string companySymbol)
+
+        public static FinnQuote RetrieveFinnQuote(string symbol)
         {
-            string url = FinnBaseUrl + FinnCompanyProfileUrl + companySymbol + "&" + FinnToken;
+            string url = FinnBaseUrl + FinnQuoteUrl + symbol + FinnToken;
+
+            string response = RetriveFromUrl(url).Result;
+            FinnQuote result = ParseStringToFinnQuote(response);
+            return result;
+        }
+
+        private static FinnQuote ParseStringToFinnQuote(string response)
+        {
+            return JsonConvert.DeserializeObject<FinnQuote>(response);
+        }
+
+
+        public static FmgCompanyProfile RetrieveFmgCompanyProfile(string companySymbol)
+        {
+            string url = FmgBaseUrl + FmgCompanyProfileUrl + companySymbol;
+            string response = RetriveFromUrl(url).Result;
+            FmgCompanyProfile result = ParseStringToFmgCompanyProfile(response);
+            return result;
+        }
+
+
+        private static FmgCompanyProfile ParseStringToFmgCompanyProfile(string response)
+        {
+            var profile = JObject.Parse(response).GetValue("profile").ToObject<FmgCompanyProfile>();
+            return profile;
+        }
+
+        public static FinnCompanyProfile RetrieveFinnCompanyProfile(string companySymbol)
+        {
+            string url = FmgBaseUrl + FinnCompanyProfileUrl + companySymbol + FinnToken;
             string response = RetriveFromUrl(url).Result;
             FinnCompanyProfile result = ParseStringToFinnCompanyProfile(response);
             return result;
@@ -38,7 +71,7 @@ namespace StockMonitor.Helpers
         {
             string url = FmgBaseUrl + FmgDataDailyUrl + companySymbol;
             List<FmgCandleDaily> result = RequestFmgDataDaily(url);
-           // Console.Out.WriteLine(result.ToString());
+           
             return result;
         }
 
@@ -62,12 +95,9 @@ namespace StockMonitor.Helpers
 
         private static List<FmgCandleDaily> ParseStringToFmgDataDaily(string response)
         {
-            //string filepath =
-           //     "C:\\Users\\WW\\Desktop\\SourceTree\\IPD20_DotNet_WW\\IPD20-DotNetProject\\StockMonitor\\StockMonitor\\StockMonitor\\FmgDataDaily.txt";
-            //File.WriteAllText(filepath, response);
             var jsonSet = JsonConvert.DeserializeObject<JObject>(response);
             var dataDailyList = jsonSet.Value<JArray>("historical").ToObject<List<FmgCandleDaily>>();
-            //Console.Out.WriteLine(h.Select(p=>p.ToString()));
+           
             return dataDailyList;
         }
 
