@@ -31,11 +31,14 @@ namespace StockMonitor
            Console.Out.WriteLine(quote);*/
 
 
-          List<FmgMajorIndex> indexList = RetrieveJsonDataHelper.RetrieveFmgMajorIndexes();
+         /* List<FmgMajorIndex> indexList = RetrieveJsonDataHelper.RetrieveFmgMajorIndexes();
           foreach (var index in indexList)
           {
               Console.Out.WriteLine(index.ToString());
-          }
+          }*/
+
+         string key = RetrieveJsonDataHelper.RetrieveFinnApiKey();
+         Console.Out.WriteLine(key);
 
             Console.ReadKey();
         }

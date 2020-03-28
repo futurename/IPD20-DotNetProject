@@ -18,7 +18,7 @@ namespace StockMonitor.Helpers
         private const string FmgCompanyProfileUrl = "/company/profile/";
         private const string FmgMajorIndexesUrl = "/majors-indexes/";
 
-        private const string FinnToken = "&token=bpvnfqnrh5rddd65blo0";
+        private const string FinnToken = "&token=bpvodjvrh5rddd65bseg";
         private const string FinnBaseUrl = "https://finnhub.io/api/v1";
         private const string FinnCompanyProfileUrl = "/stock/profile/?symbol=";
         private const string FinnQuoteUrl = "/quote?symbol=";
@@ -30,6 +30,13 @@ namespace StockMonitor.Helpers
             string response = RetriveFromUrl(url).Result;
             List<FmgMajorIndex> result = ParseStringToFmgMajorIndexList(response);
             return result;
+        }
+
+        public static string RetrieveFinnApiKey()
+        {
+            string url = "https://finnhub.io/static/js/webpack/dist/api/edit?type=apiKey";
+            string response = RetriveFromUrl(url).Result;
+            return response;
         }
 
         private static List<FmgMajorIndex> ParseStringToFmgMajorIndexList(string response)
