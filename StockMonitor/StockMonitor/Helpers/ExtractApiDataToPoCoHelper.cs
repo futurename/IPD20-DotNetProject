@@ -41,7 +41,7 @@ namespace StockMonitor.Helpers
             FmgCompanyProfile fmgCompanyProfile = RetrieveJsonDataHelper.RetrieveFmgCompanyProfile(symbol);
             FmgInvestmentValuationRatios fmgInvestmentValuationRatios =
                 RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios(symbol);
-            Company company = new Company
+            Company company = new Company()
             {
                 CompanyName = fmgCompanyProfile.CompanyName,
                 Symbol = symbol,

@@ -15,5 +15,6 @@ namespace StockMonitor.Models.POCO
         public virtual DbSet<QuoteDaily> QuoteDailySet { get; set; }
         public virtual DbSet<TradingRecord> TradingRecordSet { get; set; }
 
+
     }
 }

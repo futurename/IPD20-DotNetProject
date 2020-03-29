@@ -15,10 +15,18 @@ namespace StockMonitor.Helpers
       public static void InsertCompany(string symbol)
       {
           Company company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
-          
-          dbContext.CompanySet.Add(company);
-          dbContext.SaveChanges();
-          Console.Out.WriteLine(company.ToString());
+
+          try
+          {
+              dbContext.CompanySet.Add(company);
+              dbContext.SaveChanges();
+              Console.Out.WriteLine(company.ToString());
+            }
+          catch (Exception e)
+          {
+              Console.WriteLine(e.Message);
+          }
+         
         }
     }
     
