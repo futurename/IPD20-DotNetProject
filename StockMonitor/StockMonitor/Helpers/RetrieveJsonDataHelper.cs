@@ -5,8 +5,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
 
 namespace StockMonitor.Helpers
@@ -17,11 +19,16 @@ namespace StockMonitor.Helpers
         private const string FmgDataDailyUrl = "/historical-price-full/";
         private const string FmgCompanyProfileUrl = "/company/profile/";
         private const string FmgMajorIndexesUrl = "/majors-indexes/";
+        private const string FmgQuoteOnlyPriceUrl = "/stock/real-time-price/";
+        private const string Fmg1MinQuoteUrl = "/historical-chart/1min/";
+
+
 
         private const string FinnToken = "&token=bpvodjvrh5rddd65bseg";
         private const string FinnBaseUrl = "https://finnhub.io/api/v1";
         private const string FinnCompanyProfileUrl = "/stock/profile/?symbol=";
         private const string FinnQuoteUrl = "/quote?symbol=";
+        
 
 
         public static List<FmgMajorIndex> RetrieveFmgMajorIndexes()
@@ -32,11 +39,32 @@ namespace StockMonitor.Helpers
             return result;
         }
 
-        public static string RetrieveFinnApiKey()
+        public static FmgQuoteOnlyPrice RetrieveFmgQuoteOnlyPrice(string symbol)
         {
-            string url = "https://finnhub.io/static/js/webpack/dist/api/edit?type=apiKey";
+            string url = FmgBaseUrl + FmgQuoteOnlyPriceUrl + symbol;
             string response = RetriveFromUrl(url).Result;
-            return response;
+            FmgQuoteOnlyPrice result = ParseStringToFmgQuoteOnlyPrice(response);
+            return result;
+        }
+
+        private static FmgQuoteOnlyPrice ParseStringToFmgQuoteOnlyPrice(string response)
+        {
+            return JsonConvert.DeserializeObject<FmgQuoteOnlyPrice>(response);
+        }
+
+        public static List<FmgQuoteOnlyPrice> RetrievAllFmgQuoteOnlyPrice()
+        {
+            string url = FmgBaseUrl + FmgQuoteOnlyPriceUrl;
+            string response = RetriveFromUrl(url).Result;
+            List<FmgQuoteOnlyPrice> result = ParseStringToAllFmgQuoteOnlyPrice(response);
+            return result;
+        }
+
+        private static List<FmgQuoteOnlyPrice> ParseStringToAllFmgQuoteOnlyPrice(string response)
+        {
+            List<FmgQuoteOnlyPrice> fmgQuoteOnlyPriceList = JsonConvert.DeserializeObject<JObject>(response)
+                .Value<JArray>("stockList").ToObject<List<FmgQuoteOnlyPrice>>();
+            return fmgQuoteOnlyPriceList;
         }
 
         private static List<FmgMajorIndex> ParseStringToFmgMajorIndexList(string response)
@@ -124,6 +152,17 @@ namespace StockMonitor.Helpers
             return dataDailyList;
         }
 
-        
+        public static List<Fmg1MinQuote> RetrieveAllFmg1MinQuote(string symbol)
+        {
+            string url = FmgBaseUrl + Fmg1MinQuoteUrl + symbol;
+            string response = RetriveFromUrl(url).Result;
+            List<Fmg1MinQuote> fmg1MinQuoteList = ParseStringToFmg1MinQuoteList(response);
+            return fmg1MinQuoteList;
+        }
+
+        private static List<Fmg1MinQuote> ParseStringToFmg1MinQuoteList(string response)
+        {
+            return JsonConvert.DeserializeObject<List<Fmg1MinQuote>>(response);
+        }
     }
 }

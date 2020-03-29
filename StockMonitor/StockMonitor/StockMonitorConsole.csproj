@@ -53,6 +53,8 @@
     <Compile Include="Helpers\ExtractApiDataToPoCoHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
     <Compile Include="Models\ApiModels\FinnQuote.cs" />
+    <Compile Include="Models\ApiModels\Fmg1MinQuote.cs" />
+    <Compile Include="Models\ApiModels\FmgQuoteOnlyPrice.cs" />
     <Compile Include="Models\ApiModels\FmgCompanyProfile.cs" />
     <Compile Include="Models\ApiModels\FmgMajorIndex.cs" />
     <Compile Include="Models\POCO\Candle.cs" />
