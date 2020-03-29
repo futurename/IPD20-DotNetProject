@@ -10,13 +10,15 @@
         <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Height="349" Margin="30,27,0,0" VerticalAlignment="Top" Width="709">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Symbol" Width="200" DisplayMemberBinding="{Binding Symbol}"/>
-                    <GridViewColumn Header="Price" Width="70" DisplayMemberBinding="{Binding Price}"/>
-                    <GridViewColumn Header="Chg%" Width="70" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N2}"/>
-                    <GridViewColumn Header="Chg" Width="70" DisplayMemberBinding="{Binding Change, StringFormat=N2}"/>
-                    <GridViewColumn Header="MktCap" Width="100" DisplayMemberBinding="{Binding MarketCapital}"/>
-                    <GridViewColumn Header="Employees" Width="70" DisplayMemberBinding="{Binding EmployeesTotal}"/>
-                    <GridViewColumn Header="Sector" Width="110" DisplayMemberBinding="{Binding Sector}"/>
+                    <GridViewColumn Header="Symbol" Width="100" DisplayMemberBinding="{Binding Symbol}"/>
+                    <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Price}"/>
+                    <GridViewColumn Header="Chg%" Width="60" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N2}"/>
+                    <GridViewColumn Header="Chg" Width="60" DisplayMemberBinding="{Binding Change, StringFormat=N2}"/>
+                    <GridViewColumn Header="MktCap" Width="110" DisplayMemberBinding="{Binding MarketCapital}"/>
+                    <GridViewColumn Header="P/E" Width="60" DisplayMemberBinding="{Binding PriceToEarningRatio,StringFormat=N2}"/>
+                    <GridViewColumn Header="P/S" Width="60" DisplayMemberBinding="{Binding PriceToSalesRatio,StringFormat=N2}"/>
+                    <GridViewColumn Header="Industry" Width="70" DisplayMemberBinding="{Binding Industry}"/>
+                    <GridViewColumn Header="Sector" Width="130" DisplayMemberBinding="{Binding Sector}"/>
 
                 </GridView>
             </ListView.View>

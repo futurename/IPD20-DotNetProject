@@ -21,6 +21,7 @@ namespace StockMonitor.Helpers
         private const string FmgMajorIndexesUrl = "/majors-indexes/";
         private const string FmgQuoteOnlyPriceUrl = "/stock/real-time-price/";
         private const string Fmg1MinQuoteUrl = "/historical-chart/1min/";
+        private const string FmgInvestmentValuationRatiosUrl = "/financial-ratios/";
 
 
 
@@ -163,6 +164,23 @@ namespace StockMonitor.Helpers
         private static List<Fmg1MinQuote> ParseStringToFmg1MinQuoteList(string response)
         {
             return JsonConvert.DeserializeObject<List<Fmg1MinQuote>>(response);
+        }
+
+        public static FmgInvestmentValuationRatios RetrieveFmgInvestmentValuationRatios(string symbol)
+        {
+            string url = FmgBaseUrl + FmgInvestmentValuationRatiosUrl + symbol;
+            string response = RetriveFromUrl(url).Result;
+            FmgInvestmentValuationRatios fmgInvRatioList = ParseStringToFmgInvestmentValuationRatios(response);
+            return fmgInvRatioList;
+        }
+
+        private static FmgInvestmentValuationRatios ParseStringToFmgInvestmentValuationRatios(string response)
+        {
+
+            var jsonSet = JsonConvert.DeserializeObject<JObject>(response).Value<JArray>("ratios");
+            var tmp = jsonSet[0].Value<JObject>("investmentValuationRatios");
+            var result = tmp.ToObject<FmgInvestmentValuationRatios>();
+            return result;
         }
     }
 }

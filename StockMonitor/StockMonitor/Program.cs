@@ -48,9 +48,16 @@ namespace StockMonitor
             /*  FmgQuoteOnlyPrice quote = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice("AAPL");
               Console.Out.WriteLine(quote);*/
 
+         /*   DateTime time1 = DateTime.Now;
             List<Fmg1MinQuote> fmg1MinQuotes = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote("AAPL");
-            fmg1MinQuotes.ForEach(q => Console.WriteLine(q.ToString()));
+           // fmg1MinQuotes.ForEach(q => Console.WriteLine(q.ToString()));
+            DateTime time2 = DateTime.Now;
+            Console.Out.WriteLine((time2-time1) + " ms");*/
 
+
+         FmgInvestmentValuationRatios investment =
+             RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios("AAPL");
+         Console.Out.WriteLine(investment.ToString());
 
 
             Console.ReadKey();
