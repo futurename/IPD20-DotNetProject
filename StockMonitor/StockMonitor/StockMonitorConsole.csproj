@@ -50,6 +50,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\ExtractApiDataToPoCoHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
     <Compile Include="Models\ApiModels\FinnQuote.cs" />

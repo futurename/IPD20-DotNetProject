@@ -11,7 +11,7 @@ namespace StockMonitor.Models.POCO
         public string Symbol { get; set; }
         public double Price { get; set; }
         public double ChangePercentage { get; set; }
-        public double Change { get; set; }
+        public double PriceChange { get; set; }
         public string MarketCapital { get; set; }
         public double PriceToEarningRatio { get; set; }
         public double PriceToSalesRatio { get; set; }
@@ -20,7 +20,7 @@ namespace StockMonitor.Models.POCO
 
         public override string ToString()
         {
-            return $"{Symbol}:{Price}, {ChangePercentage}%,{Change},{Sector}";
+            return $"{Symbol}:{Price}, {ChangePercentage}%,{PriceChange},{Sector}";
         }
     }
 }

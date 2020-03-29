@@ -13,7 +13,7 @@
                     <GridViewColumn Header="Symbol" Width="100" DisplayMemberBinding="{Binding Symbol}"/>
                     <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Price}"/>
                     <GridViewColumn Header="Chg%" Width="60" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N2}"/>
-                    <GridViewColumn Header="Chg" Width="60" DisplayMemberBinding="{Binding Change, StringFormat=N2}"/>
+                    <GridViewColumn Header="Chg" Width="60" DisplayMemberBinding="{Binding PriceChange, StringFormat=N2}"/>
                     <GridViewColumn Header="MktCap" Width="110" DisplayMemberBinding="{Binding MarketCapital}"/>
                     <GridViewColumn Header="P/E" Width="60" DisplayMemberBinding="{Binding PriceToEarningRatio,StringFormat=N2}"/>
                     <GridViewColumn Header="P/S" Width="60" DisplayMemberBinding="{Binding PriceToSalesRatio,StringFormat=N2}"/>

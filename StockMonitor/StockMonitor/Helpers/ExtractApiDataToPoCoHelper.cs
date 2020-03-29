@@ -27,7 +27,7 @@ namespace StockMonitor.Helpers
             double changePercentage = (curPrice - openPrice) / openPrice * 100;
             double change = curPrice - openPrice;
             companyDataRow.ChangePercentage = changePercentage;
-            companyDataRow.Change = change;
+            companyDataRow.PriceChange = change;
             companyDataRow.MarketCapital = fmgCompanyProfile.MktCap;
             companyDataRow.Sector = fmgCompanyProfile.Sector;
             companyDataRow.PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio;
