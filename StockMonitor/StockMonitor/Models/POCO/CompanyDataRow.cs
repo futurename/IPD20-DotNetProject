@@ -8,6 +8,7 @@ namespace StockMonitor.Models.POCO
 {
     public class CompanyDataRow
     {
+        public int Id { get; set; }
         public string Symbol { get; set; }
         public double Price { get; set; }
         public double ChangePercentage { get; set; }
@@ -17,6 +18,7 @@ namespace StockMonitor.Models.POCO
         public double PriceToSalesRatio { get; set; }
         public string Industry { get; set; }
         public string Sector { get; set; }
+
 
         public override string ToString()
         {

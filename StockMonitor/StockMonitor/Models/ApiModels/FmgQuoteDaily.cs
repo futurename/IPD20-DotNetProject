@@ -14,7 +14,7 @@ namespace StockMonitor.Models.JSONModels
         public double Low { get; set; }
         public double Close { get; set; }
         public double AdjClose { get; set; }
-        public double Volume { get; set; }
+        public string Volume { get; set; }  //Todo, parse string to long
         public double UnadjustedVolume { get; set; }
         public double Change { get; set; }
         public double ChangePercent { get; set; }

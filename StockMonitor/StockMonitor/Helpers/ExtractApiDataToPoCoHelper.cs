@@ -33,9 +33,29 @@ namespace StockMonitor.Helpers
             companyDataRow.PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio;
             companyDataRow.PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio;
             companyDataRow.Industry = fmgCompanyProfile.Industry;
-
-
             return companyDataRow;
+        }
+
+        public static Company GetCompanyBySymbol(string symbol)
+        {
+            FmgCompanyProfile fmgCompanyProfile = RetrieveJsonDataHelper.RetrieveFmgCompanyProfile(symbol);
+            FmgInvestmentValuationRatios fmgInvestmentValuationRatios =
+                RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios(symbol);
+            Company company = new Company
+            {
+                CompanyName = fmgCompanyProfile.CompanyName,
+                Symbol = symbol,
+                Exchange = fmgCompanyProfile.Exchange,
+                MarketCapital = fmgCompanyProfile.MktCap,
+                PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio,
+                PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio,
+                Industry = fmgCompanyProfile.Industry,
+                Sector = fmgCompanyProfile.Sector,
+                Description = fmgCompanyProfile.Description,
+                Website = fmgCompanyProfile.Website,
+                CEO = fmgCompanyProfile.Ceo
+            };
+            return company;
         }
 
     }

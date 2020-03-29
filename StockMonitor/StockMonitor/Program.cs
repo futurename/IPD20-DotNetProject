@@ -55,10 +55,11 @@ namespace StockMonitor
             Console.Out.WriteLine((time2-time1) + " ms");*/
 
 
-         FmgInvestmentValuationRatios investment =
+         /*FmgInvestmentValuationRatios investment =
              RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios("AAPL");
-         Console.Out.WriteLine(investment.ToString());
+         Console.Out.WriteLine(investment.ToString());*/
 
+         DatabaseHelper.InsertCompany("AAPL");
 
             Console.ReadKey();
         }
