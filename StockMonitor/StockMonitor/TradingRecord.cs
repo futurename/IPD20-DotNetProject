@@ -21,10 +21,7 @@ namespace StockMonitor
         public double Price { get; set; }
         public long Volume { get; set; }
         public string TradeType { get; set; }
+    
         public virtual User User { get; set; }
-        public override string ToString()
-        {
-            return $"{UserId}: {DateTime}, {Symbol} ,{Price}, {Volume}, {TradeType}";
-        }
     }
 }

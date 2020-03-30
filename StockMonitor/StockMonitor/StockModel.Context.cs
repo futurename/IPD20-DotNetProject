@@ -13,9 +13,9 @@ namespace StockMonitor
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class StockMonitorEntities : DbContext
+    public partial class DbStockContext : DbContext
     {
-        public StockMonitorEntities()
+        public DbStockContext()
             : base("name=StockMonitorEntities")
         {
         }

@@ -9,25 +9,25 @@ namespace StockMonitor.Helpers
 {
     public static class DatabaseHelper
     {
-      private static DbContext dbContext = new DbContext();
+        private static DbStockContext dbContext = new DbStockContext();
 
 
-      public static void InsertCompany(string symbol)
-      {
-          Company company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
+        public static void InsertCompany(string symbol)
+        {
+            Company company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
 
-          try
-          {
-              dbContext.CompanySet.Add(company);
-              dbContext.SaveChanges();
-              Console.Out.WriteLine(company.ToString());
+            try
+            {
+                dbContext.Companies.Add(company);
+                dbContext.SaveChanges();
+                Console.Out.WriteLine(company.ToString());
             }
-          catch (Exception e)
-          {
-              Console.WriteLine(e.Message);
-          }
-         
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
     }
-    
+
 }

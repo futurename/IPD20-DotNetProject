@@ -22,9 +22,5 @@ namespace StockMonitor
         public double High { get; set; }
         public double Close { get; set; }
         public long Volume { get; set; }
-        public override string ToString()
-        {
-            return $"{Id}:{Symbol}, {Date}, {Open}, {Volume}";
-        }
     }
 }

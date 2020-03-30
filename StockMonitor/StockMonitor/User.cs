@@ -25,7 +25,7 @@ namespace StockMonitor
         public string AccountName { get; set; }
         public string UserFirstName { get; set; }
         public string UserLastName { get; set; }
-        public string Passport { get; set; }
+        public string Password { get; set; }
         public System.DateTime CreateDate { get; set; }
         public double Balance { get; set; }
         public byte[] Photo { get; set; }
@@ -34,9 +34,5 @@ namespace StockMonitor
         public virtual ICollection<HoldingShare> HoldingShares { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TradingRecord> TradingRecords { get; set; }
-        public override string ToString()
-        {
-            return $"{AccountName}: {UserFirstName}, {UserLastName}, {Balance}, {CreateDate}";
-        }
     }
 }

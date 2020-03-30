@@ -19,10 +19,7 @@ namespace StockMonitor
         public string Symbol { get; set; }
         public long Volume { get; set; }
         public double Price { get; set; }
+    
         public virtual User User { get; set; }
-        public override string ToString()
-        {
-            return $"{UserId}: {Symbol} ,{Volume}, {Price}";
-        }
     }
 }

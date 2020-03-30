@@ -59,7 +59,7 @@ namespace StockMonitor
              RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios("AAPL");
          Console.Out.WriteLine(investment.ToString());*/
 
-         DatabaseHelper.InsertCompany("AAPL");
+         DatabaseHelper.InsertCompany("AMZN");
 
             Console.ReadKey();
         }

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\WW\Desktop\SourceTree\IPD20_DotNet_WW\IPD20-DotNetProject\StockMonitor\StockMonitor\DbModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\WW\Desktop\SourceTree\IPD20_DotNet_WW\IPD20-DotNetProject\StockMonitor\StockMonitor\StockModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
