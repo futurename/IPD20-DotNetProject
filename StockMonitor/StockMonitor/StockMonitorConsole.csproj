@@ -98,13 +98,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Company.cs">
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\DatabaseDataInitHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\ExtractApiDataToPoCoHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
     <Compile Include="HoldingShare.cs">
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApiModels\Fmg1MinQuote.cs" />
     <Compile Include="Models\ApiModels\FmgInvestmentValuationRatios.cs" />
@@ -112,61 +113,65 @@
     <Compile Include="Models\ApiModels\FmgCompanyProfile.cs" />
     <Compile Include="Models\ApiModels\FmgMajorIndex.cs" />
     <Compile Include="Models\ApiModels\FmgQuoteDaily.cs" />
+    <Compile Include="Models\ApiModels\FmgStockListEntity.cs" />
     <Compile Include="Models\POCO\CompanyDataRow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quote1Min.cs">
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
     <Compile Include="QuoteDaily.cs">
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="StockModel.Context.cs">
+    <Compile Include="DbStockMonitorEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StockModel.Context.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="StockModel.cs">
+    <Compile Include="StockMonitorModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="StockModel.Designer.cs">
+    <Compile Include="StockMonitorModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StockModel.edmx</DependentUpon>
+      <DependentUpon>StockMonitorModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="TestQuoteDaily.cs">
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
     <Compile Include="TradingRecord.cs">
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
-      <DependentUpon>StockModel.tt</DependentUpon>
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <EntityDeploy Include="StockModel.edmx">
+    <EntityDeploy Include="StockMonitorModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StockModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>StockMonitorModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="StockModel.edmx.diagram">
-      <DependentUpon>StockModel.edmx</DependentUpon>
+    <None Include="StockMonitorModel.edmx.diagram">
+      <DependentUpon>StockMonitorModel.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="StockModel.Context.tt">
+    <Content Include="StockMonitorModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StockModel.edmx</DependentUpon>
-      <LastGenOutput>StockModel.Context.cs</LastGenOutput>
+      <DependentUpon>StockMonitorModel.edmx</DependentUpon>
+      <LastGenOutput>StockMonitorModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="StockModel.tt">
+    <Content Include="StockMonitorModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StockModel.edmx</DependentUpon>
-      <LastGenOutput>StockModel.cs</LastGenOutput>
+      <DependentUpon>StockMonitorModel.edmx</DependentUpon>
+      <LastGenOutput>StockMonitorModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

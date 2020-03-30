@@ -1,3 +1,5 @@
+
+**************************************************
 2020/03/28 Wang Wei
 1. Done since last scrum:
 - Tested retrieving data from Finn and Fmg APIs.
@@ -11,6 +13,7 @@
 3. Need assistance / figure things out
 - In UI testing, it takes over 5 seconds to retrieving 5 stocks data, need find out how to improve speed.
 
+
 2020/03/28 Donghyeok Seo
 1. Done since last scrum
 - Find Framework for candlestick chart : LiveCharts
@@ -22,3 +25,31 @@
 
 3. Need assistance / figure things out
 - Learn how to draw candlestick chart using LiveCharts framework
+
+****************************************************
+2020/03/29 Wang Wei
+1. Done since last scrum:
+- Finish creating tables on remote server
+- Add EF to the project and import model from database with EF designer mode.
+- Add retrieving 1 miniute data, Major indexes, company financial evaluation and real-time quote from API.
+-
+
+2. To do until next Scrum:
+- Need test real-time quote for refreshing display on UI.
+- Need download historical stock data from API, reorganize it and import to remote server database.
+
+3. Need assistance / figure things out
+- Need test and solve refresh rate of real-time quotes.
+
+
+2020/03/29 Donghyeok Seo
+1. Done since last scrum
+
+
+2. To do until next Scrum:
+
+
+3. Need assistance / figure things out
+
+
+*******************************************************

@@ -22,12 +22,17 @@ namespace StockMonitor.Helpers
         private const string FmgQuoteOnlyPriceUrl = "/stock/real-time-price/";
         private const string Fmg1MinQuoteUrl = "/historical-chart/1min/";
         private const string FmgInvestmentValuationRatiosUrl = "/financial-ratios/";
+        private const string FmgStockListUrl = "/company/stock/list/";
 
 
         public static List<FmgMajorIndex> RetrieveFmgMajorIndexes()
         {
             string url = FmgBaseUrl + FmgMajorIndexesUrl;
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("FmgMajorIndexes null. " + url);
+            }
             List<FmgMajorIndex> result = ParseStringToFmgMajorIndexList(response);
             return result;
         }
@@ -36,42 +41,76 @@ namespace StockMonitor.Helpers
         {
             string url = FmgBaseUrl + FmgQuoteOnlyPriceUrl + symbol;
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("FmgQuoteOnlyPrice null. " + symbol);
+            }
             FmgQuoteOnlyPrice result = ParseStringToFmgQuoteOnlyPrice(response);
             return result;
         }
 
         private static FmgQuoteOnlyPrice ParseStringToFmgQuoteOnlyPrice(string response)
         {
-            return JsonConvert.DeserializeObject<FmgQuoteOnlyPrice>(response);
+            try
+            {
+                return JsonConvert.DeserializeObject<FmgQuoteOnlyPrice>(response);
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse quote exception. " + ex.Message);
+            }
         }
 
         public static List<FmgQuoteOnlyPrice> RetrieveAllFmgQuoteOnlyPrice()
         {
             string url = FmgBaseUrl + FmgQuoteOnlyPriceUrl;
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("FmgQuoteDailyPrice null. " + url);
+            }
             List<FmgQuoteOnlyPrice> result = ParseStringToAllFmgQuoteOnlyPrice(response);
             return result;
         }
 
         private static List<FmgQuoteOnlyPrice> ParseStringToAllFmgQuoteOnlyPrice(string response)
         {
-            List<FmgQuoteOnlyPrice> fmgQuoteOnlyPriceList = JsonConvert.DeserializeObject<JObject>(response)
-                .Value<JArray>("stockList").ToObject<List<FmgQuoteOnlyPrice>>();
-            return fmgQuoteOnlyPriceList;
+            try
+            {
+                List<FmgQuoteOnlyPrice> fmgQuoteOnlyPriceList = JsonConvert.DeserializeObject<JObject>(response)
+                    .Value<JArray>("stockList").ToObject<List<FmgQuoteOnlyPrice>>();
+                return fmgQuoteOnlyPriceList;
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse quote LIST exception. " + ex.Message);
+            }
         }
 
         private static List<FmgMajorIndex> ParseStringToFmgMajorIndexList(string response)
         {
-            List<FmgMajorIndex> majorIndexList = JObject.Parse(response).GetValue("majorIndexesList").ToObject<List<FmgMajorIndex>>();
+            try
+            {
+                List<FmgMajorIndex> majorIndexList = JObject.Parse(response).GetValue("majorIndexesList")
+                    .ToObject<List<FmgMajorIndex>>();
 
-            return majorIndexList;
+                return majorIndexList;
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse Major index list exception. " + ex.Message);
+            }
         }
 
 
-        public static FmgCompanyProfile RetrieveFmgCompanyProfile(string companySymbol)
+        public static FmgCompanyProfile RetrieveFmgCompanyProfile(string symbol)
         {
-            string url = FmgBaseUrl + FmgCompanyProfileUrl + companySymbol;
+            string url = FmgBaseUrl + FmgCompanyProfileUrl + symbol;
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("FmgCompanyProfile null. " + symbol);
+            }
             FmgCompanyProfile result = ParseStringToFmgCompanyProfile(response);
             return result;
         }
@@ -79,8 +118,15 @@ namespace StockMonitor.Helpers
 
         private static FmgCompanyProfile ParseStringToFmgCompanyProfile(string response)
         {
-            var profile = JObject.Parse(response).GetValue("profile").ToObject<FmgCompanyProfile>();
-            return profile;
+            try
+            {
+                var profile = JObject.Parse(response).GetValue("profile").ToObject<FmgCompanyProfile>();
+                return profile;
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse company profile exception. " + ex.Message);
+            }
         }
 
 
@@ -96,6 +142,10 @@ namespace StockMonitor.Helpers
         private static List<FmgCandleDaily> RequestFmgDataDaily(string url)
         {
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("FmgDataDaily null. " + url);
+            }
             return ParseStringToFmgDataDaily(response);
         }
 
@@ -112,40 +162,81 @@ namespace StockMonitor.Helpers
 
         private static List<FmgCandleDaily> ParseStringToFmgDataDaily(string response)
         {
-            var jsonSet = JsonConvert.DeserializeObject<JObject>(response);
-            var dataDailyList = jsonSet.Value<JArray>("historical").ToObject<List<FmgCandleDaily>>();
+            try
+            {
+                var jsonSet = JsonConvert.DeserializeObject<JObject>(response);
+                var dataDailyList = jsonSet.Value<JArray>("historical").ToObject<List<FmgCandleDaily>>();
 
-            return dataDailyList;
+                return dataDailyList;
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse data daily exception. " + ex.Message);
+            }
         }
 
         public static List<Fmg1MinQuote> RetrieveAllFmg1MinQuote(string symbol)
         {
             string url = FmgBaseUrl + Fmg1MinQuoteUrl + symbol;
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("AllFmgMinQuote null. " + symbol);
+            }
             List<Fmg1MinQuote> fmg1MinQuoteList = ParseStringToFmg1MinQuoteList(response);
             return fmg1MinQuoteList;
         }
 
         private static List<Fmg1MinQuote> ParseStringToFmg1MinQuoteList(string response)
         {
-            return JsonConvert.DeserializeObject<List<Fmg1MinQuote>>(response);
+            try
+            {
+                return JsonConvert.DeserializeObject<List<Fmg1MinQuote>>(response);
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException("Parse 1 min quote list exception. " + ex.Message);
+            }
         }
 
         public static FmgInvestmentValuationRatios RetrieveFmgInvestmentValuationRatios(string symbol)
         {
             string url = FmgBaseUrl + FmgInvestmentValuationRatiosUrl + symbol;
             string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new SystemException("FmgInvestmentValuationRatios null. " + symbol);
+            }
             FmgInvestmentValuationRatios fmgInvRatioList = ParseStringToFmgInvestmentValuationRatios(response);
             return fmgInvRatioList;
         }
 
         private static FmgInvestmentValuationRatios ParseStringToFmgInvestmentValuationRatios(string response)
         {
+            try
+            {
+                var jsonSet = JsonConvert.DeserializeObject<JObject>(response).Value<JArray>("ratios");
+                var tmp = jsonSet[0].Value<JObject>("investmentValuationRatios");
+                var result = tmp.ToObject<FmgInvestmentValuationRatios>();
+                return result;
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse investment ratios exception. " + ex.Message);
+            }
+        }
 
-            var jsonSet = JsonConvert.DeserializeObject<JObject>(response).Value<JArray>("ratios");
-            var tmp = jsonSet[0].Value<JObject>("investmentValuationRatios");
-            var result = tmp.ToObject<FmgInvestmentValuationRatios>();
-            return result;
+        public static List<FmgStockListEntity> RetrieveStockList()
+        {
+            string url = FmgBaseUrl + FmgStockListUrl;
+            string response = RetrieveFromUrl(url).Result;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("stockList null. " + url);
+            }
+            List<FmgStockListEntity> entityList =
+                JObject.Parse(response).GetValue("symbolsList").ToObject<List<FmgStockListEntity>>();
+            return entityList.Where(p => !string.IsNullOrEmpty(p.Name)).Select(p => p).ToList();
         }
     }
 }

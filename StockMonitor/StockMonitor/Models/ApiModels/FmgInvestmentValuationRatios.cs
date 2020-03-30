@@ -8,15 +8,15 @@ namespace StockMonitor.Models.ApiModels
 {
     public class FmgInvestmentValuationRatios
     {
-        public double PriceBookValueRatio { get; set; }
-        public double PriceToBookRatio { get; set; }
-        public double PriceToSalesRatio { get; set; }
-        public double PriceEarningsRatio { get; set; }
-        public double ReceivablesTurnover { get; set; }
-        public double PriceToFreeCashFlowsRatio { get; set; }
-        public double PriceToOperatingCashFlowsRatio { get; set; }
-        public double PriceCashFlowRatio { get; set; }
-        public double PriceEarningsToGrowthRatio { get; set; }
+        public string PriceBookValueRatio { get; set; }
+        public string PriceToBookRatio { get; set; }
+        public string PriceToSalesRatio { get; set; }
+        public string PriceEarningsRatio { get; set; }
+        public string ReceivablesTurnover { get; set; }
+        public string PriceToFreeCashFlowsRatio { get; set; }
+        public string PriceToOperatingCashFlowsRatio { get; set; }
+        public string PriceCashFlowRatio { get; set; }
+        public string PriceEarningsToGrowthRatio { get; set; }
         public string PriceSalesRatio { get; set; }
         public string DividendYield { get; set; }
         public string EnterpriseValueMultiple { get; set; }

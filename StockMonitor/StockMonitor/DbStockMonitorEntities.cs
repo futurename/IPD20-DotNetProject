@@ -13,9 +13,9 @@ namespace StockMonitor
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DbStockContext : DbContext
+    public partial class DbStockMonitor : DbContext
     {
-        public DbStockContext()
+        public DbStockMonitor()
             : base("name=StockMonitorEntities")
         {
         }
@@ -29,6 +29,7 @@ namespace StockMonitor
         public virtual DbSet<HoldingShare> HoldingShares { get; set; }
         public virtual DbSet<Quote1Min> Quote1Min { get; set; }
         public virtual DbSet<QuoteDaily> QuoteDailies { get; set; }
+        public virtual DbSet<TestQuoteDaily> TestQuoteDailies { get; set; }
         public virtual DbSet<TradingRecord> TradingRecords { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }

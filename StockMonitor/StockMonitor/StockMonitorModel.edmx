@@ -4,24 +4,24 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DbStockContext.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="StockContext.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Company">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CompanyName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CompanyName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Exchange" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="MarketCapital" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="PriceToEarningRatio" Type="double" Nullable="false" />
-          <Property Name="PriceToSalesRatio" Type="double" Nullable="false" />
-          <Property Name="Industry" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="Sector" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MarketCapital" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PriceToEarningRatio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PriceToSalesRatio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Industry" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sector" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="2000" Nullable="false" />
           <Property Name="Website" Type="varchar" MaxLength="200" Nullable="false" />
-          <Property Name="CEO" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Logo" Type="longblob" />
+          <Property Name="CEO" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Logo" Type="longblob" Nullable="false" />
         </EntityType>
         <EntityType Name="HoldingShares">
           <Key>
@@ -61,6 +61,17 @@
           <Property Name="Vwap" Type="double" Nullable="false" />
           <Property Name="ChangeOverTime" Type="double" Nullable="false" />
         </EntityType>
+        <EntityType Name="TestQuoteDaily">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Open" Type="double" Nullable="false" />
+          <Property Name="High" Type="double" Nullable="false" />
+          <Property Name="Low" Type="double" Nullable="false" />
+          <Property Name="Close" Type="double" Nullable="false" />
+        </EntityType>
         <EntityType Name="TradingRecord">
           <Key>
             <PropertyRef Name="Id" />
@@ -98,15 +109,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'HoldingShares_ibfk_2' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="HoldingShares_ibfk_2" />-->
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'Quote1Min_ibfk_1' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="Quote1Min_ibfk_1" />-->
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'QuoteDaily_ibfk_1' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="QuoteDaily_ibfk_1" />-->
         <Association Name="TradingRecord_ibfk_1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
@@ -119,14 +121,12 @@ warning 6035: The relationship 'QuoteDaily_ibfk_1' has columns that are not part
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <!--Errors Found During Generation:
-warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
-        <Association Name="TradingRecord_ibfk_2" />-->
-        <EntityContainer Name="DbStockContextStoreContainer">
+        <EntityContainer Name="StockContextStoreContainer">
           <EntitySet Name="Company" EntityType="Self.Company" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="HoldingShares" EntityType="Self.HoldingShares" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="Quote1Min" EntityType="Self.Quote1Min" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="QuoteDaily" EntityType="Self.QuoteDaily" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="TestQuoteDaily" EntityType="Self.TestQuoteDaily" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="TradingRecord" EntityType="Self.TradingRecord" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="StockMonitor" store:Type="Tables" />
           <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
@@ -142,24 +142,24 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="DbStockContext" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="StockContext" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Company">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Symbol" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Exchange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="MarketCapital" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PriceToEarningRatio" Type="Double" Nullable="false" />
-          <Property Name="PriceToSalesRatio" Type="Double" Nullable="false" />
-          <Property Name="Industry" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Sector" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MarketCapital" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PriceToEarningRatio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PriceToSalesRatio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Industry" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Sector" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Website" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="CEO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="CEO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
         </EntityType>
         <EntityType Name="HoldingShare">
           <Key>
@@ -199,6 +199,17 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
           <Property Name="Volume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Vwap" Type="Double" Nullable="false" />
           <Property Name="ChangeOverTime" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestQuoteDaily">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Open" Type="Double" Nullable="false" />
+          <Property Name="High" Type="Double" Nullable="false" />
+          <Property Name="Low" Type="Double" Nullable="false" />
+          <Property Name="Close" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="TradingRecord">
           <Key>
@@ -257,6 +268,7 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
           <EntitySet Name="HoldingShares" EntityType="Self.HoldingShare" />
           <EntitySet Name="Quote1Min" EntityType="Self.Quote1Min" />
           <EntitySet Name="QuoteDailies" EntityType="Self.QuoteDaily" />
+          <EntitySet Name="TestQuoteDailies" EntityType="Self.TestQuoteDaily" />
           <EntitySet Name="TradingRecords" EntityType="Self.TradingRecord" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
@@ -273,9 +285,9 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DbStockContextStoreContainer" CdmEntityContainer="StockMonitorEntities">
+        <EntityContainerMapping StorageEntityContainer="StockContextStoreContainer" CdmEntityContainer="StockMonitorEntities">
           <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="DbStockContext.Company">
+            <EntityTypeMapping TypeName="StockContext.Company">
               <MappingFragment StoreEntitySet="Company">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
@@ -294,7 +306,7 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="HoldingShares">
-            <EntityTypeMapping TypeName="DbStockContext.HoldingShare">
+            <EntityTypeMapping TypeName="StockContext.HoldingShare">
               <MappingFragment StoreEntitySet="HoldingShares">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -305,7 +317,7 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Quote1Min">
-            <EntityTypeMapping TypeName="DbStockContext.Quote1Min">
+            <EntityTypeMapping TypeName="StockContext.Quote1Min">
               <MappingFragment StoreEntitySet="Quote1Min">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Symbol" ColumnName="Symbol" />
@@ -319,7 +331,7 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QuoteDailies">
-            <EntityTypeMapping TypeName="DbStockContext.QuoteDaily">
+            <EntityTypeMapping TypeName="StockContext.QuoteDaily">
               <MappingFragment StoreEntitySet="QuoteDaily">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Symbol" ColumnName="Symbol" />
@@ -334,8 +346,20 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TestQuoteDailies">
+            <EntityTypeMapping TypeName="StockContext.TestQuoteDaily">
+              <MappingFragment StoreEntitySet="TestQuoteDaily">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="High" ColumnName="High" />
+                <ScalarProperty Name="Low" ColumnName="Low" />
+                <ScalarProperty Name="Close" ColumnName="Close" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TradingRecords">
-            <EntityTypeMapping TypeName="DbStockContext.TradingRecord">
+            <EntityTypeMapping TypeName="StockContext.TradingRecord">
               <MappingFragment StoreEntitySet="TradingRecord">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -348,7 +372,7 @@ warning 6035: The relationship 'TradingRecord_ibfk_2' has columns that are not p
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="DbStockContext.User">
+            <EntityTypeMapping TypeName="StockContext.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AccountName" ColumnName="AccountName" />

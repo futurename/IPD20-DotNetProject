@@ -59,9 +59,15 @@ namespace StockMonitor
              RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios("AAPL");
          Console.Out.WriteLine(investment.ToString());*/
 
-         DatabaseHelper.InsertCompany("AAPL");
+         //DatabaseHelper.InsertCompany("AAPL");
 
-            Console.ReadKey();
+         //RetrieveJsonDataHelper.RetrieveStockList().ForEach(o=>Console.WriteLine(o.ToString()));
+
+         DatabaseDataInitHelper.FirstImportStockListToDatabase();
+
+        //Console.Out.WriteLine(DatabaseHelper.ReadCompany("CMCSA"));
+         
+         Console.ReadKey();
         }
 
 

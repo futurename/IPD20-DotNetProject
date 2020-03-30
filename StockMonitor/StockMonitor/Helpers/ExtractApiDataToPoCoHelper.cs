@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using StockMonitor.Models.ApiModels;
@@ -52,11 +53,21 @@ namespace StockMonitor.Helpers
                 Industry = fmgCompanyProfile.Industry,
                 Sector = fmgCompanyProfile.Sector,
                 Description = fmgCompanyProfile.Description,
+                //Website = fmgCompanyProfile.Website,
+                CEO = fmgCompanyProfile.Ceo,
                 Website = fmgCompanyProfile.Website,
-                CEO = fmgCompanyProfile.Ceo
+                Logo = GetImageFromUrl(fmgCompanyProfile.Image)
             };
             return company;
         }
 
+        private static byte[] GetImageFromUrl(string url)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                byte[] result = webClient.DownloadData(url);
+                return result;
+            }
+        }
     }
 }

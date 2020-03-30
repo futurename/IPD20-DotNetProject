@@ -14,8 +14,8 @@ namespace StockMonitor.Models.POCO
         public double ChangePercentage { get; set; }
         public double PriceChange { get; set; }
         public string MarketCapital { get; set; }
-        public double PriceToEarningRatio { get; set; }
-        public double PriceToSalesRatio { get; set; }
+        public string PriceToEarningRatio { get; set; }
+        public string PriceToSalesRatio { get; set; }
         public string Industry { get; set; }
         public string Sector { get; set; }
 

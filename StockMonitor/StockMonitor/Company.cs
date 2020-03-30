@@ -19,8 +19,8 @@ namespace StockMonitor
         public string Symbol { get; set; }
         public string Exchange { get; set; }
         public string MarketCapital { get; set; }
-        public double PriceToEarningRatio { get; set; }
-        public double PriceToSalesRatio { get; set; }
+        public string PriceToEarningRatio { get; set; }
+        public string PriceToSalesRatio { get; set; }
         public string Industry { get; set; }
         public string Sector { get; set; }
         public string Description { get; set; }

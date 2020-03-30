@@ -14,7 +14,7 @@ namespace StockMonitor.Models.JSONModels
         public string MktCap { get; set; }
         public string LastDiv { get; set; }
         public string Range { get; set; }
-        public double Changes { get; set; }
+        public string Changes { get; set; }
         public string ChangesPercentage { get; set; }
         public string CompanyName { get; set; }
         public string Exchange { get; set; }
@@ -23,11 +23,11 @@ namespace StockMonitor.Models.JSONModels
         public string Description { get; set; }
         public string Ceo { get; set; }
         public string Sector { get; set; }
-        public string ImagePath { get; set; }
+        public string Image { get; set; }
 
         public override string ToString()
         {
-            return $"FmgCompanyProfile: {Price},{Industry},{Description}";
+            return $"FmgCompanyProfile: {Price},{Industry},{Description},{Image}";
         }
     }
 }
