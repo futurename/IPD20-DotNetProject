@@ -1,3 +1,30 @@
+2020/03/27 Wang Wei
+1. Done since last scrum:
+- Finish Project proposer
+- Create 6 user stories in Trello
+- Create Github repository
+
+2. To do until next Scrum:
+- Review data structure
+- Test API
+- Retrieve data from API 
+
+3. Need assistance / figure things out
+- Solve async data request
+- Design POCO classes
+
+2020/03/27 Donghyeok Seo
+1. Done since last scrum
+- Finish Project proposer
+- Create 6 user stories in Trello
+- Create Github repository
+
+2. To do until next Scrum:
+- Design UI
+- Find framework for candlestick chart
+
+3. Need assistance / figure things out
+- Find out how to draw candlestick chart
 
 **************************************************
 2020/03/28 Wang Wei
@@ -44,12 +71,13 @@
 
 2020/03/29 Donghyeok Seo
 1. Done since last scrum
-
+- Draw candlestick chart with simple data
 
 2. To do until next Scrum:
-
+- Make candlestick scalable
+- Display value on mouse cursor in the textbox
 
 3. Need assistance / figure things out
-
+- Set scale limit
 
 *******************************************************
