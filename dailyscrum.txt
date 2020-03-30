@@ -1,27 +1,24 @@
-2020/03/27 Wang Wei
+2020/03/28 Wang Wei
 1. Done since last scrum:
-- Finish Project proposer
-- Create 6 user stories in Trello
-- Create Github repository
+- Tested retrieving data from Finn and Fmg APIs.
+- Add retrieving and parsing Json data to POCO, implemented quote and company profile parts
+- Tested UI async data retrieval.
 
 2. To do until next Scrum:
-- Review data structure
-- Test API
-- Retrieve data from API 
+- Need implement retrieving data of Major indexes, company financial evaluation.
+- Need design database and create tables on remote server
 
 3. Need assistance / figure things out
-- Solve async data request
-- Design POCO classes
+- In UI testing, it takes over 5 seconds to retrieving 5 stocks data, need find out how to improve speed.
 
-2020/03/27 Donghyeok Seo
+2020/03/28 Donghyeok Seo
 1. Done since last scrum
-- Finish Project proposer
-- Create 6 user stories in Trello
-- Create Github repository
+- Find Framework for candlestick chart : LiveCharts
 
 2. To do until next Scrum:
-- Design UI
-- Find framework for candlestick chart
+- Draw candlestick chart with simple data
+- Draw candlestick scalable
+- Display value on mouse cursor in the textbox
 
 3. Need assistance / figure things out
-- Find out how to draw candlestick chart
+- Learn how to draw candlestick chart using LiveCharts framework
