@@ -98,13 +98,15 @@
 
 2020/03/30 Donghyeok Seo
 1. Done since last scrum
-- Draw candlestick chart with simple data
-
-2. To do until next Scrum:
 - Make candlestick scalable
 - Display value on mouse cursor in the textbox
 
+2. To do until next Scrum:
+- Set graph scale limit
+- Gui Outline
+
 3. Need assistance / figure things out
-- Set scale limit
+- Connect Github to Visual studio 
+- Solve Dependency problem - install Library "LiveCharts" to project
 
 *****************************************************
