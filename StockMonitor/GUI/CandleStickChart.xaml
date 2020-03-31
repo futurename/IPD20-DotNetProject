@@ -14,15 +14,18 @@
         </TextBlock>
         <Wpf:CartesianChart Name="chartStockPrice" Series="{Binding SeriesCollection}" 
                             Zoom="X"
+                            Hoverable="False" 
+                            DataTooltip="{x:Null}"
                             MouseMove="ChartMouseMove"
                             DataClick="ChartOnDataClick"
-                            DataHover="Chart_OnDataHover" MinWidth="500" MinHeight="498">
+                            DataHover="Chart_OnDataHover" MinWidth="500" MinHeight="498" ZoomingSpeed="0">
             <Wpf:CartesianChart.AxisX>
-                <Wpf:Axis Labels="{Binding Labels}" />
+                <Wpf:Axis Labels="{Binding Labels}" 
+                          MinValue="{Binding Min, Mode=TwoWay}" 
+                          MaxValue="{Binding Max, Mode=TwoWay}"
+                          RangeChanged="Ax_RangeChanged"
+                          PreviewRangeChanged="Axis_OnPreviewRangeChanged"/>
             </Wpf:CartesianChart.AxisX>
-            <Wpf:CartesianChart.DataTooltip >
-                <Wpf:DefaultTooltip Visibility="Hidden" SelectionMode="OnlySender" />
-            </Wpf:CartesianChart.DataTooltip>
         </Wpf:CartesianChart>
 
     </Grid>
