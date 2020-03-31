@@ -42,7 +42,16 @@ namespace GUI
 
         public CandleStickChart()
         {
-            InitializeComponent();
+            DateTime start = DateTime.Now;
+            reloadWindow();
+            DateTime end = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan = end - start;
+            MessageBox.Show($"Time spent: {timeSpan.TotalMilliseconds} mills");
+        }
+
+        private void reloadWindow()
+        {
             List<QuoteDaily> valueList;
             List<string> labelList;
 
@@ -51,9 +60,9 @@ namespace GUI
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
                     string symbol = "SGH";
-                    valueList = (from price in ctx.QuoteDailies 
-                                 orderby price.Date 
-                                 where price.Symbol == symbol 
+                    valueList = (from price in ctx.QuoteDailies
+                                 orderby price.Date
+                                 where price.Symbol == symbol
                                  select price
                                  )
                                  .ToList<QuoteDaily>();
@@ -75,8 +84,8 @@ namespace GUI
                     Values = new ChartValues<OhlcPoint>(valueList)
                 }
             };
-            DataContext = this;
 
+            DataContext = this;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -100,9 +109,28 @@ namespace GUI
 
         private void ChartMouseMove(object sender, MouseEventArgs e)
         {
-            var point = chartStockPrice.ConvertToChartValues(e.GetPosition(chartStockPrice));
+            var pointChartVal = chartStockPrice.ConvertToChartValues(e.GetPosition(chartStockPrice));
 
-            Y.Text = point.Y.ToString("N");
+            Y.Text = pointChartVal.Y.ToString("N");
+            //txt_X_Axis.Text = Labels[(int)pointChartVal.X];
+
+            var pointMouse = e.GetPosition(chartStockPrice);
+            lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartStockPrice.Series.Chart.DrawMargin.Top, 0,0);
+            txt_X_Axis.Margin = new Thickness(pointMouse.X, chartStockPrice.Series.Chart.DrawMargin.Top + lbl_X_Axis.Height , 0,0);
+            lbl_Y_Axis.Margin = new Thickness(chartStockPrice.Series.Chart.DrawMargin.Left, pointMouse.Y,0,0);
+
+            var chartMargin = chartStockPrice.Series.Chart.DrawMargin;
+            if (pointMouse.X < chartMargin.Left || pointMouse.X > chartMargin.Width
+                || pointMouse.Y < chartMargin.Top || pointMouse.Y > chartMargin.Height)
+            {
+                lbl_X_Axis.Visibility = Visibility.Hidden;
+                lbl_Y_Axis.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                lbl_X_Axis.Visibility = Visibility.Visible;
+                lbl_Y_Axis.Visibility = Visibility.Visible;
+            }
         }
 
         private bool limitMin = false, limitMax = false;
@@ -118,11 +146,21 @@ namespace GUI
             Console.WriteLine("Max Value: {0}, Min Value: {1}",e.PreviewMaxValue,e.PreviewMinValue);
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime start = DateTime.Now;
+            reloadWindow();
+            DateTime end = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan = end - start;
+            MessageBox.Show($"Time spent: {timeSpan.TotalMilliseconds} mills");
+        }
+
         private void Ax_RangeChanged(LiveCharts.Events.RangeChangedEventArgs eventArgs)
         {
             Axis ax = (Axis)eventArgs.Axis;
-            if (limitMax) ax.MaxValue = Labels.Length + 1;
-            if (limitMin) ax.MinValue = -1;
+            if (limitMax) ax.MaxValue = Labels.Length + 0.5;
+            if (limitMin) ax.MinValue = -0.5;
         }
     }
 }

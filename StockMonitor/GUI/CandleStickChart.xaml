@@ -18,7 +18,7 @@
                             DataTooltip="{x:Null}"
                             MouseMove="ChartMouseMove"
                             DataClick="ChartOnDataClick"
-                            DataHover="Chart_OnDataHover" MinWidth="500" MinHeight="498" ZoomingSpeed="0">
+                            DataHover="Chart_OnDataHover" MinWidth="500" MinHeight="498" ZoomingSpeed="0" Cursor="Cross">
             <Wpf:CartesianChart.AxisX>
                 <Wpf:Axis Labels="{Binding Labels}" 
                           MinValue="{Binding Min, Mode=TwoWay}" 
@@ -27,6 +27,10 @@
                           PreviewRangeChanged="Axis_OnPreviewRangeChanged"/>
             </Wpf:CartesianChart.AxisX>
         </Wpf:CartesianChart>
+        <Label Name="lbl_Y_Axis" HorizontalAlignment="Left" Margin="26,220,0,0" VerticalAlignment="Top" Width="629" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1"/>
+        <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,10,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="599" Panel.ZIndex="-1"/>
+        <TextBox Name="txt_X_Axis" HorizontalAlignment="Left" Height="23" Margin="160,614,0,-3.4" TextWrapping="Wrap" Text="X-axis" VerticalAlignment="Top" Width="84" />
+        <Button Content="Reload" HorizontalAlignment="Left" Margin="562,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" />
 
     </Grid>
 </Window>
