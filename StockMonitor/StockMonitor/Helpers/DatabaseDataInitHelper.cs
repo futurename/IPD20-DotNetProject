@@ -124,7 +124,7 @@ namespace StockMonitor.Helpers
                     }
                     catch (SystemException ex)
                     {
-                        Console.Out.WriteLine(info + "!!!! DB save changes failure: " + subList[i]);
+                        Console.Out.WriteLine(info + "!!!! DB save changes failure: " + subList[i] + ", " + ex.Message);
                     }
 
                     Console.Out.WriteLine(

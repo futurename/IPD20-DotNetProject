@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StockMonitor.Models.POCO;
+using StockMonitor.Models.UIClasses;
 
 namespace StockMonitor.Helpers
 {

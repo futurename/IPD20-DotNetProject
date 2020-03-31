@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstWindowTest", "FirstWin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockMonitorUI", "GUI\StockMonitorUI.csproj", "{32D014C8-41A7-4A8D-9A5E-E4AC7E24E5F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUIMain", "TestUIMain\TestUIMain.csproj", "{876EBC51-9CE2-42A7-BDC9-E94C1C2DC39A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{32D014C8-41A7-4A8D-9A5E-E4AC7E24E5F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32D014C8-41A7-4A8D-9A5E-E4AC7E24E5F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32D014C8-41A7-4A8D-9A5E-E4AC7E24E5F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{876EBC51-9CE2-42A7-BDC9-E94C1C2DC39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876EBC51-9CE2-42A7-BDC9-E94C1C2DC39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876EBC51-9CE2-42A7-BDC9-E94C1C2DC39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876EBC51-9CE2-42A7-BDC9-E94C1C2DC39A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

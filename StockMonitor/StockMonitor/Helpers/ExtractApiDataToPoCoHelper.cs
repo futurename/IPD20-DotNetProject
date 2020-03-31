@@ -6,35 +6,38 @@ using System.Text;
 using System.Threading.Tasks;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
-using StockMonitor.Models.POCO;
+using StockMonitor.Models.UIClasses;
 
 namespace StockMonitor.Helpers
 {
     public static class ExtractApiDataToPoCoHelper
     {
-        public static CompanyDataRow GetCompanyDataRow(string symbol)
+        public static UIComapnyRow GetCompanyDataRow(string symbol)
         {
             FmgCompanyProfile fmgCompanyProfile = RetrieveJsonDataHelper.RetrieveFmgCompanyProfile(symbol);
             FmgQuoteOnlyPrice fmgQuoteOnlyPrice = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
             FmgInvestmentValuationRatios fmgInvestmentValuationRatios =
                 RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios(symbol);
             Fmg1MinQuote oneMinQuote = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol)[0];
-
-            CompanyDataRow companyDataRow = new CompanyDataRow();
-            companyDataRow.Symbol = symbol;
-            companyDataRow.Price = fmgQuoteOnlyPrice.Price;
+            Company company = DatabaseHelper.GetCompanyFromDb(symbol);
+            UIComapnyRow companyRow = new UIComapnyRow();
+            companyRow.Symbol = symbol;
+            companyRow.Price = fmgQuoteOnlyPrice.Price;
             double openPrice = oneMinQuote.Close;
             double curPrice = fmgQuoteOnlyPrice.Price;
             double changePercentage = (curPrice - openPrice) / openPrice * 100;
             double change = curPrice - openPrice;
-            companyDataRow.ChangePercentage = changePercentage;
-            companyDataRow.PriceChange = change;
-            companyDataRow.MarketCapital = fmgCompanyProfile.MktCap;
-            companyDataRow.Sector = fmgCompanyProfile.Sector;
-            companyDataRow.PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio;
-            companyDataRow.PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio;
-            companyDataRow.Industry = fmgCompanyProfile.Industry;
-            return companyDataRow;
+            companyRow.Open = oneMinQuote.Open;
+            companyRow.Volume = oneMinQuote.Volume;
+            companyRow.ChangePercentage = changePercentage;
+            companyRow.PriceChange = change;
+            companyRow.MarketCapital = fmgCompanyProfile.MktCap;
+            companyRow.Sector = fmgCompanyProfile.Sector;
+            companyRow.PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio;
+            companyRow.PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio;
+            companyRow.Industry = fmgCompanyProfile.Industry;
+            companyRow.Logo = company.Logo;
+            return companyRow;
         }
 
         public static Company GetCompanyBySymbol(string symbol)
