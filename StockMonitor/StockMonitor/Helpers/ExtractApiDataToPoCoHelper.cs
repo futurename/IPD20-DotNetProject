@@ -69,5 +69,29 @@ namespace StockMonitor.Helpers
                 return result;
             }
         }
+
+        public static List<QuoteDaily> GetQuoteDailyList(string symbol)
+        {
+            List<QuoteDaily> result = new List<QuoteDaily>();
+            List<FmgCandleDaily> quoteList = RetrieveJsonDataHelper.RetrieveFmgDataDaily(symbol);
+            foreach (var dailyQuote in quoteList)
+            {
+                QuoteDaily quoteDaily = new QuoteDaily
+                {
+                    Symbol = symbol,
+                    Date = dailyQuote.Date,
+                    Open = dailyQuote.Open,
+                    High = dailyQuote.High,
+                    Low = dailyQuote.Low,
+                    Close = dailyQuote.Close,
+                    Volume = dailyQuote.Volume,
+                    Vwap = dailyQuote.Vwap,
+                    ChangeOverTime = dailyQuote.ChangeOverTime
+                };
+                result.Add(quoteDaily);
+            }
+
+            return result;
+        } 
     }
 }

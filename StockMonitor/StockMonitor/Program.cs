@@ -63,9 +63,11 @@ namespace StockMonitor
 
          //RetrieveJsonDataHelper.RetrieveStockList().ForEach(o=>Console.WriteLine(o.ToString()));
 
-         DatabaseDataInitHelper.FirstImportStockListToDatabase();
+        // DatabaseDataInitHelper.FirstImportStockListToDatabase();
 
         //Console.Out.WriteLine(DatabaseHelper.ReadCompany("CMCSA"));
+
+        DatabaseDataInitHelper.SecondInsertAllDailyQuote();
          
          Console.ReadKey();
         }
