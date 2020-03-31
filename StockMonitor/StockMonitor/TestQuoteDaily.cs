@@ -9,16 +9,13 @@
 
 namespace StockMonitor
 {
+    using LiveCharts.Defaults;
     using System;
     using System.Collections.Generic;
     
-    public partial class TestQuoteDaily
+    public partial class TestQuoteDaily : OhlcPoint
     {
         public int Id { get; set; }
         public System.DateTime Date { get; set; }
-        public double Open { get; set; }
-        public double High { get; set; }
-        public double Low { get; set; }
-        public double Close { get; set; }
     }
 }

@@ -1,0 +1,29 @@
+﻿<Window x:Class="GUI.CandleStickChart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        Title="MainWindow" Height="663.442" Width="671.319">
+    <Grid>
+        <TextBlock>
+            <TextBlock >Stock Price: $</TextBlock>
+            <TextBlock Name="Y"></TextBlock>
+        </TextBlock>
+        <Wpf:CartesianChart Name="chartStockPrice" Series="{Binding SeriesCollection}" 
+                            Zoom="X"
+                            MouseMove="ChartMouseMove"
+                            DataClick="ChartOnDataClick"
+                            DataHover="Chart_OnDataHover" MinWidth="500" MinHeight="498">
+            <Wpf:CartesianChart.AxisX>
+                <Wpf:Axis Labels="{Binding Labels}" />
+            </Wpf:CartesianChart.AxisX>
+            <Wpf:CartesianChart.DataTooltip >
+                <Wpf:DefaultTooltip Visibility="Hidden" SelectionMode="OnlySender" />
+            </Wpf:CartesianChart.DataTooltip>
+        </Wpf:CartesianChart>
+
+    </Grid>
+</Window>
