@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
 using StockMonitor.Models.UIClasses;
@@ -14,12 +15,19 @@ namespace StockMonitor.Helpers
     {
         public static UIComapnyRow GetCompanyDataRow(string symbol)
         {
-            FmgCompanyProfile fmgCompanyProfile = RetrieveJsonDataHelper.RetrieveFmgCompanyProfile(symbol);
+            DateTime start = DateTime.Now;
             FmgQuoteOnlyPrice fmgQuoteOnlyPrice = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
-            FmgInvestmentValuationRatios fmgInvestmentValuationRatios =
-                RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios(symbol);
             Fmg1MinQuote oneMinQuote = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol)[0];
+
+            DateTime end = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan = end - start;
+            Console.Out.WriteLine($"Time: {timeSpan.TotalMilliseconds} mills for {symbol}");
+
             Company company = DatabaseHelper.GetCompanyFromDb(symbol);
+
+
+
             UIComapnyRow companyRow = new UIComapnyRow();
             companyRow.Symbol = symbol;
             companyRow.Price = fmgQuoteOnlyPrice.Price;
@@ -31,12 +39,13 @@ namespace StockMonitor.Helpers
             companyRow.Volume = oneMinQuote.Volume;
             companyRow.ChangePercentage = changePercentage;
             companyRow.PriceChange = change;
-            companyRow.MarketCapital = fmgCompanyProfile.MktCap;
-            companyRow.Sector = fmgCompanyProfile.Sector;
-            companyRow.PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio;
-            companyRow.PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio;
-            companyRow.Industry = fmgCompanyProfile.Industry;
+            companyRow.MarketCapital = company.MarketCapital;
+            companyRow.Sector = company.Sector;
+            companyRow.PriceToEarningRatio = company.PriceToEarningRatio;
+            companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
+            companyRow.Industry = company.Industry;
             companyRow.Logo = company.Logo;
+          
             return companyRow;
         }
 

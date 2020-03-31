@@ -26,7 +26,14 @@ namespace TestUIMain
         public MainWindow()
         {
             InitializeComponent();
+            DateTime start = DateTime.Now;
+            
             SetListView();
+            
+          /*  DateTime end = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan = end - start;
+            MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
         }
         private void InitListView()
         {
