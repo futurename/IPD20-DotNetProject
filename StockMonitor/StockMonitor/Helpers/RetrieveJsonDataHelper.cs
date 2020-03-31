@@ -37,10 +37,11 @@ namespace StockMonitor.Helpers
             return result;
         }
 
-        public static FmgQuoteOnlyPrice RetrieveFmgQuoteOnlyPrice(string symbol)
+        public static async Task<FmgQuoteOnlyPrice> RetrieveFmgQuoteOnlyPrice(string symbol)
         {
             string url = FmgBaseUrl + FmgQuoteOnlyPriceUrl + symbol;
-            string response = RetrieveFromUrl(url).Result;
+            var responseTask = RetrieveFromUrl(url);
+            string response = await responseTask;
             if (response == "{ }" || string.IsNullOrEmpty(response))
             {
                 throw new ArgumentException("FmgQuoteOnlyPrice null. " + symbol);
@@ -133,15 +134,16 @@ namespace StockMonitor.Helpers
         public static List<FmgCandleDaily> RetrieveFmgDataDaily(string companySymbol)
         {
             string url = FmgBaseUrl + FmgDataDailyUrl + companySymbol;
-            List<FmgCandleDaily> result = RequestFmgDataDaily(url);
+            List<FmgCandleDaily> resultTask = RequestFmgDataDaily(url).Result;
 
-            return result;
+            return resultTask;
         }
 
 
-        private static List<FmgCandleDaily> RequestFmgDataDaily(string url)
+        private static async Task<List<FmgCandleDaily>> RequestFmgDataDaily(string url)
         {
-            string response = RetrieveFromUrl(url).Result;
+            Task<string> responseTask = RetrieveFromUrl(url);
+            string response = await responseTask;
             if (response == "{ }" || string.IsNullOrEmpty(response))
             {
                 throw new ArgumentException("FmgDataDaily null. " + url);
@@ -175,10 +177,10 @@ namespace StockMonitor.Helpers
             }
         }
 
-        public static List<Fmg1MinQuote> RetrieveAllFmg1MinQuote(string symbol)
+        public static async Task<List<Fmg1MinQuote>> RetrieveAllFmg1MinQuote(string symbol)
         {
             string url = FmgBaseUrl + Fmg1MinQuoteUrl + symbol;
-            string response = RetrieveFromUrl(url).Result;
+            string response = await RetrieveFromUrl(url);
             if (response == "{ }" || string.IsNullOrEmpty(response))
             {
                 throw new ArgumentException("AllFmgMinQuote null. " + symbol);
