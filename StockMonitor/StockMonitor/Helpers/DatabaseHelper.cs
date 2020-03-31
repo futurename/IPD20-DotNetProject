@@ -9,38 +9,58 @@ namespace StockMonitor.Helpers
 {
     public static class DatabaseHelper
     {
-        private static DbStockMonitor dbContext = new DbStockMonitor();
-
-
-        public static void InsertCompany(string symbol)
+        public static void InsertCompanyToDb(string symbol)
         {
             Company company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
 
-            try
+            using (DbStockMonitor dbContext = new DbStockMonitor())
             {
-                dbContext.Companies.Add(company);
-                dbContext.SaveChanges();
-                Console.Out.WriteLine(company.ToString());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
+                try
+                {
+                    dbContext.Companies.Add(company);
+                    dbContext.SaveChanges();
+                    Console.Out.WriteLine(company.ToString());
+                }
+                catch (Exception e)
+                {
+                    throw new SystemException("InsertCompanyToDb exception: {symbol} > {ex.Message}");
+                }
             }
         }
 
-        public static Company ReadCompany(string symbol)
+        public static Company GetCompanyFromDb(string symbol)
         {
-            try
+            using (DbStockMonitor dbContext = new DbStockMonitor())
             {
-               return  dbContext.Companies.Where(p => p.Symbol == "CMCSA").FirstOrDefault() as Company;
+                try
+                {
+                    return dbContext.Companies.FirstOrDefault(p => p.Symbol == symbol) as Company;
+                }
+                catch (SystemException ex)
+                {
+                   throw new SystemException($"GetCompanyFromDb exception: {symbol} > {ex.Message}"); 
+                }
             }
-            catch (SystemException ex)
-            {
-                Console.Out.WriteLine("ReadCompany exception: " + symbol);
-            }
-
-            return null;
         }
+
+        public static List<QuoteDaily> GetQuoteDailyListFromDb(string symbol)
+        {
+
+            using (DbStockMonitor dbContext = new DbStockMonitor())
+            {
+                try
+                {
+                    List<QuoteDaily> result = dbContext.QuoteDailies.Where(p => p.Symbol == symbol).ToList();
+                    return result;
+                }
+                catch (SystemException ex)
+                {
+                    throw new SystemException("GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
+                }
+            }
+        }
+
+         
     }
 
 }

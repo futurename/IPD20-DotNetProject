@@ -24,5 +24,10 @@ namespace StockMonitor
         public string Volume { get; set; }
         public double Vwap { get; set; }
         public double ChangeOverTime { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}: {Symbol},{Date}, {Open}, {High}, {Low}, {Close}, {Volume}, {Vwap}, {ChangeOverTime}";
+        }
     }
 }

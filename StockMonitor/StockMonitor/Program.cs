@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using StockMonitor.Helpers;
@@ -48,30 +49,95 @@ namespace StockMonitor
             /*  FmgQuoteOnlyPrice quote = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice("AAPL");
               Console.Out.WriteLine(quote);*/
 
-         /*   DateTime time1 = DateTime.Now;
-            List<Fmg1MinQuote> fmg1MinQuotes = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote("AAPL");
-           // fmg1MinQuotes.ForEach(q => Console.WriteLine(q.ToString()));
-            DateTime time2 = DateTime.Now;
-            Console.Out.WriteLine((time2-time1) + " ms");*/
+            /*   DateTime time1 = DateTime.Now;
+               List<Fmg1MinQuote> fmg1MinQuotes = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote("AAPL");
+              // fmg1MinQuotes.ForEach(q => Console.WriteLine(q.ToString()));
+               DateTime time2 = DateTime.Now;
+               Console.Out.WriteLine((time2-time1) + " ms");*/
 
 
-         /*FmgInvestmentValuationRatios investment =
-             RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios("AAPL");
-         Console.Out.WriteLine(investment.ToString());*/
+            /*FmgInvestmentValuationRatios investment =
+                RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios("AAPL");
+            Console.Out.WriteLine(investment.ToString());*/
 
-         //DatabaseHelper.InsertCompany("AAPL");
+            //DatabaseHelper.InsertCompanyToDb("AAPL");
 
-         //RetrieveJsonDataHelper.RetrieveStockList().ForEach(o=>Console.WriteLine(o.ToString()));
+            //RetrieveJsonDataHelper.RetrieveStockList().ForEach(o=>Console.WriteLine(o.ToString()));
 
-        // DatabaseDataInitHelper.FirstImportStockListToDatabase();
+            // DatabaseDataInitHelper.FirstImportStockListToDatabase();
 
-        //Console.Out.WriteLine(DatabaseHelper.ReadCompany("CMCSA"));
+            //Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("CMCSA"));
 
-        DatabaseDataInitHelper.SecondInsertAllDailyQuote();
-         
-         Console.ReadKey();
+            //DatabaseDataInitHelper.SecondInsertAllDailyQuote();
+            /*  double prePrice = 0, curPrice = 0;
+              int counter = 0;
+
+              while (true)
+              {
+                  curPrice = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice("AAPL").Price;
+                  //Console.Out.WriteLine("Before display: "+ curPrice);
+                  prePrice = AsyncGetQuoteOnlyPrice("AAPL", curPrice, prePrice, counter).Result;
+              }
+  */
+
+            //DateTime start = DateTime.Now;
+
+            /*   List<QuoteDaily> dailyList = DatabaseHelper.GetQuoteDailyListFromDb("AAPL");
+               DateTime end = DateTime.Now;
+               TimeSpan span = new TimeSpan();
+               span = end - start;
+               Console.Out.WriteLine($"Read list time: {span.Milliseconds} mills");
+               //dailyList.ForEach(p=>Console.WriteLine(p.ToString()));
+     */
+
+            int num = 200;
+            DateTime start = DateTime.Now;
+            
+            TestBatchRetrieveDailyQuoteList(num);
+            DateTime end = DateTime.Now;
+            TimeSpan timeSpan= new TimeSpan();
+            timeSpan = end - start;
+            Console.Out.WriteLine($"Total time for <{num}> companies: {timeSpan.Milliseconds} mills");
+
+            Console.ReadKey();
+        }
+        private static async Task<double> AsyncGetQuoteOnlyPrice(string symbol, double curPrice, double prePrice, int counter)
+        {
+
+            if (Math.Abs(prePrice - curPrice) < 0.001)
+            {
+                await Task.Delay(2000);
+                Console.Out.WriteLine($"No change, sleep 2 sec. {curPrice}");
+            }
+            else
+            {
+                Console.Out.WriteLine($"{counter++}: AAPL: {curPrice}");
+                prePrice = curPrice;
+            }
+
+            return prePrice;
         }
 
+        private static void TestBatchRetrieveDailyQuoteList(int num)
+        {
+            using (DbStockMonitor dbContext = new DbStockMonitor())
+            {
+                List<string> companyList = dbContext.Companies.Select(p => p.Symbol).ToList();
+                Random rand = new Random();
+                for (int i = 0; i < num; i++)
+                {
+                    int index = rand.Next(companyList.Count);
 
+                    DateTime start = DateTime.Now;
+                    List<QuoteDaily> quoteList = DatabaseHelper.GetQuoteDailyListFromDb(companyList[index]);
+                    
+                    DateTime end = DateTime.Now;
+                    TimeSpan timeSpan = new TimeSpan();
+                    timeSpan = end - start;
+                    Console.Out.WriteLine($"Retrieve {companyList[index]}, Use: {timeSpan.Milliseconds} mills, count: {quoteList.Count}");
+                }
+            }
+        }
     }
+
 }
