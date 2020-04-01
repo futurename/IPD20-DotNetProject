@@ -43,14 +43,13 @@ namespace TestUIMain
             SetListView();
             InitializeComponent();
             
-            /*  DateTime end = DateTime.Now;
+           /*   DateTime end = DateTime.Now;
               TimeSpan timeSpan = new TimeSpan();
               timeSpan = end - start;
               MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
         }
         private async Task InitListView()
         {
-
             companyDataRowList = new List<UIComapnyRow>();
 
             foreach (Task<UIComapnyRow> task in taskList)
@@ -59,9 +58,14 @@ namespace TestUIMain
                 {
                     UIComapnyRow company = await task;
                     companyDataRowList.Add(company);
-                } catch (ArgumentOutOfRangeException ex)
+                }
+                catch (ArgumentOutOfRangeException ex)
                 {
                     Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
+                }
+                catch (SystemException ex)
+                {
+                    Console.Out.WriteLine("!!!! system exception " + ex.Message);
                 }
             }
                 //lsvMarketPreview.ItemsSource = companyDataRowList;

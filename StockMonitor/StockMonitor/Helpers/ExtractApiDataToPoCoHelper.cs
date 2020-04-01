@@ -56,7 +56,8 @@ namespace StockMonitor.Helpers
             DateTime start = DateTime.Now;
 
             FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
-            Fmg1MinQuote oneMinQuote = (await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol))[0];
+            //Fmg1MinQuote oneMinQuote = (await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol))[0];
+            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol);
 
             DateTime end = DateTime.Now;
             TimeSpan timeSpan = new TimeSpan();
@@ -70,12 +71,12 @@ namespace StockMonitor.Helpers
             UIComapnyRow companyRow = new UIComapnyRow();
             companyRow.Symbol = symbol;
             companyRow.Price = fmgQuoteOnlyPrice.Price;
-            double openPrice = oneMinQuote.Close;
+            double openPrice = singleQuote.open;
             double curPrice = fmgQuoteOnlyPrice.Price;
             double changePercentage = (curPrice - openPrice) / openPrice * 100;
             double change = curPrice - openPrice;
-            companyRow.Open = oneMinQuote.Open;
-            companyRow.Volume = oneMinQuote.Volume;
+            companyRow.Open = openPrice;
+            companyRow.Volume = singleQuote.volume;
             companyRow.ChangePercentage = changePercentage;
             companyRow.PriceChange = change;
             companyRow.MarketCapital = company.MarketCapital;

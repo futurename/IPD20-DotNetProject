@@ -24,10 +24,48 @@ namespace StockMonitor.Helpers
         private const string Fmg1MinQuoteUrl = "/historical-chart/1min/";
         private const string FmgInvestmentValuationRatiosUrl = "/financial-ratios/";
         private const string FmgStockListUrl = "/company/stock/list/";
+        private const string FmgSingleQuoteUrl = "/quote/";
 
         private static HttpResponseMessage httpResponseMessage;
         private static HttpClientHandler httpClientHandler = new HttpClientHandler();
         private static HttpClient httpClient = new HttpClient();
+
+        public static async Task<FmgSingleQuote> RetrieveFmgSingleQuote(string symbol)
+        {
+            string url = FmgBaseUrl + FmgSingleQuoteUrl + symbol;
+            var responseTask =  RetrieveFromUrl(url);
+            string response = await responseTask;
+            if (response == "{ }" || string.IsNullOrEmpty(response))
+            {
+                throw new ArgumentException("FmgMajorIndexes null. " + url);
+            }
+            FmgSingleQuote quote = ParseStringToSingleQuote(response);
+            return quote;
+        }
+
+        private static FmgSingleQuote ParseStringToSingleQuote(string response)
+        {
+            try
+            {
+                List<FmgSingleQuote> list =JsonConvert.DeserializeObject<List<FmgSingleQuote>>(response);
+                if (list.Count != 0)
+                {
+                    FmgSingleQuote quote = list[0];
+                    return quote;
+                }
+                else
+                {
+                    throw new SystemException("Parse single quote null");
+                }
+                
+            }
+            catch (Newtonsoft.Json.JsonSerializationException ex)
+            {
+                throw new SystemException("Parse Single Quote exception. " + ex.Message);
+            }
+        }
+
+
         public static List<FmgMajorIndex> RetrieveFmgMajorIndexes()
         {
             string url = FmgBaseUrl + FmgMajorIndexesUrl;

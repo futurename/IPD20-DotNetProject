@@ -120,6 +120,7 @@
     <Compile Include="Models\ApiModels\FmgCompanyProfile.cs" />
     <Compile Include="Models\ApiModels\FmgMajorIndex.cs" />
     <Compile Include="Models\ApiModels\FmgQuoteDaily.cs" />
+    <Compile Include="Models\ApiModels\FmgSingleQuote.cs" />
     <Compile Include="Models\ApiModels\FmgStockListEntity.cs" />
     <Compile Include="Models\UIClasses\UICompanyRow.cs" />
     <Compile Include="Program.cs" />
