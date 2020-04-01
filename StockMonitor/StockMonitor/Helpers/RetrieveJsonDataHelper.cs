@@ -192,6 +192,14 @@ namespace StockMonitor.Helpers
             return ParseStringToFmgDataDaily(response);
         }
 
+        public static async Task<string> GetQuoteStringBySymbol(string symbol)
+        {
+            string url = FmgBaseUrl + FmgSingleQuoteUrl + symbol;
+            var responseTask = RetrieveFromUrl(url);
+            string response = await responseTask;
+            return response;
+        }
+
         private static async Task<string> RetrieveFromUrl(string url)
         {
             /*httpClientHandler.Proxy = null;
@@ -205,7 +213,7 @@ namespace StockMonitor.Helpers
 
             DateTime end = DateTime.Now;
             TimeSpan span = end - start;
-            Console.Out.WriteLine($"One retrieval from url: {span.TotalMilliseconds} mills, {url}");
+           // Console.Out.WriteLine($"One retrieval from url: {span.TotalMilliseconds} mills, {url}");
             return responseBody;
 
         }

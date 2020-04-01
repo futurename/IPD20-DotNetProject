@@ -90,35 +90,39 @@ namespace StockMonitor
                //dailyList.ForEach(p=>Console.WriteLine(p.ToString()));
      */
 
-          /*  int num = 200;
-            DateTime start = DateTime.Now;
-            
-            TestBatchRetrieveDailyQuoteList(num);
-            DateTime end = DateTime.Now;
-            TimeSpan timeSpan= new TimeSpan();
-            timeSpan = end - start;
-            Console.Out.WriteLine($"Total time for <{num}> companies: {timeSpan.Milliseconds} mills");*/
-
-          for (int i = 0; i < 10; i++)
-          {
-
+            /*  int num = 200;
               DateTime start = DateTime.Now;
-              
-         /*     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AAPL"));
-              Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("GOOG"));
-              Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AMZN"));*/
 
-         Company company = DatabaseHelper.GetCompanyFromDb("AAPL");
-              
+              TestBatchRetrieveDailyQuoteList(num);
               DateTime end = DateTime.Now;
-              TimeSpan timeSpan = new TimeSpan();
+              TimeSpan timeSpan= new TimeSpan();
               timeSpan = end - start;
-              Console.Out.WriteLine($"***Time spent: {timeSpan.TotalMilliseconds} mills\n");
-          }
+              Console.Out.WriteLine($"Total time for <{num}> companies: {timeSpan.Milliseconds} mills");*/
+/*
+            for (int i = 0; i < 10; i++)
+            {
+
+                DateTime start = DateTime.Now;
+
+                *//*     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AAPL"));
+                     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("GOOG"));
+                     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AMZN"));*//*
+
+                Company company = DatabaseHelper.GetCompanyFromDb("AAPL");
+
+                DateTime end = DateTime.Now;
+                TimeSpan timeSpan = new TimeSpan();
+                timeSpan = end - start;
+                Console.Out.WriteLine($"***Time spent: {timeSpan.TotalMilliseconds} mills\n");
+            }*/
+
+           // DatabaseDataInitHelper.FilterSybomlNoQuoteData();
+
+           DatabaseDataInitHelper.DeleteNoQuoteDataSybolsAndRecordsFromDb();
 
 
 
-          Console.ReadKey();
+            Console.ReadKey();
         }
         private static async Task<double> AsyncGetQuoteOnlyPrice(string symbol, double curPrice, double prePrice, int counter)
         {
@@ -149,7 +153,7 @@ namespace StockMonitor
 
                     DateTime start = DateTime.Now;
                     List<QuoteDaily> quoteList = DatabaseHelper.GetQuoteDailyListFromDb(companyList[index]);
-                    
+
                     DateTime end = DateTime.Now;
                     TimeSpan timeSpan = new TimeSpan();
                     timeSpan = end - start;

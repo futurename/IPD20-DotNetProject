@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
 
@@ -94,8 +96,8 @@ namespace StockMonitor.Helpers
 
                     try
                     {
-                       Thread t= new Thread(()=>GetSubListDailyQuotes(subList, i));
-                       t.Start();
+                        Thread t = new Thread(() => GetSubListDailyQuotes(subList, i));
+                        t.Start();
                     }
                     catch (ArgumentNullException ex)
                     {
@@ -131,6 +133,64 @@ namespace StockMonitor.Helpers
                         $"{info}Insert {subList[i]}, from {dailyQuoteList[0].Date} to {dailyQuoteList[dailyQuoteList.Count - 1].Date}, total: {dailyQuoteList.Count}, time: {timeConsume.TotalSeconds} sec");
                 }
             }
+        }
+
+        public static void FilterSybomlNoQuoteData()
+        {
+            int counter = 0;
+            string filepath =
+                "C:\\Users\\WW\\Desktop\\SourceTree\\IPD20-DotNetProject\\StockMonitor\\InvalidSymbols.txt";
+            using (DbStockMonitor context = new DbStockMonitor())
+            {
+                List<string> symbolList = context.Companies.AsNoTracking().Select(p => p.Symbol).ToList();
+
+                for (int i = 0; i < symbolList.Count; i++)
+                {
+                    string symbol = symbolList[i];
+                    string response = RetrieveJsonDataHelper.GetQuoteStringBySymbol(symbol).Result;
+                    if (response.Length < 10)
+                    {
+                        Console.Out.WriteLine($"<{i}>: find {++counter} - {symbol} single quote has NO data: <{response}>");
+                        File.AppendAllText(filepath, $"{symbol}\n");
+                    }
+                }
+            }
+        }
+
+        public static void DeleteNoQuoteDataSybolsAndRecordsFromDb()
+        {
+            string filepath =
+                "C:\\Users\\WW\\Desktop\\SourceTree\\IPD20-DotNetProject\\StockMonitor\\InvalidSymbols.txt";
+            List<string> list = File.ReadAllText(filepath).Split('\n').ToList();
+             foreach (var symbol in list)
+                {
+                    using (DbStockMonitor context = new DbStockMonitor())
+                    {
+
+                    var dailyQuoteList =
+                         context.QuoteDailies.Where(r => r.Symbol == symbol).ToList();
+                    Console.Out.WriteLine($"Deleting records for {symbol}: {dailyQuoteList.Count}");
+
+                    for (int i = 0; i < dailyQuoteList.Count; i++)
+                    {
+                        context.QuoteDailies.Remove(dailyQuoteList[i]);
+                        context.SaveChanges();
+                        if (i % 50 == 0 && i != 0)
+                        {
+                            Console.Out.WriteLine($"Deleted 50 records, left: {dailyQuoteList.Count - i}");
+                        }
+                    }
+
+                    context.SaveChanges();
+
+                    Company company = context.Companies.FirstOrDefault(c => c.Symbol == symbol);
+                    context.Companies.Remove(company);
+                    context.SaveChanges();
+
+                    Console.Out.WriteLine($"Delete {symbol}");
+                }
+            }
+
         }
     }
 }
