@@ -32,9 +32,9 @@
                     <GridViewColumn Width="130" Header="Logo">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid>
-                                    <Image Source="{Binding Source=GetLogoImage}"></Image>
-                                </Grid>
+                                
+                                    <Image Source="{Binding Logo}" Height="30"></Image>
+                               
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
 
