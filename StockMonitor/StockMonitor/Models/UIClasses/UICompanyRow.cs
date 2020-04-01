@@ -30,17 +30,5 @@ namespace StockMonitor.Models.UIClasses
             return $"{Symbol}:{Price}, {ChangePercentage}%,{PriceChange},{Sector}";
         }
 
-        public BitmapImage GetLogoImage()
-        {
-            using (var ms = new System.IO.MemoryStream(Logo))
-            {
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.CacheOption = BitmapCacheOption.OnLoad; // here
-                image.StreamSource = ms;
-                image.EndInit();
-                return image;
-            }
-        }
     }
 }
