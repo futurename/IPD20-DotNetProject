@@ -139,3 +139,36 @@
 
 3. Need assistance / figure things out
 
+
+*****************************************************
+
+
+2020/04/01 Wang Wei
+1. Done since last scrum:
+- optimize EF query to improve reading speed from database
+- Finish retrieving daily data of all companies from API and inserting into database
+- prelimilarily test the bottle neck of app loading speed.
+
+2. To do until next Scrum:
+- Need test real-time quote for refreshing display on UI, need change the way we design for faster loading data
+- Add CompanyDetail POCO for displaying on major window
+- Continue testing and locate bottle neck of data retrieving issue
+
+3. Need assistance / figure things out
+- With entity framework, first query need take 5 more times (few secends) to load data, caching maybe a way to improve this or try raw SQL query, need test and compare.
+
+
+2020/03/31 Donghyeok Seo
+1. Done since last scrum
+- Set graph scale limit(fine tuning)
+- Draw graph with real data(Check Invalid data)
+- Check drawing time, optimize
+- Merge Test projects(Candle chart, Search stock) to StockMonitorUI project
+
+2. To do until next Scrum:
+- Search Company by name/ simbol
+- Sorty company by name, price, ... when user click header of list view
+- Filter result of search by range of price, trend
+- Show company information(CEO, description ... ) when user click company
+
+3. Need assistance / figure things out
