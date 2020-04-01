@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using StockMonitor.Helpers;
+using StockMonitor.Models.UIClasses;
 
 namespace GUI
 {
@@ -22,7 +24,19 @@ namespace GUI
     {
         public MainWindow()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (SystemException ex)
+            {
+                MessageBox.Show(
+                    "If this Message shows Xaml Design time, ignore.\n Otherwise, INTERNAL ERROR!!",
+                    "INTERNAL ERROR",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
+
     }
 }

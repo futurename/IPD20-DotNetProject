@@ -5,8 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        ResizeMode="NoResize"
+        Title="MainWindow" Height="558" Width="1263.4">
+    <Grid OpacityMask="#FF26262D" Background="#FF26262D">
+        <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" Background="#FF26262D" Foreground="#FFDDDDDD" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102" Foreground="#FFDDDDDD" Background="#FF26262D"/>
+        <TabControl HorizontalAlignment="Left" Height="498" Margin="10,10,0,0" VerticalAlignment="Top" Width="1200" Background="#FF26262D">
+            <TabItem Header="Search Stock" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
+                <local:SearchStockUserControl />
+            </TabItem>
+            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
+                <Grid Background="#FF26262D">
+                    <ListBox HorizontalAlignment="Left" Height="416" VerticalAlignment="Top" Width="146" Margin="0,10,0,-0.4"/>
+                    <Grid Background="#FFFFFFFF" HorizontalAlignment="Left" Height="416" Margin="151,10,0,-0.4" VerticalAlignment="Top" Width="597">
+                        <local:CandleChartUserControl VerticalAlignment="Top" Width="597" Height="300" />
+                    </Grid>
+                    <Grid Background="#FFFFFFFF" HorizontalAlignment="Left" Height="416" Margin="753,10,0,-0.4" VerticalAlignment="Top" Width="431"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="TabItem" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
+            </TabItem>
+        </TabControl>
     </Grid>
+
 </Window>
