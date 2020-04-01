@@ -27,5 +27,10 @@ namespace StockMonitor
         public string Website { get; set; }
         public string CEO { get; set; }
         public byte[] Logo { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}: {Symbol},{Industry},{Logo.Length}";
+        }
     }
 }
