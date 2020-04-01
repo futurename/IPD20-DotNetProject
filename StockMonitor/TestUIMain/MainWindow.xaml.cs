@@ -32,13 +32,14 @@ namespace TestUIMain
 
             start = DateTime.Now;
 
-            string[] companyNames = {"CASI", "MPO", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
+            string[] companyNames = {"CASI", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
                 "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };
 
             taskList = new List<Task<UIComapnyRow>>();
             foreach (string name in companyNames)
             {
-                taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRow(name));
+                //taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRow(name));
+                taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRowNo1MinData(name));
             }
             SetListView();
             InitializeComponent();

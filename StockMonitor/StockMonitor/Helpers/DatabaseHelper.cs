@@ -47,7 +47,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                List<QuoteDaily> result = dbContext.QuoteDailies.Where(p => p.Symbol == symbol).ToList();
+                List<QuoteDaily> result = dbContext.QuoteDailies.AsNoTracking().Where(p => p.Symbol == symbol).ToList();
                 return result;
             }
             catch (SystemException ex)

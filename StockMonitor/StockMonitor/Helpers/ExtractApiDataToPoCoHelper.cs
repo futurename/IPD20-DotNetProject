@@ -13,11 +13,47 @@ namespace StockMonitor.Helpers
 {
     public static class ExtractApiDataToPoCoHelper
     {
+
+        public static async Task<UIComapnyRow> GetCompanyDataRowNo1MinData(string symbol)
+        {
+            DateTime start = DateTime.Now;
+
+            FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
+            //Fmg1MinQuote oneMinQuote = (await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol))[0];
+
+            DateTime end = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan = end - start;
+            Console.Out.WriteLine($"Time: {timeSpan.TotalMilliseconds} mills for {symbol}");
+
+            Company company = DatabaseHelper.GetCompanyFromDb(symbol);
+
+
+
+            UIComapnyRow companyRow = new UIComapnyRow();
+            companyRow.Symbol = symbol;
+            companyRow.Price = fmgQuoteOnlyPrice.Price;
+           // double openPrice = oneMinQuote.Close;
+            double curPrice = fmgQuoteOnlyPrice.Price;
+           // double changePercentage = (curPrice - openPrice) / openPrice * 100;
+            //double change = curPrice - openPrice;
+            //companyRow.Open = oneMinQuote.Open;
+            //companyRow.Volume = oneMinQuote.Volume;
+            //companyRow.ChangePercentage = changePercentage;
+            //companyRow.PriceChange = change;
+            companyRow.MarketCapital = company.MarketCapital;
+            companyRow.Sector = company.Sector;
+            companyRow.PriceToEarningRatio = company.PriceToEarningRatio;
+            companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
+            companyRow.Industry = company.Industry;
+            companyRow.Logo = company.Logo;
+
+            return companyRow;
+        }
+
         public static async Task<UIComapnyRow> GetCompanyDataRow(string symbol)
         {
             DateTime start = DateTime.Now;
-            //FmgQuoteOnlyPrice fmgQuoteOnlyPrice = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
-            //Fmg1MinQuote oneMinQuote = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol)[0];
 
             FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
             Fmg1MinQuote oneMinQuote = (await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol))[0];
