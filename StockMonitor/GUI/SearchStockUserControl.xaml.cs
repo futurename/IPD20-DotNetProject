@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace GUI
     {
         List<Task<UIComapnyRow>> taskList;
 
-        List<UIComapnyRow> companyDataRowList;
+        public static List<UICompanyRowWraperForListView> companyDataRowList;
 
         DateTime start, end;
         public SearchStockUserControl()
@@ -74,21 +75,41 @@ namespace GUI
 
         private async Task SaveLoadedDataOnList()
         {
-            companyDataRowList = new List<UIComapnyRow>();
+            companyDataRowList = new List<UICompanyRowWraperForListView>();
 
             foreach (Task<UIComapnyRow> task in taskList)
             {
                 try
                 {
                     UIComapnyRow company = await task;
-                    companyDataRowList.Add(company);
+                    companyDataRowList.Add(new UICompanyRowWraperForListView(company));
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
                     Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
                 }
+                catch (FormatException ex)
+                {
+                    Console.Out.WriteLine("[Parse Error] " + ex.Message);
+                }
             }
 
+        }
+    }
+
+    public class UICompanyRowWraperForListView
+    {
+        public UIComapnyRow Company { get; set; }
+
+        public double MarketCapital { get; set; }
+        public double PriceToEarningRatio { get; set; }
+        public double PriceToSalesRatio { get; set; }
+        public UICompanyRowWraperForListView(UIComapnyRow company)//ex FormatException
+        {
+            Company = company;
+            MarketCapital = double.Parse(company.MarketCapital, CultureInfo.InvariantCulture);//ex
+            PriceToEarningRatio = double.Parse(company.PriceToEarningRatio, CultureInfo.InvariantCulture);//ex
+            PriceToSalesRatio = double.Parse(company.PriceToSalesRatio, CultureInfo.InvariantCulture);//ex
         }
     }
 }

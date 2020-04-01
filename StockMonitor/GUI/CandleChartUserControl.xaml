@@ -30,7 +30,6 @@
         <Label Name="lbl_Y_Axis" HorizontalAlignment="Left" Margin="26,220,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1"/>
         <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,10,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1"/>
         <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="23" Margin="144,631,0,0" TextWrapping="Wrap" Text="X-axis" VerticalAlignment="Top" Width="84" />
-        <Button Content="Reload" HorizontalAlignment="Left" Margin="562,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" />
-
+        <Button Name="btReload" Content="Reload" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Width="75" Click="btReload_Click" RenderTransformOrigin="-0.308,0.902" />
     </Grid>
 </UserControl>

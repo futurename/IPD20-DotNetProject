@@ -3,6 +3,7 @@ using LiveCharts.Defaults;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
 using StockMonitor;
+using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,16 +30,7 @@ namespace GUI
     {
 
         public SeriesCollection SeriesCollection { get; set; }
-        private string[] _labels;
-        public string[] Labels
-        {
-            get { return _labels; }
-            set
-            {
-                _labels = value;
-                OnPropertyChanged("Labels");
-            }
-        }
+        public string[] Labels { get; set; }
 
         public CandleChartUserControl()
         {
@@ -54,16 +46,13 @@ namespace GUI
             }
 
             DateTime start = DateTime.Now;
+
             reloadWindow();
-
-
-
-
 
             DateTime end = DateTime.Now;
             TimeSpan timeSpan = new TimeSpan();
             timeSpan = end - start;
-            MessageBox.Show($"Time spent: {timeSpan.TotalMilliseconds} mills");
+            Console.WriteLine($"Time spent: {timeSpan.TotalMilliseconds} mills");
         }
 
         private void reloadWindow()
@@ -102,13 +91,6 @@ namespace GUI
             };
 
             DataContext = this;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            if (PropertyChanged != null) PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void ChartOnDataClick(object sender, ChartPoint p)
@@ -166,14 +148,14 @@ namespace GUI
             Console.WriteLine("Max Value: {0}, Min Value: {1}", e.PreviewMaxValue, e.PreviewMinValue);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btReload_Click(object sender, RoutedEventArgs e)
         {
             DateTime start = DateTime.Now;
             reloadWindow();
             DateTime end = DateTime.Now;
             TimeSpan timeSpan = new TimeSpan();
             timeSpan = end - start;
-            MessageBox.Show($"Time spent: {timeSpan.TotalMilliseconds} mills");
+            Console.WriteLine($"Time spent: {timeSpan.TotalMilliseconds} mills");
         }
 
         private void chartStockPrice_MouseEnter(object sender, MouseEventArgs e)
