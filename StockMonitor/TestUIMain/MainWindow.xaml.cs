@@ -43,11 +43,6 @@ namespace TestUIMain
             SetListView();
             InitializeComponent();
             
-            
-           
-
-          
-
             /*  DateTime end = DateTime.Now;
               TimeSpan timeSpan = new TimeSpan();
               timeSpan = end - start;

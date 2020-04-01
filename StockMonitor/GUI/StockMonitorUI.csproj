@@ -113,16 +113,9 @@
     <Compile Include="SearchStockUserControl.xaml.cs">
       <DependentUpon>SearchStockUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
     <Page Include="CandleChartUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="CandleStickChart.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -135,18 +128,11 @@
     <Compile Include="CandleChartUserControl.xaml.cs">
       <DependentUpon>CandleChartUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CandleStickChart.xaml.cs">
-      <DependentUpon>CandleStickChart.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SearchStockUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
