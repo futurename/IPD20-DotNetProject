@@ -14,11 +14,11 @@ namespace StockMonitor.Helpers
     public static class ExtractApiDataToPoCoHelper
     {
 
-        public static async Task<UIComapnyRow> GetCompanyDataRowNo1MinData(string symbol)
+        public static  UIComapnyRow GetCompanyDataRowNo1MinData(string symbol)
         {
             DateTime start = DateTime.Now;
 
-            FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
+            FmgQuoteOnlyPrice fmgQuoteOnlyPrice = RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol).Result;
             //Fmg1MinQuote oneMinQuote = (await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol))[0];
 
             DateTime end = DateTime.Now;

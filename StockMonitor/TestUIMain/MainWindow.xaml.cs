@@ -1,7 +1,9 @@
-﻿ using System;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,61 +24,56 @@ namespace TestUIMain
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Task<UIComapnyRow>> taskList;
 
-        List<UIComapnyRow> companyDataRowList;
+
+        List<UIComapnyRow> companyDataRowList = new List<UIComapnyRow>();
 
         DateTime start, end;
+        string[] companyNames = {"CASI", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
+            "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };
         public MainWindow()
         {
-
             start = DateTime.Now;
 
-            string[] companyNames = {"CASI", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
-                "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };
-
-            taskList = new List<Task<UIComapnyRow>>();
-            foreach (string name in companyNames)
-            {
-                //taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRow(name));
-                taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRowNo1MinData(name));
-            }
-            SetListView();
             InitializeComponent();
-            
-            
-           
 
-          
+            GetAsyncCompnayRow();
 
-            /*  DateTime end = DateTime.Now;
-              TimeSpan timeSpan = new TimeSpan();
-              timeSpan = end - start;
-              MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
+            DateTime end = DateTime.Now;
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan = end - start;
+            MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");
         }
-        private async Task InitListView()
+
+        private void GetAsyncCompnayRow()
         {
-
-            companyDataRowList = new List<UIComapnyRow>();
-
-            foreach (Task<UIComapnyRow> task in taskList)
+            List<Task> taskList = new List<Task>();
+            for (int i = 0; i < companyNames.Length; i++)
             {
-                try
+
+                string name = companyNames[i];
+                //taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRow(name));
+                Task task = new Task(() =>
                 {
-                    UIComapnyRow company = await task;
-                    companyDataRowList.Add(company);
-                } catch (ArgumentOutOfRangeException ex)
-                {
-                    Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
-                }
+                    UIComapnyRow companyRow = ExtractApiDataToPoCoHelper.GetCompanyDataRowNo1MinData(name);
+                    companyDataRowList.Add(companyRow);
+                });
+                taskList.Add(task);
+                task.Start();
             }
-                //lsvMarketPreview.ItemsSource = companyDataRowList;
+
+            foreach (var task in taskList)
+            {
+                task.Wait();
+            }
+
+            lsvMarketPreview.ItemsSource = companyDataRowList;
         }
 
-        private async void SetListView()
+        private void SetListView()
         {
-            
-            await Task.Run(InitListView);
+            GetAsyncCompnayRow();
+
             lsvMarketPreview.ItemsSource = companyDataRowList;
 
 
