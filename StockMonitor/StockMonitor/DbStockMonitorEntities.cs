@@ -18,6 +18,7 @@ namespace StockMonitor
         public DbStockMonitor()
             : base("name=StockMonitorEntities")
         {
+
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

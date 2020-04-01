@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,58 +10,54 @@ namespace StockMonitor.Helpers
 {
     public static class DatabaseHelper
     {
+        private static DbStockMonitor dbContext = new DbStockMonitor();
         public static void InsertCompanyToDb(string symbol)
         {
             Company company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
-
-            using (DbStockMonitor dbContext = new DbStockMonitor())
+            try
             {
-                try
-                {
-                    dbContext.Companies.Add(company);
-                    dbContext.SaveChanges();
-                    Console.Out.WriteLine(company.ToString());
-                }
-                catch (Exception e)
-                {
-                    throw new SystemException("InsertCompanyToDb exception: {symbol} > {ex.Message}");
-                }
+                dbContext.Companies.Add(company);
+                dbContext.SaveChanges();
+                Console.Out.WriteLine(company.ToString());
+            }
+            catch (Exception e)
+            {
+                throw new SystemException("InsertCompanyToDb exception: {symbol} > {ex.Message}");
             }
         }
 
         public static Company GetCompanyFromDb(string symbol)
         {
-            using (DbStockMonitor dbContext = new DbStockMonitor())
+            try
             {
-                try
-                {
-                    return dbContext.Companies.FirstOrDefault(p => p.Symbol == symbol) as Company;
-                }
-                catch (SystemException ex)
-                {
-                   throw new SystemException($"GetCompanyFromDb exception: {symbol} > {ex.Message}"); 
-                }
+                Stopwatch sw = Stopwatch.StartNew();
+                Company company= dbContext.Companies.AsNoTracking().FirstOrDefault(p => p.Symbol == symbol) as Company;
+                sw.Stop();
+                TimeSpan span = sw.Elapsed;
+                Console.Out.WriteLine($"Get company {symbol} from db: {span.TotalMilliseconds} mills");
+                return company;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException($"GetCompanyFromDb exception: {symbol} > {ex.Message}");
             }
         }
 
         public static List<QuoteDaily> GetQuoteDailyListFromDb(string symbol)
         {
-
-            using (DbStockMonitor dbContext = new DbStockMonitor())
+            try
             {
-                try
-                {
-                    List<QuoteDaily> result = dbContext.QuoteDailies.Where(p => p.Symbol == symbol).ToList();
-                    return result;
-                }
-                catch (SystemException ex)
-                {
-                    throw new SystemException("GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
-                }
+                List<QuoteDaily> result = dbContext.QuoteDailies.Where(p => p.Symbol == symbol).ToList();
+                return result;
             }
+            catch (SystemException ex)
+            {
+                throw new SystemException("GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
+            }
+
         }
 
-         
+
     }
 
 }

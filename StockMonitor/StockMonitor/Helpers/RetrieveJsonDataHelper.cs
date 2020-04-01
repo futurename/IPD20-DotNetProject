@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -24,7 +25,9 @@ namespace StockMonitor.Helpers
         private const string FmgInvestmentValuationRatiosUrl = "/financial-ratios/";
         private const string FmgStockListUrl = "/company/stock/list/";
 
-
+        private static HttpResponseMessage httpResponseMessage;
+        private static HttpClientHandler httpClientHandler = new HttpClientHandler();
+        private static HttpClient httpClient = new HttpClient();
         public static List<FmgMajorIndex> RetrieveFmgMajorIndexes()
         {
             string url = FmgBaseUrl + FmgMajorIndexesUrl;
@@ -153,13 +156,20 @@ namespace StockMonitor.Helpers
 
         private static async Task<string> RetrieveFromUrl(string url)
         {
-            HttpClient client = new HttpClient();
-            using (HttpResponseMessage response = await client.GetAsync(url))
-            {
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                return responseBody;
-            }
+            /*httpClientHandler.Proxy = null;
+            httpClientHandler.UseProxy = false;*/
+
+            DateTime start = DateTime.Now;
+            httpResponseMessage = await httpClient.GetAsync(url);
+
+            //httpResponseMessage.EnsureSuccessStatusCode();
+            string responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            DateTime end = DateTime.Now;
+            TimeSpan span = end - start;
+            Console.Out.WriteLine($"One retrieval from url: {span.TotalMilliseconds} mills, {url}");
+            return responseBody;
+
         }
 
         private static List<FmgCandleDaily> ParseStringToFmgDataDaily(string response)
