@@ -56,19 +56,14 @@ namespace TestUIMain
                         {
                             RefreshPriceBySymbol(companyRow);
                             Thread.Sleep(2000);
+                           
                         });
                     }
-                   
+                    
                 }
             });
 
          
-
-
-
-
-
-
 
 
             /*   DateTime end = DateTime.Now;
@@ -81,6 +76,7 @@ namespace TestUIMain
         private async void RefreshPriceBySymbol(UIComapnyRow comapnyRow)
         {
             FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
+           quote.Price += new Random().NextDouble();
             if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
@@ -89,10 +85,12 @@ namespace TestUIMain
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
                 comapnyRow.Price = quote.Price;
+                int index = companyDataRowList.IndexOf(comapnyRow);
+                
             }
         }
 
-
+        
 
 
         private async Task InitListView()
