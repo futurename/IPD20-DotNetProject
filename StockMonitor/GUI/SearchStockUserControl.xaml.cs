@@ -24,8 +24,10 @@ namespace GUI
     public partial class SearchStockUserControl : UserControl
     {
         List<Task<UIComapnyRow>> taskList;
+        List<Task<UIComapnyRow>> watchTaskList;
 
-        public static List<UICompanyRowWraperForListView> companyDataRowList;
+        List<UICompanyRowWraperForListView> companyDataRowList;
+        public static List<UICompanyRowWraperForListView> CompanyWatchListDataRowList { get; set; }
 
         DateTime start, end;
         public SearchStockUserControl()
@@ -51,7 +53,7 @@ namespace GUI
             TimeSpan timeSpan = new TimeSpan();
             timeSpan = end - start;
             Console.WriteLine("##############Total time:{0} milli####################", timeSpan);
-            
+
         }
 
         private void LoadingCompanyDataOnSearchStockFromApi()
@@ -59,10 +61,19 @@ namespace GUI
             string[] companyNames = {"CASI", "MPO", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
                 "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };
 
+            string[] watchList = { "SDRL", "DRD", "HSY", "LHO" };
+
             taskList = new List<Task<UIComapnyRow>>();
+
             foreach (string name in companyNames)
             {
                 taskList.Add(GUIHelper.GetCompanyDataRowTask(name));
+            }
+
+            watchTaskList = new List<Task<UIComapnyRow>>();
+            foreach (string name in watchList)
+            {
+                watchTaskList.Add(GUIHelper.GetCompanyDataRowTask(name));
             }
         }
 
@@ -71,12 +82,12 @@ namespace GUI
             await Task.Run(SaveLoadedDataOnList);
 
             lsvMarketPreview.ItemsSource = companyDataRowList;
+            lsvWatch.ItemsSource = CompanyWatchListDataRowList;
         }
 
         private async Task SaveLoadedDataOnList()
         {
             companyDataRowList = new List<UICompanyRowWraperForListView>();
-
             foreach (Task<UIComapnyRow> task in taskList)
             {
                 try
@@ -88,12 +99,29 @@ namespace GUI
                 {
                     Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
                 }
-                catch (FormatException ex)
+                catch (SystemException ex)
                 {
                     Console.Out.WriteLine("[Parse Error] " + ex.Message);
                 }
             }
 
+            CompanyWatchListDataRowList = new List<UICompanyRowWraperForListView>();
+            foreach (Task<UIComapnyRow> task in watchTaskList)
+            {
+                try
+                {
+                    UIComapnyRow company = await task;
+                    CompanyWatchListDataRowList.Add(new UICompanyRowWraperForListView(company));
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
+                }
+                catch (SystemException ex)
+                {
+                    Console.Out.WriteLine("[Parse Error] " + ex.Message);
+                }
+            }
         }
     }
 

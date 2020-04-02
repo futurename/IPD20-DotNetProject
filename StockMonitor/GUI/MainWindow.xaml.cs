@@ -24,18 +24,7 @@ namespace GUI
     {
         public MainWindow()
         {
-            try
-            {
-                InitializeComponent();
-            }
-            catch (SystemException ex)
-            {
-                MessageBox.Show(
-                    "If this Message shows Xaml Design time, ignore.\n Otherwise, INTERNAL ERROR!!",
-                    "INTERNAL ERROR",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-            }
+            InitializeComponent();
         }
 
     }

@@ -19,6 +19,7 @@ namespace StockMonitor
         {
             this.HoldingShares = new HashSet<HoldingShare>();
             this.TradingRecords = new HashSet<TradingRecord>();
+            this.WatchLists = new HashSet<WatchList>();
         }
     
         public int Id { get; set; }
@@ -34,5 +35,7 @@ namespace StockMonitor
         public virtual ICollection<HoldingShare> HoldingShares { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TradingRecord> TradingRecords { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WatchList> WatchLists { get; set; }
     }
 }
