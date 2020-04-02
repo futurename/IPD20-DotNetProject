@@ -12,17 +12,13 @@ namespace StockMonitor
     using System;
     using System.Collections.Generic;
     
-    public partial class QuoteDaily
+    public partial class WatchListItem
     {
         public int Id { get; set; }
-        public string Symbol { get; set; }
-        public System.DateTime Date { get; set; }
-        public double Open { get; set; }
-        public double High { get; set; }
-        public double Low { get; set; }
-        public double Close { get; set; }
-        public string Volume { get; set; }
-        public double Vwap { get; set; }
-        public double ChangeOverTime { get; set; }
+        public int UserId { get; set; }
+        public int CompanyId { get; set; }
+    
+        public virtual Company Company { get; set; }
+        public virtual User User { get; set; }
     }
 }

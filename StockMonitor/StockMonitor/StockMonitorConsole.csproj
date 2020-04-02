@@ -164,6 +164,9 @@
     <Compile Include="WatchList.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="WatchListItem.cs">
+      <DependentUpon>StockMonitorModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

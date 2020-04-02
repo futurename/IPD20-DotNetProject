@@ -71,7 +71,7 @@ namespace StockMonitor.Helpers
             }
         }
 
-        public static List<WatchList>
+        
 
 
     }
