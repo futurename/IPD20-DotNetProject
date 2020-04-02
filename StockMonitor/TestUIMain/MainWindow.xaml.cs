@@ -88,7 +88,7 @@ namespace TestUIMain
             }
             else
             {
-                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}, {quote1MinList[0].Volume}");
                 comapnyRow.Price = quote.Price;
                 double change = comapnyRow.Price - comapnyRow.Open;
                 double changePercentage = (change / comapnyRow.Open) / comapnyRow.Open * 100;
