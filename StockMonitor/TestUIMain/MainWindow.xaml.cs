@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
@@ -25,8 +26,13 @@ namespace TestUIMain
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    ///
+    ///
+    ///
+    
     public partial class MainWindow : Window
     {
+        
         List<Task<UIComapnyRow>> taskList;
 
         BlockingCollection<UIComapnyRow> companyDataRowList;
@@ -49,6 +55,10 @@ namespace TestUIMain
             Task t = SetListView();
             InitializeComponent();
 
+            TradingRecord record = DatabaseHelper.GetTradingRecordFromDb(1);
+            cmRecordType.ItemsSource = new List<string> {"Sell", "Buy"};
+            cmRecordType.Text = record.TradeType;
+            
 
             Task.WhenAll(t).ContinueWith(p =>
             {

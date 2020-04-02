@@ -234,6 +234,8 @@ namespace StockMonitor.Helpers
             }
         }
 
+   
+
         public static async Task<List<Fmg1MinQuote>> RetrieveAllFmg1MinQuote(string symbol)
         {
             string url = FmgBaseUrl + Fmg1MinQuoteUrl + symbol;

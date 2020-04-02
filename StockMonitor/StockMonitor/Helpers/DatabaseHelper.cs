@@ -63,11 +63,25 @@ namespace StockMonitor.Helpers
             }
             catch (SystemException ex)
             {
-                throw new SystemException("GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
+                throw new SystemException($"GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
             }
         }
 
-        
+        public static TradingRecord GetTradingRecordFromDb(int recordId)
+        {
+            try
+            {
+                using (DbStockMonitor dbContext = new DbStockMonitor())
+                {
+                    TradingRecord record = dbContext.TradingRecords.AsNoTracking().Where(r => r.Id == recordId).FirstOrDefault();
+                    return record;
+                }
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException($"GetTradingRecordFromDb exception, id: {recordId} > {ex.Message}");
+            }
+        }
 
 
     }
