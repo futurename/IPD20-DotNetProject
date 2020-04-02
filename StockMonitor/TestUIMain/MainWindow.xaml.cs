@@ -37,9 +37,9 @@ namespace TestUIMain
 
             start = DateTime.Now;
 
-            string[] companyNames = { "AAPL" };
-            /*{"CASI", "AAPL", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
-                "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };*/
+            string[] companyNames =
+            {"VXUS", "AAPL", "AMZN", "GOOG", "BA", "LTM", "FB", "AAXN", "MSFT",
+                "T", "VZ", "GM", "OKE", "TERP", "IRBT", "LULU", "W", "NFLX", "NSYS", "STZ" };
 
             taskList = new List<Task<UIComapnyRow>>();
             foreach (string name in companyNames)
@@ -48,6 +48,7 @@ namespace TestUIMain
             }
             Task t = SetListView();
             InitializeComponent();
+
 
             Task.WhenAll(t).ContinueWith(p =>
             {
@@ -59,12 +60,11 @@ namespace TestUIMain
                         {
                             RefreshPriceBySymbol(companyRow);
                             Thread.Sleep(3000);
-                            
-                            }
+                            this.Dispatcher.Invoke(() => { lsvMarketPreview.Items.Refresh(); });
+                        }
                     });
                 }
             });
-
 
 
 
@@ -78,6 +78,7 @@ namespace TestUIMain
         private async void RefreshPriceBySymbol(UIComapnyRow comapnyRow)
         {
             FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
+            List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
 
             // Console.Out.WriteLine($"{comapnyRow.Symbol}, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
             // quote.Price += new Random().NextDouble();
@@ -87,8 +88,16 @@ namespace TestUIMain
             }
             else
             {
-                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}, {quote1MinList[0].Volume}");
                 comapnyRow.Price = quote.Price;
+                double change = comapnyRow.Price - comapnyRow.Open;
+                double changePercentage = (change / comapnyRow.Open) / comapnyRow.Open * 100;
+                comapnyRow.PriceChange = change;
+                comapnyRow.ChangePercentage = changePercentage;
+                if (quote1MinList.Count > 0)
+                {
+                    comapnyRow.Volume = quote1MinList[0].Volume;
+                }
             }
         }
 
