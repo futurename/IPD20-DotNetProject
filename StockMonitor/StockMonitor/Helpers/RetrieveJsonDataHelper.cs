@@ -39,6 +39,7 @@ namespace StockMonitor.Helpers
             {
                 throw new ArgumentException("FmgMajorIndexes null. " + url);
             }
+
             FmgSingleQuote quote = ParseStringToSingleQuote(response);
             return quote;
         }
@@ -55,7 +56,7 @@ namespace StockMonitor.Helpers
                 }
                 else
                 {
-                    throw new SystemException("Parse single quote null");
+                    throw new SystemException($"Parse single quote null {response}");
                 }
                 
             }

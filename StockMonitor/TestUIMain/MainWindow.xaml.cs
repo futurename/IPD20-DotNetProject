@@ -1,7 +1,9 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StockMonitor.Helpers;
+using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
 
 namespace TestUIMain
@@ -40,14 +43,58 @@ namespace TestUIMain
             {
                 taskList.Add(GUIHelper.GetCompanyDataRowTask(name));
             }
-            SetListView();
+            Task t = SetListView();
             InitializeComponent();
-            
-           /*   DateTime end = DateTime.Now;
-              TimeSpan timeSpan = new TimeSpan();
-              timeSpan = end - start;
-              MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
+
+            Task.WhenAll(t).ContinueWith(p =>
+            {
+                while (true)
+                {
+                    foreach (var companyRow in companyDataRowList)
+                    {
+                        Task.Factory.StartNew(() =>
+                        {
+                            RefreshPriceBySymbol(companyRow);
+                            Thread.Sleep(2000);
+                        });
+                    }
+                   
+                }
+            });
+
+         
+
+
+
+
+
+
+
+
+            /*   DateTime end = DateTime.Now;
+               TimeSpan timeSpan = new TimeSpan();
+               timeSpan = end - start;
+               MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
         }
+
+
+        private async void RefreshPriceBySymbol(UIComapnyRow comapnyRow)
+        {
+            FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
+            if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
+            {
+                Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+            }
+            else
+            {
+                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                comapnyRow.Price = quote.Price;
+            }
+        }
+
+
+
+
         private async Task InitListView()
         {
             companyDataRowList = new List<UIComapnyRow>();
@@ -68,12 +115,12 @@ namespace TestUIMain
                     Console.Out.WriteLine("!!!! system exception " + ex.Message);
                 }
             }
-                //lsvMarketPreview.ItemsSource = companyDataRowList;
+            //lsvMarketPreview.ItemsSource = companyDataRowList;
         }
 
-        private async void SetListView()
+        private async Task SetListView()
         {
-            
+
             await Task.Run(InitListView);
             lsvMarketPreview.ItemsSource = companyDataRowList;
 

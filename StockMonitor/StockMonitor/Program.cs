@@ -14,7 +14,7 @@ namespace StockMonitor
 {
     class Program
     {
-      
+
         static void Main(string[] args)
         {
             /*List<FmgCandleDaily> fmgDataDaily = RetrieveJsonData.RetriveFmgDataDaily("AAPL");
@@ -100,35 +100,35 @@ namespace StockMonitor
               TimeSpan timeSpan= new TimeSpan();
               timeSpan = end - start;
               Console.Out.WriteLine($"Total time for <{num}> companies: {timeSpan.Milliseconds} mills");*/
-/*
-            for (int i = 0; i < 10; i++)
-            {
+            /*
+                        for (int i = 0; i < 10; i++)
+                        {
 
-                DateTime start = DateTime.Now;
+                            DateTime start = DateTime.Now;
 
-                *//*     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AAPL"));
-                     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("GOOG"));
-                     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AMZN"));*//*
+                            *//*     Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AAPL"));
+                                 Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("GOOG"));
+                                 Console.Out.WriteLine(DatabaseHelper.GetCompanyFromDb("AMZN"));*//*
 
-                Company company = DatabaseHelper.GetCompanyFromDb("AAPL");
+                            Company company = DatabaseHelper.GetCompanyFromDb("AAPL");
 
-                DateTime end = DateTime.Now;
-                TimeSpan timeSpan = new TimeSpan();
-                timeSpan = end - start;
-                Console.Out.WriteLine($"***Time spent: {timeSpan.TotalMilliseconds} mills\n");
-            }*/
+                            DateTime end = DateTime.Now;
+                            TimeSpan timeSpan = new TimeSpan();
+                            timeSpan = end - start;
+                            Console.Out.WriteLine($"***Time spent: {timeSpan.TotalMilliseconds} mills\n");
+                        }*/
 
-           // DatabaseDataInitHelper.FilterSybomlNoQuoteData();
+            // DatabaseDataInitHelper.FilterSybomlNoQuoteData();
 
-        //   DatabaseDataInitHelper.DeleteNoQuoteDataSybolsAndRecordsFromDb();
+            //   DatabaseDataInitHelper.DeleteNoQuoteDataSybolsAndRecordsFromDb();
 
-        List<UIComapnyRow> list = new List<UIComapnyRow>();
-        list.Add(GUIHelper.GetCompanyDataRowTask("AAPL").Result);
-        list.Add(GUIHelper.GetCompanyDataRowTask("FB").Result);
-        UICompanyRowDetail detail1 = GUIHelper.GetUICompanyRowDetailTask("AAPL", list).Result;
-        Console.Out.WriteLine(detail1);
-        UICompanyRowDetail detail2 = GUIHelper.GetUICompanyRowDetailTask("FB", list).Result;
-        Console.Out.WriteLine(detail2);
+            List<UIComapnyRow> list = new List<UIComapnyRow>();
+            list.Add(GUIHelper.GetCompanyDataRowTask("AAPL").Result);
+            list.Add(GUIHelper.GetCompanyDataRowTask("FB").Result);
+            UICompanyRowDetail detail1 = GUIHelper.GetUICompanyRowDetailTask("AAPL", list).Result;
+            Console.Out.WriteLine(detail1);
+            UICompanyRowDetail detail2 = GUIHelper.GetUICompanyRowDetailTask("FB", list).Result;
+            Console.Out.WriteLine(detail2);
 
             Console.ReadKey();
         }
