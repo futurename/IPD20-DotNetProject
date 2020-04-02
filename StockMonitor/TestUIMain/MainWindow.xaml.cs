@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -27,7 +29,7 @@ namespace TestUIMain
     {
         List<Task<UIComapnyRow>> taskList;
 
-        List<UIComapnyRow> companyDataRowList;
+        BlockingCollection<UIComapnyRow> companyDataRowList;
 
         DateTime start, end;
         public MainWindow()
@@ -35,8 +37,9 @@ namespace TestUIMain
 
             start = DateTime.Now;
 
-            string[] companyNames = {"CASI", "MPO", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
-                "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };
+            string[] companyNames = { "AAPL" };
+            /*{"CASI", "AAPL", "GBL", "INWK", "BOKF", "PVBC", "MRC", "NEWM", "ICON",
+                "SLM", "DVCR", "PETX", "CODX", "LIVE", "SHEN", "TMK", "INTU", "VNOM", "NSYS", "EOLS" };*/
 
             taskList = new List<Task<UIComapnyRow>>();
             foreach (string name in companyNames)
@@ -48,22 +51,21 @@ namespace TestUIMain
 
             Task.WhenAll(t).ContinueWith(p =>
             {
-                while (true)
+                foreach (var companyRow in companyDataRowList)
                 {
-                    foreach (var companyRow in companyDataRowList)
+                    Task.Factory.StartNew(() =>
                     {
-                        Task.Factory.StartNew(() =>
+                        while (true)
                         {
                             RefreshPriceBySymbol(companyRow);
-                            Thread.Sleep(2000);
-                           
-                        });
-                    }
-                    
+                            Thread.Sleep(3000);
+                            
+                            }
+                    });
                 }
             });
 
-         
+
 
 
             /*   DateTime end = DateTime.Now;
@@ -76,7 +78,9 @@ namespace TestUIMain
         private async void RefreshPriceBySymbol(UIComapnyRow comapnyRow)
         {
             FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
-           quote.Price += new Random().NextDouble();
+
+            // Console.Out.WriteLine($"{comapnyRow.Symbol}, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+            // quote.Price += new Random().NextDouble();
             if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
@@ -85,17 +89,15 @@ namespace TestUIMain
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
                 comapnyRow.Price = quote.Price;
-                int index = companyDataRowList.IndexOf(comapnyRow);
-                
             }
         }
 
-        
+
 
 
         private async Task InitListView()
         {
-            companyDataRowList = new List<UIComapnyRow>();
+            companyDataRowList = new BlockingCollection<UIComapnyRow>();
 
             foreach (Task<UIComapnyRow> task in taskList)
             {
@@ -130,4 +132,6 @@ namespace TestUIMain
 
         }
     }
+
+
 }
