@@ -124,6 +124,7 @@
     <Compile Include="Models\UIClasses\UICompanyRowDetail.cs" />
     <Compile Include="Models\UIClasses\UICompanyRow.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quote1Min.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>

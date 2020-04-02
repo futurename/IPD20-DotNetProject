@@ -122,13 +122,17 @@ namespace StockMonitor
 
             //   DatabaseDataInitHelper.DeleteNoQuoteDataSybolsAndRecordsFromDb();
 
-            List<UIComapnyRow> list = new List<UIComapnyRow>();
+         /*   List<UIComapnyRow> list = new List<UIComapnyRow>();
             list.Add(GUIHelper.GetCompanyDataRowTask("AAPL").Result);
             list.Add(GUIHelper.GetCompanyDataRowTask("FB").Result);
             UICompanyRowDetail detail1 = GUIHelper.GetUICompanyRowDetailTask("AAPL", list).Result;
             Console.Out.WriteLine(detail1);
             UICompanyRowDetail detail2 = GUIHelper.GetUICompanyRowDetailTask("FB", list).Result;
-            Console.Out.WriteLine(detail2);
+            Console.Out.WriteLine(detail2);*/
+
+
+         List<Fmg1MinQuote> quotes = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote("AAPL").Result;
+         quotes.ForEach(p=> Console.WriteLine(p.ToString()));
 
             Console.ReadKey();
         }
