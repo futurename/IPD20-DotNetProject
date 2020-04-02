@@ -8,11 +8,13 @@ using System.Windows.Documents;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
+using StockMonitor.Models.UIClasses;
 
 namespace StockMonitor
 {
     class Program
     {
+      
         static void Main(string[] args)
         {
             /*List<FmgCandleDaily> fmgDataDaily = RetrieveJsonData.RetriveFmgDataDaily("AAPL");
@@ -118,9 +120,15 @@ namespace StockMonitor
 
            // DatabaseDataInitHelper.FilterSybomlNoQuoteData();
 
-           DatabaseDataInitHelper.DeleteNoQuoteDataSybolsAndRecordsFromDb();
+        //   DatabaseDataInitHelper.DeleteNoQuoteDataSybolsAndRecordsFromDb();
 
-
+        List<UIComapnyRow> list = new List<UIComapnyRow>();
+        list.Add(GUIHelper.GetCompanyDataRowTask("AAPL").Result);
+        list.Add(GUIHelper.GetCompanyDataRowTask("FB").Result);
+        UICompanyRowDetail detail1 = GUIHelper.GetUICompanyRowDetailTask("AAPL", list).Result;
+        Console.Out.WriteLine(detail1);
+        UICompanyRowDetail detail2 = GUIHelper.GetUICompanyRowDetailTask("FB", list).Result;
+        Console.Out.WriteLine(detail2);
 
             Console.ReadKey();
         }

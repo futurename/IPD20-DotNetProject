@@ -62,7 +62,7 @@ namespace GUI
             taskList = new List<Task<UIComapnyRow>>();
             foreach (string name in companyNames)
             {
-                taskList.Add(ExtractApiDataToPoCoHelper.GetCompanyDataRow(name));
+                taskList.Add(GUIHelper.GetCompanyDataRowTask(name));
             }
         }
 

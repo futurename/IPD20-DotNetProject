@@ -34,7 +34,7 @@ namespace StockMonitor.Helpers
                 Company company = null;
                 try
                 {
-                    company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
+                    company = GUIHelper.GetCompanyBySymbol(symbol);
                 }
                 catch (Newtonsoft.Json.JsonSerializationException ex)
                 {
@@ -112,7 +112,7 @@ namespace StockMonitor.Helpers
             for (int i = 0; i < subList.Count; i++)
             {
                 string info = $"T{index}=>{i}: ";
-                List<QuoteDaily> dailyQuoteList = ExtractApiDataToPoCoHelper.GetQuoteDailyList(subList[i]);
+                List<QuoteDaily> dailyQuoteList = GUIHelper.GetQuoteDailyList(subList[i]);
                 TimeSpan timeConsume = new TimeSpan();
                 using (DbStockMonitor dbctx = new DbStockMonitor())
                 {

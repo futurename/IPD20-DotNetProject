@@ -13,7 +13,7 @@ namespace StockMonitor.Helpers
      
         public static void InsertCompanyToDb(string symbol)
         {
-            Company company = ExtractApiDataToPoCoHelper.GetCompanyBySymbol(symbol);
+            Company company = GUIHelper.GetCompanyBySymbol(symbol);
             try
             {
                 using (DbStockMonitor dbContext = new DbStockMonitor())
@@ -65,8 +65,9 @@ namespace StockMonitor.Helpers
             {
                 throw new SystemException("GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
             }
-
         }
+
+        
 
 
     }

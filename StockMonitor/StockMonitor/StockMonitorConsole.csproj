@@ -108,7 +108,6 @@
     </Compile>
     <Compile Include="Helpers\DatabaseDataInitHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
-    <Compile Include="Helpers\ExtractApiDataToPoCoHelper.cs" />
     <Compile Include="Helpers\GUIHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
     <Compile Include="HoldingShare.cs">
@@ -122,6 +121,7 @@
     <Compile Include="Models\ApiModels\FmgQuoteDaily.cs" />
     <Compile Include="Models\ApiModels\FmgSingleQuote.cs" />
     <Compile Include="Models\ApiModels\FmgStockListEntity.cs" />
+    <Compile Include="Models\UIClasses\UICompanyRowDetail.cs" />
     <Compile Include="Models\UIClasses\UICompanyRow.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
