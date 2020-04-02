@@ -47,7 +47,7 @@ namespace GUI
                 return;
             }
 
-            DrawCandleStick();
+            //DrawCandleStick();
         }
 
         private void DrawCandleStick()
