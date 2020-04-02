@@ -108,7 +108,7 @@
     </Compile>
     <Compile Include="Helpers\DatabaseDataInitHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
-    <Compile Include="Helpers\GUIHelper.cs" />
+    <Compile Include="Helpers\GUIDataHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
     <Compile Include="HoldingShare.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
