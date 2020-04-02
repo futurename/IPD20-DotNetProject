@@ -47,10 +47,10 @@ namespace GUI
                 return;
             }
 
-           // DrawCandleStick();
+            DrawCandleStick();
         }
 
-        private void DrawCandleStick()
+        private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
             List<Fmg1MinQuoteWapper> valueList;
             List<string> labelList;
@@ -60,14 +60,14 @@ namespace GUI
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
                     string symbol = "SGH";
-                    var minValueList = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol).Result; // FIXME : Retrieve data for Chart
+                    var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
 
-                    valueList = (from fmg1MinQuote in minValueList
+                    valueList = (from fmg1MinQuote in minValueList.Take(200)
                                  orderby fmg1MinQuote.Date
                                  select new Fmg1MinQuoteWapper(fmg1MinQuote)
                                  ).ToList<Fmg1MinQuoteWapper>();
                     
-                    labelList = (from value in valueList select value.Date.ToString("hh-mm")).ToList<string>();
+                    labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
                     Labels = labelList.ToArray();
                 }
             }
@@ -87,6 +87,7 @@ namespace GUI
             };
 
             DataContext = this;
+
         }
 
         private void ChartOnDataClick(object sender, ChartPoint p)
@@ -116,7 +117,7 @@ namespace GUI
             var chartMargin = chartStockPrice.Series.Chart.DrawMargin;
 
             lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top, 0, 0);
-            txt_X_Axis.Margin = new Thickness(pointMouse.X - txt_X_Axis.Width/2, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
+            txt_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
             lbl_Y_Axis.Margin = new Thickness(chartMargin.Left, pointMouse.Y, 0, 0);
 
             if (pointMouse.X < chartMargin.Left || pointMouse.X > chartMargin.Width + chartMargin.Left
@@ -159,9 +160,11 @@ namespace GUI
 
         private void chartStockPrice_MouseEnter(object sender, MouseEventArgs e)
         {
+            if(chartStockPrice == null) { return; }
             lbl_X_Axis.Height = chartStockPrice.Series.Chart.DrawMargin.Height;
             lbl_Y_Axis.Width = chartStockPrice.Series.Chart.DrawMargin.Width;
         }
+
 
         private void Ax_RangeChanged(LiveCharts.Events.RangeChangedEventArgs eventArgs)
         {
@@ -179,6 +182,7 @@ namespace GUI
             Low = fmg1MinQuote.Low;
             High = fmg1MinQuote.High;
             Close = fmg1MinQuote.Close;
+            Date = fmg1MinQuote.Date;
         }
 
         public DateTime Date { get; set; }

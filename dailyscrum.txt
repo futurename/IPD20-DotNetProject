@@ -158,12 +158,42 @@
 - With entity framework, first query need take 5 more times (few secends) to load data, caching maybe a way to improve this or try raw SQL query, need test and compare.
 
 
-2020/03/31 Donghyeok Seo
+2020/04/01 Donghyeok Seo
 1. Done since last scrum
 - Set graph scale limit(fine tuning)
 - Draw graph with real data(Check Invalid data)
 - Check drawing time, optimize
 - Merge Test projects(Candle chart, Search stock) to StockMonitorUI project
+
+2. To do until next Scrum:
+- Search Company by name/ simbol
+- Sort company by name, price, ... when user click header of list view
+- Filter result of search by range of price, trend
+- Show company information(CEO, description ... ) when user click company
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/02 Wang Wei
+1. Done since last scrum:
+- Switch companyRow data source from /1min to /stock for Open price.
+- Find out API does not provide /stock data for some companies, write code to locate these companies in database and remove all daily records from db.
+- implement async refresh price for UICompanyRow
+- Add UICompanyRowDetail class and helper method
+2. To do until next Scrum:
+- Implement WatchList data integration with UI
+- Search for better way to refresh listview.
+3. Need assistance / figure things out
+- Refresh single item of listview and change the color during changing.
+
+
+2020/04/02 Donghyeok Seo
+1. Done since last scrum
+- Search Company by name/ simbol
+- Sort company by name, price, ... when user click header of list view
+- Filter result of search by range of price, trend
+- Show company information(CEO, description ... ) when user click company
 
 2. To do until next Scrum:
 - Search Company by name/ simbol

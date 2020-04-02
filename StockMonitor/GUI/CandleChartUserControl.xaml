@@ -51,7 +51,9 @@
                     DataTooltip="{x:Null}"
                     MouseMove="ChartMouseMove"
                     DataClick="ChartOnDataClick"
-                    DataHover="Chart_OnDataHover" ZoomingSpeed="0" Cursor="Cross" MouseEnter="chartStockPrice_MouseEnter" Margin="0,0,-0.2,0" HorizontalAlignment="Left" Width="564" Height="257" VerticalAlignment="Top">
+                    DataHover="Chart_OnDataHover" 
+                    MouseEnter="chartStockPrice_MouseEnter" 
+                    ZoomingSpeed="0.1" Cursor="Cross" Margin="0,0,-0.2,0" HorizontalAlignment="Left" Width="564" Height="257" VerticalAlignment="Top">
                     <Wpf:CartesianChart.AxisX>
                         <Wpf:Axis Labels="{Binding Labels}" 
                             MinValue="{Binding Min, Mode=TwoWay}" 
