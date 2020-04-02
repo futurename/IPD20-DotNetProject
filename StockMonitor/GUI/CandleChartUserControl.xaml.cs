@@ -3,6 +3,8 @@ using LiveCharts.Defaults;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
 using StockMonitor;
+using StockMonitor.Helpers;
+using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
@@ -45,19 +47,12 @@ namespace GUI
                 return;
             }
 
-            DateTime start = DateTime.Now;
-
-            reloadWindow();
-
-            DateTime end = DateTime.Now;
-            TimeSpan timeSpan = new TimeSpan();
-            timeSpan = end - start;
-            Console.WriteLine($"Time spent: {timeSpan.TotalMilliseconds} mills");
+            DrawCandleStick();
         }
 
-        private void reloadWindow()
+        private void DrawCandleStick()
         {
-            List<QuoteDaily> valueList;
+            List<Fmg1MinQuoteWapper> valueList;
             List<string> labelList;
 
             try
@@ -65,14 +60,14 @@ namespace GUI
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
                     string symbol = "SGH";
-                    valueList = (from price in ctx.QuoteDailies
-                                 orderby price.Date
-                                 where price.Symbol == symbol
-                                 select price
-                                 )
-                                 .ToList<QuoteDaily>();
+                    var minValueList = RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol).Result; // FIXME : Retrieve data for Chart
 
-                    labelList = (from value in valueList select value.Date.ToString("yyyy-MM-dd")).ToList<string>();
+                    valueList = (from fmg1MinQuote in minValueList
+                                 orderby fmg1MinQuote.Date
+                                 select new Fmg1MinQuoteWapper(fmg1MinQuote)
+                                 ).ToList<Fmg1MinQuoteWapper>();
+                    
+                    labelList = (from value in valueList select value.Date.ToString("hh-mm")).ToList<string>();
                     Labels = labelList.ToArray();
                 }
             }
@@ -86,7 +81,8 @@ namespace GUI
             {
                 new CandleSeries()
                 {
-                    Values = new ChartValues<OhlcPoint>(valueList)
+                    Values = new ChartValues<OhlcPoint>(valueList),
+                    Fill = Brushes.Transparent
                 }
             };
 
@@ -111,27 +107,30 @@ namespace GUI
 
             Y.Text = pointChartVal.Y.ToString("N");
 
-            if(pointChartVal.X <= Labels.Length)
+            if(pointChartVal.X < Labels.Length  && pointChartVal.X >= 0)
             {
                 txt_X_Axis.Text = Labels[(int)pointChartVal.X];
             }
-
+            
             var pointMouse = e.GetPosition(chartStockPrice);
-            lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartStockPrice.Series.Chart.DrawMargin.Top, 0, 0);
-            txt_X_Axis.Margin = new Thickness(pointMouse.X, chartStockPrice.Series.Chart.DrawMargin.Top + lbl_X_Axis.Height, 0, 0);
-            lbl_Y_Axis.Margin = new Thickness(chartStockPrice.Series.Chart.DrawMargin.Left, pointMouse.Y, 0, 0);
-
             var chartMargin = chartStockPrice.Series.Chart.DrawMargin;
-            if (pointMouse.X < chartMargin.Left || pointMouse.X > chartMargin.Width
-                || pointMouse.Y < chartMargin.Top || pointMouse.Y > chartMargin.Height)
+
+            lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top, 0, 0);
+            txt_X_Axis.Margin = new Thickness(pointMouse.X - txt_X_Axis.Width/2, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
+            lbl_Y_Axis.Margin = new Thickness(chartMargin.Left, pointMouse.Y, 0, 0);
+
+            if (pointMouse.X < chartMargin.Left || pointMouse.X > chartMargin.Width + chartMargin.Left
+                || pointMouse.Y < chartMargin.Top || pointMouse.Y > chartMargin.Height + chartMargin.Top)
             {
                 lbl_X_Axis.Visibility = Visibility.Hidden;
                 lbl_Y_Axis.Visibility = Visibility.Hidden;
+                txt_X_Axis.Visibility = Visibility.Hidden;
             }
             else
             {
                 lbl_X_Axis.Visibility = Visibility.Visible;
                 lbl_Y_Axis.Visibility = Visibility.Visible;
+                txt_X_Axis.Visibility = Visibility.Visible;
             }
         }
 
@@ -151,7 +150,7 @@ namespace GUI
         private void btReload_Click(object sender, RoutedEventArgs e)
         {
             DateTime start = DateTime.Now;
-            reloadWindow();
+            DrawCandleStick();
             DateTime end = DateTime.Now;
             TimeSpan timeSpan = new TimeSpan();
             timeSpan = end - start;
@@ -171,4 +170,19 @@ namespace GUI
             if (limitMin) ax.MinValue = -0.5;
         }
     }
+    
+    class Fmg1MinQuoteWapper : OhlcPoint
+    {
+        public Fmg1MinQuoteWapper(Fmg1MinQuote fmg1MinQuote)
+        {
+            Open = fmg1MinQuote.Open;
+            Low = fmg1MinQuote.Low;
+            High = fmg1MinQuote.High;
+            Close = fmg1MinQuote.Close;
+        }
+
+        public DateTime Date { get; set; }
+        public long Volume { get; set; }
+    }
+
 }
