@@ -60,7 +60,6 @@ namespace GUI
                         {
                             RefreshPriceBySymbol(companyRow);
                             Thread.Sleep(3000);
-                            this.Dispatcher.Invoke(() => { lsvMarketPreview.Items.Refresh(); });
                         }
                     });
                 }
@@ -81,7 +80,7 @@ namespace GUI
             List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
 
             // Console.Out.WriteLine($"{comapnyRow.Symbol}, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
-            // quote.Price += new Random().NextDouble();
+            quote.Price += new Random().NextDouble() * quote.Price / 10;
             if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");

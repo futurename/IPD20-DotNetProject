@@ -54,11 +54,12 @@ namespace TestUIMain
             }
             Task t = SetListView();
             InitializeComponent();
+            
 
             TradingRecord record = DatabaseHelper.GetTradingRecordFromDb(1);
             cmRecordType.ItemsSource = new List<string> {"Sell", "Buy"};
             cmRecordType.Text = record.TradeType;
-            
+            int counter = 0;
 
             Task.WhenAll(t).ContinueWith(p =>
             {
@@ -66,11 +67,12 @@ namespace TestUIMain
                 {
                     Task.Factory.StartNew(() =>
                     {
+                       
                         while (true)
                         {
+                           
                             RefreshPriceBySymbol(companyRow);
                             Thread.Sleep(3000);
-                            this.Dispatcher.Invoke(() => { lsvMarketPreview.Items.Refresh(); });
                         }
                     });
                 }
@@ -91,7 +93,7 @@ namespace TestUIMain
             List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
 
             // Console.Out.WriteLine($"{comapnyRow.Symbol}, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
-            // quote.Price += new Random().NextDouble();
+             quote.Price += new Random().NextDouble() * quote.Price / 10;
             if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
@@ -142,7 +144,6 @@ namespace TestUIMain
 
             await Task.Run(InitListView);
             lsvMarketPreview.ItemsSource = companyDataRowList;
-
 
             end = DateTime.Now;
             TimeSpan timeSpan = new TimeSpan();

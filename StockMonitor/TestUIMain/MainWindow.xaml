@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:TestUIMain"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="1200">
+   
     <Grid>
-        <ListView Name="lsvMarketPreview"  HorizontalAlignment="Left" Height="349" Margin="14,27,0,0" VerticalAlignment="Top" Width="994" RenderTransformOrigin="0.5,0.5">
+        <ListView Name="lsvMarketPreview" ItemsSource="{Binding UICompanyRow}"  HorizontalAlignment="Left" Height="349" Margin="14,27,0,0" VerticalAlignment="Top" Width="994" RenderTransformOrigin="0.5,0.5">
             <ListView.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -19,7 +20,14 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Symbol" Width="100" DisplayMemberBinding="{Binding Symbol}"/>
-                    <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Price}"/>
+                    <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Price, StringFormat=N2}" >
+                        <!--<GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="tbPrice" Foreground="Crimson" DataContext="{Binding Price}" Width="60"></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>-->
+                        
+                    </GridViewColumn>
                     <GridViewColumn Header="Chg%" Width="60" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N3}"/>
                     <GridViewColumn Header="Chg" Width="60" DisplayMemberBinding="{Binding PriceChange, StringFormat=N2}"/>
                     <GridViewColumn Header="Vol" Width="80" DisplayMemberBinding="{Binding Volume}"/>
