@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
+using static GUI.Wrapper;
 
 namespace GUI
 {
@@ -29,7 +30,7 @@ namespace GUI
     {
         List<Task<UIComapnyRow>> taskList;
 
-        BlockingCollection<UIComapnyRow> companyDataRowList;
+        BlockingCollection<UICompanyRowWraper> companyDataRowList;
 
         DateTime start, end;
 
@@ -58,7 +59,7 @@ namespace GUI
                     {
                         while (true)
                         {
-                            RefreshPriceBySymbol(companyRow);
+                            RefreshPriceBySymbol(companyRow.Company);
                             Thread.Sleep(3000);
                             this.Dispatcher.Invoke(() => { lsvMarketPreview.Items.Refresh(); });
                         }
@@ -106,18 +107,22 @@ namespace GUI
 
         private async Task InitListView()
         {
-            companyDataRowList = new BlockingCollection<UIComapnyRow>();
+            companyDataRowList = new BlockingCollection<UICompanyRowWraper>();
 
             foreach (Task<UIComapnyRow> task in taskList)
             {
                 try
                 {
                     UIComapnyRow company = await task;
-                    companyDataRowList.Add(company);
+                    companyDataRowList.Add(new UICompanyRowWraper(company));
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
+                    Console.Out.WriteLine("!!!!! Validation Error: " + ex.Message);
+                }
+                catch(FormatException ex)
+                {
+                    Console.Out.WriteLine("!!!! Format exception from Wrapper class" + ex.Message);
                 }
                 catch (SystemException ex)
                 {

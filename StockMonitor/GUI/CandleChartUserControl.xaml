@@ -34,8 +34,8 @@
             <ImageBrush/>
         </Grid.Background>
         <ListBox Name="lstWatch" HorizontalAlignment="Left" Width="146" Margin="0,10,0,0.6" ItemTemplate="{DynamicResource lstWatch_DataTemplate}"/>
-    
-        <Grid HorizontalAlignment="Left" Margin="151,10,0,0.6" Width="597">
+
+        <Grid Name="gridChartContainer" HorizontalAlignment="Left" Margin="151,10,0,0.6" Width="597">
             <Grid.Background>
                 <ImageBrush/>
             </Grid.Background>
@@ -45,15 +45,17 @@
                     <TextBlock x:Name="Y" Margin="0,0,-0.2,-16.2" Foreground="Gainsboro" Width="45"/>
                 </InlineUIContainer></TextBlock>
             <Grid Margin="0,29,0,118.6">
-                <Wpf:CartesianChart x:Name="chartStockPrice" Series="{Binding SeriesCollection}" 
+                <Wpf:CartesianChart x:Name="chartStockPrice"
+                    Series="{Binding SeriesCollection}"
                     Zoom="X"
                     Hoverable="False" 
                     DataTooltip="{x:Null}"
-                    MouseMove="ChartMouseMove"
                     DataClick="ChartOnDataClick"
                     DataHover="Chart_OnDataHover" 
-                    MouseEnter="chartStockPrice_MouseEnter" 
-                    ZoomingSpeed="0.1" Cursor="Cross" Margin="0,0,-0.2,0" HorizontalAlignment="Left" Width="564" Height="257" VerticalAlignment="Top">
+                    MouseMove="ChartMouseMove"
+                    MouseEnter="ChartMouseEnter" 
+                    MouseLeave="ChartMouseLeave"
+                    ZoomingSpeed="0.2" Cursor="Cross" Margin="0,0,-0.2,0" HorizontalAlignment="Left" Width="564" Height="257" VerticalAlignment="Top">
                     <Wpf:CartesianChart.AxisX>
                         <Wpf:Axis Labels="{Binding Labels}" 
                             MinValue="{Binding Min, Mode=TwoWay}" 

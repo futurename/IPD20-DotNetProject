@@ -113,6 +113,7 @@
     <Compile Include="SearchStockUserControl.xaml.cs">
       <DependentUpon>SearchStockUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Wrapper.cs" />
     <Page Include="CandleChartUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
