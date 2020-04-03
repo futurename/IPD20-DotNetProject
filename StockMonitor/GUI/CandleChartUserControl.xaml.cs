@@ -181,8 +181,5 @@ namespace GUI
             timeSpan = end - start;
             Console.WriteLine($"Time spent: {timeSpan.TotalMilliseconds} mills");
         }
-
     }
-    
-
 }

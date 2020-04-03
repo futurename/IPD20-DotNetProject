@@ -27,14 +27,14 @@ namespace GUI
             public long Volume { get; set; }
         }
 
-        public class UICompanyRowWraper
+        public class UICompanyRowWrapper
         {
             public UIComapnyRow Company { get; set; }
 
             public double MarketCapital { get; set; }
             public double PriceToEarningRatio { get; set; }
             public double PriceToSalesRatio { get; set; }
-            public UICompanyRowWraper(UIComapnyRow company)//ex FormatException
+            public UICompanyRowWrapper(UIComapnyRow company)//ex FormatException
             {
                 Company = company;
                 MarketCapital = double.Parse(company.MarketCapital, CultureInfo.InvariantCulture);//ex
