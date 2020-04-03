@@ -48,14 +48,14 @@ namespace GUI
                 return;
             }
 
-            DrawCandleStick();
         }
 
         private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
+            
             List<Fmg1MinQuoteWapper> valueList;
             List<string> labelList;
-            int numOfVal = (int)(NumberOfValuesPerPixel * gridChartContainer.Width);
+            int numOfVal = (int)(gridChartContainer.ActualWidth * NumberOfValuesPerPixel);
             try
             {
                 using (DbStockMonitor ctx = new DbStockMonitor())
@@ -64,10 +64,8 @@ namespace GUI
                     var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
 
                     valueList = (from fmg1MinQuote in minValueList.Take(numOfVal)
-                                 orderby fmg1MinQuote.Date 
                                  select new Fmg1MinQuoteWapper(fmg1MinQuote)
                                  ).ToList<Fmg1MinQuoteWapper>();
-
                     labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
                     Labels = labelList.ToArray();
                 }
@@ -78,11 +76,11 @@ namespace GUI
                 return;
             }
 
-            SeriesCollection = new SeriesCollection {
+            SeriesCollection = new SeriesCollection
+            {
                 new CandleSeries()
                 {
                     Values = new ChartValues<OhlcPoint>(valueList),
-                    Fill = Brushes.Transparent
                 }
             };
 
@@ -109,23 +107,42 @@ namespace GUI
 
             Y.Text = pointChartVal.Y.ToString("N");
 
+            if (!chartStockPrice.IsLoaded){ return; }// Check chart loaded
+            if (chartStockPrice.Series == null) { return; }// Check chart loaded
+
+            var chartMargin = chartStockPrice.Series.Chart.DrawMargin;
+            if (chartMargin == null) { return; }
+            if (!isCrossLineSet)
+            {
+                lbl_X_Axis.Height = chartMargin.Height;
+                lbl_Y_Axis.Width = chartMargin.Width;
+            }
+
             if ((pointChartVal.X < Labels.Length - 1) && pointChartVal.X >= 0)//FIXME: exception when mouse already entered and move in chart loading
             {
                 txt_X_Axis.Text = Labels[(int)Math.Round(pointChartVal.X)];
             }
 
             var pointMouse = e.GetPosition(chartStockPrice);
-            var chartMargin = chartStockPrice.Series.Chart.DrawMargin;
-            if (chartMargin == null) { return; }
-            if (!isCrossLineSet) {
-                lbl_X_Axis.Height = chartMargin.Height;
-                lbl_Y_Axis.Width = chartMargin.Width;
-            }
+            var dfe = chartStockPrice.Model;
 
-
-            lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top, 0, 0);
+            lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top , 0, 0);
             txt_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
             lbl_Y_Axis.Margin = new Thickness(chartMargin.Left, pointMouse.Y, 0, 0);
+
+            if (pointMouse.X < chartMargin.Left || pointMouse.X > chartMargin.Width + chartMargin.Left
+                || pointMouse.Y < chartMargin.Top || pointMouse.Y > chartMargin.Height + chartMargin.Top)
+            {
+                lbl_X_Axis.Visibility = Visibility.Hidden;
+                lbl_Y_Axis.Visibility = Visibility.Hidden;
+                txt_X_Axis.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                lbl_X_Axis.Visibility = Visibility.Visible;
+                lbl_Y_Axis.Visibility = Visibility.Visible;
+                txt_X_Axis.Visibility = Visibility.Visible;
+            }
         }
 
         private void ChartMouseLeave(object sender, MouseEventArgs e)
@@ -170,6 +187,12 @@ namespace GUI
             Axis ax = (Axis)eventArgs.Axis;
             if (limitMax) ax.MaxValue = Labels.Length;
             if (limitMin) ax.MinValue = 0;
+        }
+
+
+        private void chartStockPrice_Loaded(object sender, RoutedEventArgs e)
+        {
+            DrawCandleStick();
         }
 
         private void btReload_Click(object sender, RoutedEventArgs e)
