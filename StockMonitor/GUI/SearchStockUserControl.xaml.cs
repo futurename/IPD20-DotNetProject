@@ -46,7 +46,7 @@ namespace GUI
             string[] companyNames =
             {"VXUS", "AAPL", "AMZN", "GOOG", "BA", "LTM", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "TERP", "IRBT", "LULU", "W", "NFLX", "NSYS", "STZ" };
-            
+
             taskList = new List<Task<UIComapnyRow>>();
 
             List<Task<UIComapnyRow>> uiCompanyRowTaskList = GUIDataHelper.GetWatchUICompanyRowTaskList(3);
@@ -56,7 +56,7 @@ namespace GUI
             {
                 taskList.Add(GUIDataHelper.GetCompanyDataRowTask(symbol));
             }
-           
+
             Task mainListTask = InitListView();
 
             InitializeComponent();
@@ -78,20 +78,36 @@ namespace GUI
                 {
                     Task.Factory.StartNew(async () =>
                     {
-                        while (true)
+                        try
                         {
-                            RefreshRealTImePrice(companyRowWrapper.Company);
-                           // Thread.Sleep(RealTimeInterval);
-                           await Task.Delay(RealTimeInterval);
+                            while (true)
+                            {
+                                RefreshRealTImePrice(companyRowWrapper.Company);
+                                //Thread.Sleep(RealTimeInterval);
+                                await Task.Delay(RealTimeInterval);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Out.WriteLine(
+                                $"Mainwindow realtimeprice loop thread exception {companyRowWrapper.Company.Symbol} at {DateTime.Now}");
                         }
                     });
 
                     Task.Factory.StartNew(async () =>
                     {
-                        while (true)
+                        try
                         {
-                            Refresh1MinData(companyRowWrapper.Company);
-                            Thread.Sleep(OneMinTimeInterval);
+                            while (true)
+                            {
+                                Refresh1MinData(companyRowWrapper.Company);
+                                await Task.Delay(OneMinTimeInterval);
+                                //Thread.Sleep(OneMinTimeInterval);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Out.WriteLine($"1Mindata loop thread exception {companyRowWrapper.Company.Symbol} at {DateTime.Now}");
                         }
                     });
                 }
@@ -102,9 +118,16 @@ namespace GUI
                     {
                         while (true)
                         {
-                            RefreshRealTImePrice(uiComapnyRow);
-                            // Thread.Sleep(RealTimeInterval);
-                            await Task.Delay(RealTimeInterval);
+                            try
+                            {
+                                RefreshRealTImePrice(uiComapnyRow);
+                                //Thread.Sleep(RealTimeInterval);
+                                await Task.Delay(RealTimeInterval);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.Out.WriteLine($"Watchlist loop thread exception {uiComapnyRow.Symbol} at {DateTime.Now}");
+                            }
                         }
                     });
                 }
@@ -124,43 +147,57 @@ namespace GUI
 
         private async void Refresh1MinData(UIComapnyRow comapnyRow)
         {
-            List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
-            if (quote1MinList.Count > 0)
+            try
             {
-                comapnyRow.Volume = quote1MinList[0].Volume;
+                List<Fmg1MinQuote> quote1MinList =
+                    await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
+                if (quote1MinList.Count > 0)
+                {
+                    comapnyRow.Volume = quote1MinList[0].Volume;
 
-                /**************************************************
-                following line simulate Volume change during close hours.
-                ****************************************************/
-                comapnyRow.Volume += new Random().Next(10000) * 1000;
+                    /**************************************************
+                    following line simulate Volume change during close hours.
+                    ****************************************************/
+                    comapnyRow.Volume += new Random().Next(10000) * 1000;
+                }
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!! Refresh1Mindata exception for {comapnyRow.Symbol} at {DateTime.Now}");
             }
         }
 
         private async void RefreshRealTImePrice(UIComapnyRow comapnyRow)
         {
-            FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
-
-            /**************************************************
-                following line simulate Volume change during close hours.
-            ****************************************************/
-            quote.Price += new Random().NextDouble() * quote.Price / 10;
-
-            if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
+            try
             {
-                Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
+
+                /**************************************************
+                    following line simulate Volume change during close hours.
+                ****************************************************/
+                quote.Price += new Random().NextDouble() * quote.Price / 10;
+
+                if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
+                {
+                    Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                }
+                else
+                {
+                    Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                    comapnyRow.Price = quote.Price;
+                    double change = comapnyRow.Price - comapnyRow.Open;
+                    double changePercentage = (change / comapnyRow.Open) / comapnyRow.Open * 100;
+                    comapnyRow.PriceChange = change;
+                    comapnyRow.ChangePercentage = changePercentage;
+                }
             }
-            else
+            catch (SystemException ex)
             {
-                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
-                comapnyRow.Price = quote.Price;
-                double change = comapnyRow.Price - comapnyRow.Open;
-                double changePercentage = (change / comapnyRow.Open) / comapnyRow.Open * 100;
-                comapnyRow.PriceChange = change;
-                comapnyRow.ChangePercentage = changePercentage;
-
+                Console.Out.WriteLine($"\n!!! RefreshRealtimePrice exception for {comapnyRow.Symbol} at {DateTime.Now}");
             }
         }
-        
+
 
         private async Task InitListView()
         {
