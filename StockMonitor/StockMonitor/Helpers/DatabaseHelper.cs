@@ -117,6 +117,54 @@ namespace StockMonitor.Helpers
             }
         }
 
+
+        public static void DeleteFromWatchListById(int userId, int companyId)
+        {
+            try
+            {
+                var result = _dbContext.WatchListItems.AsNoTracking().Include("Company")
+                    .Where(w => w.UserId == userId && w.CompanyId == companyId).Select(i => i);
+                if (result == null)
+                {
+                    Console.Out.WriteLine($"*** No such item in watchlist db, {userId}, {companyId}");
+                }
+                else
+                {
+                    WatchListItem item = result as WatchListItem;
+                    _dbContext.WatchListItems.Remove(item);
+                    _dbContext.SaveChanges();
+                }
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n*** Delete item from watchlist fails. userid: {userId}, companyId: {companyId}. " + ex.Message);
+            }
+        }
+
+        public static void AddItemToWatchList(int userId, int companyId)
+        {
+            try
+            {
+                var result = _dbContext.WatchListItems.AsNoTracking().Include("Company")
+                    .Where(w => w.UserId == userId && w.CompanyId == companyId).Select(w => w);
+                if (result != null)
+                {
+                    Console.Out.WriteLine($"*** item EXISTS in watchlist db, {userId}, {companyId}");
+                }
+                else
+                {
+                    WatchListItem item = new WatchListItem { UserId = userId, CompanyId = companyId };
+                    _dbContext.WatchListItems.Add(item);
+                    _dbContext.SaveChanges();
+                    Console.Out.WriteLine($"*** SUCCESSFULLY add item to watch list. {userId}, {companyId}");
+                }
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n*** Add item to watchlist failed. {userId}:{companyId}. " + ex.Message);
+            }
+
+        }
     }
 
 }

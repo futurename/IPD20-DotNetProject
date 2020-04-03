@@ -29,7 +29,7 @@ namespace StockMonitor.Models.UIClasses
                 OnPropertyChanged("Volume");
             }
         }
-        
+        public int CompanyId { get; set; }
         public double ChangePercentage { get; set; }
 
         public double PriceChange { get; set; }

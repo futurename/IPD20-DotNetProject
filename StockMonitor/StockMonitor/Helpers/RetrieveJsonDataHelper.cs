@@ -63,7 +63,7 @@ namespace StockMonitor.Helpers
             }
             catch (Newtonsoft.Json.JsonSerializationException ex)
             {
-                throw new SystemException("Parse Single Quote exception. " + ex.Message);
+                throw new SystemException($"Parse Single Quote exception. {response}" + ex.Message);
             }
         }
 
