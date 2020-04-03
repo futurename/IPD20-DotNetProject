@@ -32,10 +32,11 @@ namespace GUI
         List<Task<UIComapnyRow>> taskList;
 
         BlockingCollection<UICompanyRowWrapper> companyDataRowList;
+        BlockingCollection<UIComapnyRow> watctList;
 
         DateTime start, end;
 
-        private const int RealTimeInterval = 3000;
+        private const int RealTimeInterval = 2000;
         private const int OneMinTimeInterval = 60000;
 
         public SearchStockUserControl()
@@ -45,25 +46,37 @@ namespace GUI
             string[] companyNames =
             {"VXUS", "AAPL", "AMZN", "GOOG", "BA", "LTM", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "TERP", "IRBT", "LULU", "W", "NFLX", "NSYS", "STZ" };
-
-            List<UIComapnyRow> watchListCompanies = GUIDataHelper.GetWatchUICompanyRowList(3);
-           
             
             taskList = new List<Task<UIComapnyRow>>();
+
+            List<Task<UIComapnyRow>> uiCompanyRowTaskList = GUIDataHelper.GetWatchUICompanyRowTaskList(3);
+            Task watchlistTask = InitWatchListTaskList(uiCompanyRowTaskList);
+
             foreach (string symbol in companyNames)
             {
                 taskList.Add(GUIDataHelper.GetCompanyDataRowTask(symbol));
             }
-            Task t = SetListView();
+           
+            Task mainListTask = InitListView();
+
             InitializeComponent();
 
-            lsvWatchList.ItemsSource = watchListCompanies;
+            LoopRefreshData(mainListTask, watchlistTask);
 
-            Task.WhenAll(t).ContinueWith(p =>
+
+
+        }
+
+
+
+
+        private void LoopRefreshData(Task mainListTask, Task watchlistTask)
+        {
+            Task.WhenAll(mainListTask, watchlistTask).ContinueWith(p =>
             {
                 foreach (var companyRowWrapper in companyDataRowList)
                 {
-                    Task.Factory.StartNew(() =>
+                    Task.Factory.StartNew(async () =>
                     {
                         while (true)
                         {
@@ -72,7 +85,7 @@ namespace GUI
                         }
                     });
 
-                    Task.Factory.StartNew(() =>
+                    Task.Factory.StartNew(async () =>
                     {
                         while (true)
                         {
@@ -81,14 +94,30 @@ namespace GUI
                         }
                     });
                 }
+
+                foreach (var uiComapnyRow in watctList)
+                {
+                    Task.Factory.StartNew(async () =>
+                    {
+                        while (true)
+                        {
+                            RefreshRealTImePrice(uiComapnyRow);
+                            Thread.Sleep(RealTimeInterval);
+                        }
+                    });
+                }
             });
+        }
 
-
-
-            /*   DateTime end = DateTime.Now;
-               TimeSpan timeSpan = new TimeSpan();
-               timeSpan = end - start;
-               MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
+        private async Task InitWatchListTaskList(List<Task<UIComapnyRow>> uiCompanyRowTaskList)
+        {
+            watctList = new BlockingCollection<UIComapnyRow>();
+            foreach (Task<UIComapnyRow> task in uiCompanyRowTaskList)
+            {
+                UIComapnyRow comapnyRow = await task;
+                watctList.Add(comapnyRow);
+            }
+            lsvWatchList.ItemsSource = watctList;
         }
 
         private async void Refresh1MinData(UIComapnyRow comapnyRow)
@@ -129,9 +158,7 @@ namespace GUI
 
             }
         }
-
-
-
+        
 
         private async Task InitListView()
         {
@@ -153,13 +180,6 @@ namespace GUI
                     Console.Out.WriteLine("!!!! system exception " + ex.Message);
                 }
             }
-            //lsvMarketPreview.ItemsSource = companyDataRowList;
-        }
-
-        private async Task SetListView()
-        {
-
-            await Task.Run(InitListView);
             lsvMarketPreview.ItemsSource = companyDataRowList;
 
 
@@ -167,7 +187,6 @@ namespace GUI
             TimeSpan timeSpan = new TimeSpan();
             timeSpan = end - start;
             Console.WriteLine("##############Total time:{0} milli####################", timeSpan);
-
         }
     }
 }

@@ -138,51 +138,50 @@ namespace StockMonitor.Helpers
         }
 
 
-        public static List<UIComapnyRow> GetWatchUICompanyRowList(int userId)
+        public static List<Task<UIComapnyRow>> GetWatchUICompanyRowTaskList(int userId)
         {
             List<Company> watchListCompanies = DatabaseHelper.GetWatchListCompaniesFromDb(userId);
-           
+
             List<Task<UIComapnyRow>> taskList = new List<Task<UIComapnyRow>>();
             foreach (var company in watchListCompanies)
             {
-               taskList.Add( Task.Run(async () =>
-               {
-                   Stopwatch sw = Stopwatch.StartNew();
-
-                   FmgQuoteOnlyPrice fmgQuoteOnlyPrice =
-                       await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
-                   FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(company.Symbol);
-
-                   UIComapnyRow companyRow = new UIComapnyRow();
-                   companyRow.Symbol = company.Symbol;
-                   companyRow.Price = fmgQuoteOnlyPrice.Price;
-                   double openPrice = singleQuote.open;
-                   double curPrice = fmgQuoteOnlyPrice.Price;
-                   double changePercentage = (curPrice - openPrice) / openPrice * 100;
-                   double change = curPrice - openPrice;
-                   companyRow.Open = openPrice;
-                   companyRow.Volume = singleQuote.volume;
-                   companyRow.ChangePercentage = changePercentage;
-                   companyRow.PriceChange = change;
-                   companyRow.MarketCapital = company.MarketCapital;
-                   companyRow.Sector = company.Sector;
-                   companyRow.PriceToEarningRatio = company.PriceToEarningRatio;
-                   companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
-                   companyRow.Industry = company.Industry;
-                   companyRow.Logo = company.Logo;
-                   companyRow.Description = company.Description;
-                   
-                   sw.Stop();
-                   Console.Out.WriteLine(
-                       $"\n---- Add one companyRow to result in GetWatchUICompanyRowList: {company.Symbol}, time: {sw.Elapsed.TotalMilliseconds} mills");
-                   return companyRow;
-               }));
+               taskList.Add(GetWatchUIComanyRowTask(userId, company));
             }
-            
-            List<UIComapnyRow> result = new List<UIComapnyRow>();
-            taskList.ForEach(t => result.Add(t.Result));
 
-            return result;
+            return taskList;
+        }
+
+        private static async Task<UIComapnyRow> GetWatchUIComanyRowTask(int userId, Company company)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+
+            FmgQuoteOnlyPrice fmgQuoteOnlyPrice =
+                await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
+            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(company.Symbol);
+
+            UIComapnyRow companyRow = new UIComapnyRow();
+            companyRow.Symbol = company.Symbol;
+            companyRow.Price = fmgQuoteOnlyPrice.Price;
+            double openPrice = singleQuote.open;
+            double curPrice = fmgQuoteOnlyPrice.Price;
+            double changePercentage = (curPrice - openPrice) / openPrice * 100;
+            double change = curPrice - openPrice;
+            companyRow.Open = openPrice;
+            companyRow.Volume = singleQuote.volume;
+            companyRow.ChangePercentage = changePercentage;
+            companyRow.PriceChange = change;
+            companyRow.MarketCapital = company.MarketCapital;
+            companyRow.Sector = company.Sector;
+            companyRow.PriceToEarningRatio = company.PriceToEarningRatio;
+            companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
+            companyRow.Industry = company.Industry;
+            companyRow.Logo = company.Logo;
+            companyRow.Description = company.Description;
+
+            sw.Stop();
+            Console.Out.WriteLine(
+                $"\n---- Add one companyRow to result in GetWatchUICompanyRowList: {company.Symbol}, time: {sw.Elapsed.TotalMilliseconds} mills");
+            return companyRow;
         }
 
     }
