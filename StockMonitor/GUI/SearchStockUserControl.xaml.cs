@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
@@ -44,15 +45,18 @@ namespace GUI
             {"VXUS", "AAPL", "AMZN", "GOOG", "BA", "LTM", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "TERP", "IRBT", "LULU", "W", "NFLX", "NSYS", "STZ" };
 
+            List<UIComapnyRow> watchListCompanies = GUIDataHelper.GetWatchUICompanyRowList(3);
+            lsvWatchList.ItemsSource = watchListCompanies;
+            
             taskList = new List<Task<UIComapnyRow>>();
-            foreach (string name in companyNames)
+            foreach (string symbol in companyNames)
             {
-                taskList.Add(GUIHelper.GetCompanyDataRowTask(name));
+                taskList.Add(GUIDataHelper.GetCompanyDataRowTask(symbol));
             }
             Task t = SetListView();
             InitializeComponent();
 
-            int counter = 0;
+            //lsvWatchList.ItemsSource = companyNames;
 
             Task.WhenAll(t).ContinueWith(p =>
             {

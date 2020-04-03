@@ -40,7 +40,7 @@
         </ListView>
         
         <Grid Margin="816,41,0,2.6">
-            <ListView Name="lsvWatch" Height="186" VerticalAlignment="Top">
+            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>

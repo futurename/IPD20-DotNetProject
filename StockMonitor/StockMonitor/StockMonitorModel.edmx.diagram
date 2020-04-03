@@ -14,9 +14,6 @@
         <EntityTypeShape EntityType="StockContext.User" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
         <AssociationConnector Association="StockContext.HoldingShares_ibfk_1" ManuallyRouted="false" />
         <AssociationConnector Association="StockContext.TradingRecord_ibfk_1" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="StockContext.WatchList" Width="1.5" PointX="10" PointY="2.125" />
-        <AssociationConnector Association="StockContext.WatchList_ibfk_2" />
-        <AssociationConnector Association="StockContext.WatchList_ibfk_1" />
         <EntityTypeShape EntityType="StockContext.WatchListItem" Width="1.5" PointX="8" PointY="5.25" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_2" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_1" />

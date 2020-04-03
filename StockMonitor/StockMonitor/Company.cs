@@ -17,10 +17,8 @@ namespace StockMonitor
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Company()
         {
-            this.WatchLists = new HashSet<WatchList>();
             this.WatchListItems = new HashSet<WatchListItem>();
         }
-    
         public int Id { get; set; }
         public string CompanyName { get; set; }
         public string Symbol { get; set; }
@@ -35,8 +33,6 @@ namespace StockMonitor
         public string CEO { get; set; }
         public byte[] Logo { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WatchList> WatchLists { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WatchListItem> WatchListItems { get; set; }
     }

@@ -10,14 +10,14 @@ namespace StockMonitor.Helpers
 {
     public static class DatabaseHelper
     {
-        private static DbStockMonitor dbContext = new DbStockMonitor();
+        private static DbStockMonitor _dbContext = new DbStockMonitor();
         public static void InsertCompanyToDb(string symbol)
         {
-            Company company = GUIHelper.GetCompanyBySymbol(symbol);
+            Company company = GUIDataHelper.GetCompanyBySymbol(symbol);
             try
             {
-                dbContext.Companies.Add(company);
-                dbContext.SaveChanges();
+                _dbContext.Companies.Add(company);
+                _dbContext.SaveChanges();
                 Console.Out.WriteLine(company.ToString());
             }
             catch (Exception e)
@@ -32,7 +32,7 @@ namespace StockMonitor.Helpers
             {
                 Stopwatch sw = Stopwatch.StartNew();
                 Company company =
-                    dbContext.Companies.AsNoTracking().FirstOrDefault(p => p.Symbol == symbol) as Company;
+                    _dbContext.Companies.AsNoTracking().FirstOrDefault(p => p.Symbol == symbol) as Company;
                 sw.Stop();
                 TimeSpan span = sw.Elapsed;
                 Console.Out.WriteLine($"Get company {symbol} from db: {span.TotalMilliseconds} mills");
@@ -48,7 +48,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                List<QuoteDaily> result = dbContext.QuoteDailies.AsNoTracking().Where(p => p.Symbol == symbol)
+                List<QuoteDaily> result = _dbContext.QuoteDailies.AsNoTracking().Where(p => p.Symbol == symbol)
                         .ToList();
                 return result;
             }
@@ -62,7 +62,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                TradingRecord record = dbContext.TradingRecords.AsNoTracking().Where(r => r.Id == recordId).FirstOrDefault();
+                TradingRecord record = _dbContext.TradingRecords.AsNoTracking().FirstOrDefault(r => r.Id == recordId);
                 return record;
             }
             catch (SystemException ex)
@@ -71,8 +71,50 @@ namespace StockMonitor.Helpers
             }
         }
 
-        
+        private static List<int> GetWatchCompanyIdsFromDb(int userId)
+        {
+            try
+            {
+               
+                    Stopwatch sw = Stopwatch.StartNew();
+                    List<int> result = _dbContext.WatchListItems.AsNoTracking().Where(i => i.UserId == userId)
+                        .Select(i => i.CompanyId)
+                        .ToList();
 
+                    sw.Stop();
+                    Console.Out.WriteLine(
+                        $"\n>>> Time to get watchlistitems for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
+
+                    //result.ForEach(p=>Console.WriteLine(p.ToString()));
+                    return result;
+               
+            }catch(SystemException ex)
+            {
+                throw new SystemException($"GetWatListIdsFromDb exception, id: {userId} > {ex.Message}");
+            }
+        }
+
+        public static List<Company> GetWatchListCompaniesFromDb(int userId)
+        {
+            try
+            {
+                
+                    Stopwatch sw = Stopwatch.StartNew();
+
+                    List<int> companyIds = GetWatchCompanyIdsFromDb(userId);
+                    List<Company> result = _dbContext.WatchListItems.Include("Company").AsNoTracking()
+                        .Where(u=>u.UserId== userId).Select(p => p.Company).ToList();
+
+                    sw.Stop();
+                    Console.Out.WriteLine(
+                        $"\n----- Time to match all watch item with all companies for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
+                    return result;
+                
+            }
+            catch (SystemException ex)
+            {throw new SystemException($"GetWatchListSymbolsFromDb exception, id: {userId} > {ex.Message}");
+            }
+        }
 
     }
 
