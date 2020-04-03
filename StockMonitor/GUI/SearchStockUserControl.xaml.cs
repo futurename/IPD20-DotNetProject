@@ -47,7 +47,7 @@ namespace GUI
                 "T", "VZ", "GM", "OKE", "TERP", "IRBT", "LULU", "W", "NFLX", "NSYS", "STZ" };
 
             List<UIComapnyRow> watchListCompanies = GUIDataHelper.GetWatchUICompanyRowList(3);
-            lsvWatchList.ItemsSource = watchListCompanies;
+           
             
             taskList = new List<Task<UIComapnyRow>>();
             foreach (string symbol in companyNames)
@@ -57,7 +57,7 @@ namespace GUI
             Task t = SetListView();
             InitializeComponent();
 
-            //lsvWatchList.ItemsSource = companyNames;
+            lsvWatchList.ItemsSource = watchListCompanies;
 
             Task.WhenAll(t).ContinueWith(p =>
             {

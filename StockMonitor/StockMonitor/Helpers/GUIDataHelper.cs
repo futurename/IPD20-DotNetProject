@@ -50,6 +50,7 @@ namespace StockMonitor.Helpers
             companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
             companyRow.Industry = company.Industry;
             companyRow.Logo = company.Logo;
+            companyRow.Description = company.Description;
 
             return companyRow;
         }
@@ -169,6 +170,7 @@ namespace StockMonitor.Helpers
                    companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
                    companyRow.Industry = company.Industry;
                    companyRow.Logo = company.Logo;
+                   companyRow.Description = company.Description;
                    
                    sw.Stop();
                    Console.Out.WriteLine(

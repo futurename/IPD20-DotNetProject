@@ -42,6 +42,7 @@ namespace StockMonitor.Models.UIClasses
         public string Industry { get; set; }
         public string Sector { get; set; }
         public byte[] Logo { get; set; }
+        public string Description { get; set; }
 
 
         public override string ToString()
