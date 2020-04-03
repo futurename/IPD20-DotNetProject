@@ -33,5 +33,6 @@ namespace StockMonitor
         public virtual DbSet<TradingRecord> TradingRecords { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<WatchList> WatchLists { get; set; }
+        public virtual DbSet<WatchListItem> WatchListItems { get; set; }
     }
 }

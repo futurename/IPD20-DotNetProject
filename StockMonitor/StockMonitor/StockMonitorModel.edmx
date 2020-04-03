@@ -97,7 +97,7 @@
           <Property Name="Balance" Type="double" Nullable="false" />
           <Property Name="Photo" Type="longblob" />
         </EntityType>
-        <EntityType Name="WatchList">
+        <EntityType Name="WatchListItem">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -129,26 +129,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="WatchList_ibfk_1">
+        <Association Name="WatchListItem_ibfk_1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="WatchList" Type="Self.WatchList" Multiplicity="*" />
+          <End Role="WatchListItem" Type="Self.WatchListItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="WatchList">
+            <Dependent Role="WatchListItem">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="WatchList_ibfk_2">
+        <Association Name="WatchListItem_ibfk_2">
           <End Role="Company" Type="Self.Company" Multiplicity="1" />
-          <End Role="WatchList" Type="Self.WatchList" Multiplicity="*" />
+          <End Role="WatchListItem" Type="Self.WatchListItem" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Company">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="WatchList">
+            <Dependent Role="WatchListItem">
               <PropertyRef Name="CompanyId" />
             </Dependent>
           </ReferentialConstraint>
@@ -161,7 +161,7 @@
           <EntitySet Name="TestQuoteDaily" EntityType="Self.TestQuoteDaily" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="TradingRecord" EntityType="Self.TradingRecord" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="StockMonitor" store:Type="Tables" />
-          <EntitySet Name="WatchList" EntityType="Self.WatchList" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="WatchListItem" EntityType="Self.WatchListItem" Schema="StockMonitor" store:Type="Tables" />
           <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
             <End Role="User" EntitySet="User" />
             <End Role="HoldingShares" EntitySet="HoldingShares" />
@@ -170,13 +170,13 @@
             <End Role="User" EntitySet="User" />
             <End Role="TradingRecord" EntitySet="TradingRecord" />
           </AssociationSet>
-          <AssociationSet Name="WatchList_ibfk_1" Association="Self.WatchList_ibfk_1">
+          <AssociationSet Name="WatchListItem_ibfk_1" Association="Self.WatchListItem_ibfk_1">
             <End Role="User" EntitySet="User" />
-            <End Role="WatchList" EntitySet="WatchList" />
+            <End Role="WatchListItem" EntitySet="WatchListItem" />
           </AssociationSet>
-          <AssociationSet Name="WatchList_ibfk_2" Association="Self.WatchList_ibfk_2">
+          <AssociationSet Name="WatchListItem_ibfk_2" Association="Self.WatchListItem_ibfk_2">
             <End Role="Company" EntitySet="Company" />
-            <End Role="WatchList" EntitySet="WatchList" />
+            <End Role="WatchListItem" EntitySet="WatchListItem" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -201,6 +201,7 @@
           <Property Name="CEO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="WatchLists" Relationship="StockContext.WatchList_ibfk_2" FromRole="Company" ToRole="WatchList" />
+          <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_2" FromRole="Company" ToRole="WatchListItem" />
         </EntityType>
         <EntityType Name="HoldingShare">
           <Key>
@@ -280,6 +281,7 @@
           <NavigationProperty Name="HoldingShares" Relationship="Self.HoldingShares_ibfk_1" FromRole="User" ToRole="HoldingShares" />
           <NavigationProperty Name="TradingRecords" Relationship="Self.TradingRecord_ibfk_1" FromRole="User" ToRole="TradingRecord" />
           <NavigationProperty Name="WatchLists" Relationship="StockContext.WatchList_ibfk_1" FromRole="User" ToRole="WatchList" />
+          <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_1" FromRole="User" ToRole="WatchListItem" />
         </EntityType>
         <Association Name="HoldingShares_ibfk_1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -330,6 +332,15 @@
             <End Role="User" EntitySet="Users" />
             <End Role="WatchList" EntitySet="WatchLists" />
           </AssociationSet>
+          <EntitySet Name="WatchListItems" EntityType="StockContext.WatchListItem" />
+          <AssociationSet Name="WatchListItem_ibfk_2" Association="StockContext.WatchListItem_ibfk_2">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="WatchListItem" EntitySet="WatchListItems" />
+          </AssociationSet>
+          <AssociationSet Name="WatchListItem_ibfk_1" Association="StockContext.WatchListItem_ibfk_1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="WatchListItem" EntitySet="WatchListItems" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="WatchList">
           <Key>
@@ -361,6 +372,40 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="WatchList">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="WatchListItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="StockContext.WatchListItem_ibfk_2" FromRole="WatchListItem" ToRole="Company" />
+          <NavigationProperty Name="User" Relationship="StockContext.WatchListItem_ibfk_1" FromRole="WatchListItem" ToRole="User" />
+        </EntityType>
+        <Association Name="WatchListItem_ibfk_2">
+          <End Type="StockContext.Company" Role="Company" Multiplicity="1" />
+          <End Type="StockContext.WatchListItem" Role="WatchListItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WatchListItem">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WatchListItem_ibfk_1">
+          <End Type="StockContext.User" Role="User" Multiplicity="1" />
+          <End Type="StockContext.WatchListItem" Role="WatchListItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WatchListItem">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -470,9 +515,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="WatchLists">
-            <EntityTypeMapping TypeName="StockContext.WatchList">
-              <MappingFragment StoreEntitySet="WatchList">
+          <EntitySetMapping Name="WatchListItems">
+            <EntityTypeMapping TypeName="StockContext.WatchListItem">
+              <MappingFragment StoreEntitySet="WatchListItem">
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

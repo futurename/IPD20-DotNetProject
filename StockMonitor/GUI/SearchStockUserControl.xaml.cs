@@ -19,7 +19,6 @@ using System.Windows.Shapes;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
-using static GUI.Wrapper;
 
 namespace GUI
 {
@@ -30,9 +29,12 @@ namespace GUI
     {
         List<Task<UIComapnyRow>> taskList;
 
-        BlockingCollection<UICompanyRowWraper> companyDataRowList;
+        BlockingCollection<UIComapnyRow> companyDataRowList;
 
         DateTime start, end;
+
+        private const int RealTimeInterval = 3000;
+        private const int OneMinTimeInterval = 60000;
 
         public SearchStockUserControl()
         {
@@ -50,6 +52,7 @@ namespace GUI
             Task t = SetListView();
             InitializeComponent();
 
+            int counter = 0;
 
             Task.WhenAll(t).ContinueWith(p =>
             {
@@ -59,9 +62,17 @@ namespace GUI
                     {
                         while (true)
                         {
-                            RefreshPriceBySymbol(companyRow.Company);
-                            Thread.Sleep(3000);
-                            this.Dispatcher.Invoke(() => { lsvMarketPreview.Items.Refresh(); });
+                            RefreshRealTImePrice(companyRow);
+                            Thread.Sleep(RealTimeInterval);
+                        }
+                    });
+
+                    Task.Factory.StartNew(() =>
+                    {
+                        while (true)
+                        {
+                            Refresh1MinData(companyRow);
+                            Thread.Sleep(OneMinTimeInterval);
                         }
                     });
                 }
@@ -75,30 +86,42 @@ namespace GUI
                MessageBox.Show($"Loading time: {timeSpan.TotalMilliseconds} mills");*/
         }
 
+        private async void Refresh1MinData(UIComapnyRow comapnyRow)
+        {
+            List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
+            if (quote1MinList.Count > 0)
+            {
+                comapnyRow.Volume = quote1MinList[0].Volume;
 
-        private async void RefreshPriceBySymbol(UIComapnyRow comapnyRow)
+                /**************************************************
+                following line simulate Volume change during close hours.
+                ****************************************************/
+                comapnyRow.Volume += new Random().Next(10000) * 1000;
+            }
+        }
+
+        private async void RefreshRealTImePrice(UIComapnyRow comapnyRow)
         {
             FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
-            List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
 
-            // Console.Out.WriteLine($"{comapnyRow.Symbol}, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
-            // quote.Price += new Random().NextDouble();
+            /**************************************************
+                following line simulate Volume change during close hours.
+            ****************************************************/
+            quote.Price += new Random().NextDouble() * quote.Price / 10;
+
             if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
             {
                 Console.Out.WriteLine($"{comapnyRow.Symbol} No change, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
             }
             else
             {
-                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}, {quote1MinList[0].Volume}");
+                Console.Out.WriteLine($"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
                 comapnyRow.Price = quote.Price;
                 double change = comapnyRow.Price - comapnyRow.Open;
                 double changePercentage = (change / comapnyRow.Open) / comapnyRow.Open * 100;
                 comapnyRow.PriceChange = change;
                 comapnyRow.ChangePercentage = changePercentage;
-                if (quote1MinList.Count > 0)
-                {
-                    comapnyRow.Volume = quote1MinList[0].Volume;
-                }
+
             }
         }
 
@@ -107,22 +130,18 @@ namespace GUI
 
         private async Task InitListView()
         {
-            companyDataRowList = new BlockingCollection<UICompanyRowWraper>();
+            companyDataRowList = new BlockingCollection<UIComapnyRow>();
 
             foreach (Task<UIComapnyRow> task in taskList)
             {
                 try
                 {
                     UIComapnyRow company = await task;
-                    companyDataRowList.Add(new UICompanyRowWraper(company));
+                    companyDataRowList.Add(company);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    Console.Out.WriteLine("!!!!! Validation Error: " + ex.Message);
-                }
-                catch(FormatException ex)
-                {
-                    Console.Out.WriteLine("!!!! Format exception from Wrapper class" + ex.Message);
+                    Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
                 }
                 catch (SystemException ex)
                 {
