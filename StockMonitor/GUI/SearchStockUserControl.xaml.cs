@@ -20,6 +20,7 @@ using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
+using static GUI.Wrapper;
 
 namespace GUI
 {
@@ -30,7 +31,7 @@ namespace GUI
     {
         List<Task<UIComapnyRow>> taskList;
 
-        BlockingCollection<UIComapnyRow> companyDataRowList;
+        BlockingCollection<UICompanyRowWrapper> companyDataRowList;
 
         DateTime start, end;
 
@@ -60,13 +61,13 @@ namespace GUI
 
             Task.WhenAll(t).ContinueWith(p =>
             {
-                foreach (var companyRow in companyDataRowList)
+                foreach (var companyRowWrapper in companyDataRowList)
                 {
                     Task.Factory.StartNew(() =>
                     {
                         while (true)
                         {
-                            RefreshRealTImePrice(companyRow);
+                            RefreshRealTImePrice(companyRowWrapper.Company);
                             Thread.Sleep(RealTimeInterval);
                         }
                     });
@@ -75,7 +76,7 @@ namespace GUI
                     {
                         while (true)
                         {
-                            Refresh1MinData(companyRow);
+                            Refresh1MinData(companyRowWrapper.Company);
                             Thread.Sleep(OneMinTimeInterval);
                         }
                     });
@@ -134,14 +135,14 @@ namespace GUI
 
         private async Task InitListView()
         {
-            companyDataRowList = new BlockingCollection<UIComapnyRow>();
+            companyDataRowList = new BlockingCollection<UICompanyRowWrapper>();
 
             foreach (Task<UIComapnyRow> task in taskList)
             {
                 try
                 {
                     UIComapnyRow company = await task;
-                    companyDataRowList.Add(company);
+                    companyDataRowList.Add(new UICompanyRowWrapper(company));
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {

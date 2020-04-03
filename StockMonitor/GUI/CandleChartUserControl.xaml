@@ -5,70 +5,47 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
              mc:Ignorable="d" 
-             xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-              Height="415" Width="1175" >
-    <UserControl.Resources>
-        <DataTemplate x:Key="lstWatch_DataTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Margin="5" BorderBrush="White" BorderThickness="1">
-                    <Image Source="{Binding Path=Logo}" Stretch="Fill" Width="50" Height="50" OpacityMask="Black" />
-                </Border>
-                <StackPanel Grid.Column="1" Margin="5">
-                    <StackPanel Orientation="Horizontal" TextBlock.FontWeight="Bold" >
-                        <TextBlock Text="{Binding Path=Symbol, FallbackValue=Symbol}" Foreground="#FFBCBCBC" />
-                        <TextBlock Text="{Binding Path=Price, FallbackValue=Price, StringFormat={}{0:0.00}}" Padding="10,0,0,0" Foreground="White"/>
-                    </StackPanel>
-                    <TextBlock Text="{Binding Path=Volume, FallbackValue=Volume}" Foreground="#FFBCBCBC" />
-                    <TextBlock Text="{Binding Path=Name, FallbackValue=Name}" Foreground="#FFBCBCBC" />
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-    </UserControl.Resources>
-    
-    <Grid Margin="0,0,0.2,-0.4">
-        <Grid.Background>
-            <ImageBrush/>
-        </Grid.Background>
-        <ListBox Name="lstWatch" HorizontalAlignment="Left" Width="146" Margin="0,10,0,0.6" ItemTemplate="{DynamicResource lstWatch_DataTemplate}"/>
-    
-        <Grid HorizontalAlignment="Left" Margin="151,10,0,0.6" Width="597">
-            <Grid.Background>
-                <ImageBrush/>
-            </Grid.Background>
-            <TextBlock Margin="35,10,0,0" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="15" Height="19"><InlineUIContainer>
-                    <TextBlock Foreground="Gainsboro" Height="20" Width="93" ><Run Text="Stock Price: $"/></TextBlock>
-                </InlineUIContainer><Run Text=" "/><InlineUIContainer>
-                    <TextBlock x:Name="Y" Margin="0,0,-0.2,-16.2" Foreground="Gainsboro" Width="45"/>
-                </InlineUIContainer></TextBlock>
-            <Grid Margin="0,29,0,118.6">
-                <Wpf:CartesianChart x:Name="chartStockPrice" Series="{Binding SeriesCollection}" 
+             xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" Height="298.4" Width="609.6">
+
+
+    <Grid Name="gridChartContainer" Margin="0,0,-0.4,-14.6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Name="stPanelLegend" Grid.Row="0" Orientation="Horizontal" Margin="22,0,472,0" TextBlock.FontWeight="Bold" VerticalAlignment="Top" >
+            <TextBlock Text="Stock Price: $" Foreground="Gainsboro" Width="81" Margin="0,2" />
+            <TextBlock x:Name="Y" Margin="0,0,-0.2,2" Foreground="Gainsboro" Width="35"/>
+        </StackPanel>
+
+        <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="525,0,10,0" VerticalAlignment="Top" Click="btReload_Click"/>
+
+        <Wpf:CartesianChart x:Name="chartStockPrice"
+                    Series="{Binding SeriesCollection}"
                     Zoom="X"
+                    Grid.Row="1" 
                     Hoverable="False" 
                     DataTooltip="{x:Null}"
-                    MouseMove="ChartMouseMove"
                     DataClick="ChartOnDataClick"
                     DataHover="Chart_OnDataHover" 
-                    MouseEnter="chartStockPrice_MouseEnter" 
-                    ZoomingSpeed="0.1" Cursor="Cross" Margin="0,0,-0.2,0" HorizontalAlignment="Left" Width="564" Height="257" VerticalAlignment="Top">
-                    <Wpf:CartesianChart.AxisX>
-                        <Wpf:Axis Labels="{Binding Labels}" 
+                    MouseMove="ChartMouseMove"
+                    MouseEnter="ChartMouseEnter" 
+                    MouseLeave="ChartMouseLeave"
+                    ZoomingSpeed="0.2" Cursor="Cross" Loaded="chartStockPrice_Loaded" AnimationsSpeed="0:0:0.1" Margin="0,0,-0.4,14.8">
+            <Wpf:CartesianChart.AxisX>
+                <Wpf:Axis Labels="{Binding Labels}" 
                             MinValue="{Binding Min, Mode=TwoWay}" 
                             MaxValue="{Binding Max, Mode=TwoWay}"
                             RangeChanged="Ax_RangeChanged"
                             PreviewRangeChanged="Axis_OnPreviewRangeChanged"/>
-                    </Wpf:CartesianChart.AxisX>
-                </Wpf:CartesianChart>
-                <Label Name="lbl_Y_Axis" Margin="36,220,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left"/>
-                <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="194,56,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Height="215"/>
-                <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="23" Margin="200,268,0,0" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Foreground="Gainsboro" Width="61.6" Background="#FF26262D" Opacity="0.8" />
-            </Grid>
-            <Button Name="btReload" Content="Reload" HorizontalAlignment="Left" Margin="500,10,0,0" VerticalAlignment="Top" Width="75" Click="btReload_Click" RenderTransformOrigin="-0.308,0.902" />
-        </Grid>
-        <Grid Background="#FFFFFFFF" HorizontalAlignment="Left" Height="416" Margin="753,10,0,-0.4" VerticalAlignment="Top" Width="431"/>
+            </Wpf:CartesianChart.AxisX>
+        </Wpf:CartesianChart>
+        <Label Name="lbl_Y_Axis" Margin="35,207,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Width="500" Grid.Row="1" />
+        <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,33,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Height="215" Grid.Row="1"/>
+        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="23" Margin="200,248,0,0" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Foreground="Gainsboro" Width="62" Background="#FF26262D" Opacity="0.8" Grid.Row="1" />
     </Grid>
 
 </UserControl>

@@ -15,22 +15,22 @@
             </ListView.Resources>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Symbol}"/>
-                    <GridViewColumn Header="Price"  DisplayMemberBinding="{Binding Price, StringFormat={}{0:0.00}}" />
-                    <GridViewColumn Header="Chg%" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N3}"/>
-                    <GridViewColumn Header="Chg" DisplayMemberBinding="{Binding PriceChange, StringFormat={}{0:0.0}}"/>
-                    <GridViewColumn Header="Vol" DisplayMemberBinding="{Binding Volume,  StringFormat='\{0:#,##0,K\}'}"/>
-                    <GridViewColumn Header="Open" DisplayMemberBinding="{Binding Open, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
+                    <GridViewColumn Header="Price"  DisplayMemberBinding="{Binding Company.Price, StringFormat={}{0:0.00}}" />
+                    <GridViewColumn Header="Chg%" DisplayMemberBinding="{Binding Company.ChangePercentage, StringFormat={}{0:0.0}}"/>
+                    <GridViewColumn Header="Chg" DisplayMemberBinding="{Binding Company.PriceChange, StringFormat={}{0:0.0}}"/>
+                    <GridViewColumn Header="Vol" DisplayMemberBinding="{Binding Company.Volume,  StringFormat='\{0:#,##0,K\}'}"/>
+                    <GridViewColumn Header="Open" DisplayMemberBinding="{Binding Company.Open, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="MktCap" DisplayMemberBinding="{Binding MarketCapital, StringFormat='\{0:#,##0,,M\}'}"/>
-                    <GridViewColumn Header="P/E" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat=N2}"/>
-                    <GridViewColumn Header="P/S" DisplayMemberBinding="{Binding PriceToSalesRatio, StringFormat=N2}"/>
-                    <GridViewColumn Header="Industry" DisplayMemberBinding="{Binding Industry}"/>
-                    <GridViewColumn Header="Sector" DisplayMemberBinding="{Binding Sector}"/>
+                    <GridViewColumn Header="P/E" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="P/S" DisplayMemberBinding="{Binding PriceToSalesRatio, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="Industry" DisplayMemberBinding="{Binding Company.Industry}"/>
+                    <GridViewColumn Header="Sector" DisplayMemberBinding="{Binding Company.Sector}"/>
                     <GridViewColumn Header="Logo">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate >
                                 <Border Margin="5" BorderBrush="Black" BorderThickness="1">
-                                    <Image Source="{Binding Logo}" Stretch="Fill" Width="30" Height="30" />
+                                    <Image Source="{Binding Company.Logo}" Stretch="Fill" Width="30" Height="30" />
                                 </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
