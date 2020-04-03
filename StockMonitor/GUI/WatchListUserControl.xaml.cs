@@ -40,7 +40,7 @@ namespace GUI
             taskList = new List<Task<UIComapnyRow>>();
             foreach (string name in companyNames)
             {
-                taskList.Add(GUIHelper.GetCompanyDataRowTask(name));
+                taskList.Add(GUIDataHelper.GetCompanyDataRowTask(name));
             }
 
             foreach (Task<UIComapnyRow> task in taskList)

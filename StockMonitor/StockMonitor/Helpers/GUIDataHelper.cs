@@ -140,15 +140,16 @@ namespace StockMonitor.Helpers
         public static List<UIComapnyRow> GetWatchUICompanyRowList(int userId)
         {
             List<Company> watchListCompanies = DatabaseHelper.GetWatchListCompaniesFromDb(userId);
-            List<UIComapnyRow> result = new List<UIComapnyRow>();
-            List<Task> taskList = new List<Task>();
+           
+            List<Task<UIComapnyRow>> taskList = new List<Task<UIComapnyRow>>();
             foreach (var company in watchListCompanies)
             {
-               Task t = Task.Run(async () =>
+               taskList.Add( Task.Run(async () =>
                {
                    Stopwatch sw = Stopwatch.StartNew();
 
-                   FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
+                   FmgQuoteOnlyPrice fmgQuoteOnlyPrice =
+                       await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
                    FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(company.Symbol);
 
                    UIComapnyRow companyRow = new UIComapnyRow();
@@ -168,16 +169,16 @@ namespace StockMonitor.Helpers
                    companyRow.PriceToSalesRatio = company.PriceToSalesRatio;
                    companyRow.Industry = company.Industry;
                    companyRow.Logo = company.Logo;
-                   result.Add(companyRow);
-                   sw.Stop();
-                   Console.Out.WriteLine($"\n---- Add one companyRow to result in GetWatchUICompanyRowList: {company.Symbol}, time: {sw.Elapsed.TotalMilliseconds} mills");
                    
-               });
-                taskList.Add(t);
+                   sw.Stop();
+                   Console.Out.WriteLine(
+                       $"\n---- Add one companyRow to result in GetWatchUICompanyRowList: {company.Symbol}, time: {sw.Elapsed.TotalMilliseconds} mills");
+                   return companyRow;
+               }));
             }
-
-           // Task.WaitAll(taskList.ToArray());
             
+            List<UIComapnyRow> result = new List<UIComapnyRow>();
+            taskList.ForEach(t => result.Add(t.Result));
 
             return result;
         }

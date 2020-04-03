@@ -75,20 +75,21 @@ namespace StockMonitor.Helpers
         {
             try
             {
-               
-                    Stopwatch sw = Stopwatch.StartNew();
-                    List<int> result = _dbContext.WatchListItems.AsNoTracking().Where(i => i.UserId == userId)
-                        .Select(i => i.CompanyId)
-                        .ToList();
 
-                    sw.Stop();
-                    Console.Out.WriteLine(
-                        $"\n>>> Time to get watchlistitems for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
+                Stopwatch sw = Stopwatch.StartNew();
+                List<int> result = _dbContext.WatchListItems.AsNoTracking().Where(i => i.UserId == userId)
+                    .Select(i => i.CompanyId)
+                    .ToList();
 
-                    //result.ForEach(p=>Console.WriteLine(p.ToString()));
-                    return result;
-               
-            }catch(SystemException ex)
+                sw.Stop();
+                Console.Out.WriteLine(
+                    $"\n>>> Time to get watchlistitems for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
+
+                //result.ForEach(p=>Console.WriteLine(p.ToString()));
+                return result;
+
+            }
+            catch (SystemException ex)
             {
                 throw new SystemException($"GetWatListIdsFromDb exception, id: {userId} > {ex.Message}");
             }
@@ -98,21 +99,21 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                
-                    Stopwatch sw = Stopwatch.StartNew();
+                Stopwatch sw = Stopwatch.StartNew();
 
-                    List<int> companyIds = GetWatchCompanyIdsFromDb(userId);
-                    List<Company> result = _dbContext.WatchListItems.Include("Company").AsNoTracking()
-                        .Where(u=>u.UserId== userId).Select(p => p.Company).ToList();
+                List<int> companyIds = GetWatchCompanyIdsFromDb(userId);
+                List<Company> result = _dbContext.WatchListItems.Include("Company").AsNoTracking()
+                    .Where(u => u.UserId == userId).Select(p => p.Company).ToList();
 
-                    sw.Stop();
-                    Console.Out.WriteLine(
-                        $"\n----- Time to match all watch item with all companies for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
-                    return result;
-                
+                sw.Stop();
+                Console.Out.WriteLine(
+                    $"\n----- Time to match all watch item with all companies for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
+                return result;
+
             }
             catch (SystemException ex)
-            {throw new SystemException($"GetWatchListSymbolsFromDb exception, id: {userId} > {ex.Message}");
+            {
+                throw new SystemException($"GetWatchListSymbolsFromDb exception, id: {userId} > {ex.Message}");
             }
         }
 
