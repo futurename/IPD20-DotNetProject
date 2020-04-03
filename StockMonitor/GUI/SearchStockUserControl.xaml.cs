@@ -81,7 +81,8 @@ namespace GUI
                         while (true)
                         {
                             RefreshRealTImePrice(companyRowWrapper.Company);
-                            Thread.Sleep(RealTimeInterval);
+                           // Thread.Sleep(RealTimeInterval);
+                           await Task.Delay(RealTimeInterval);
                         }
                     });
 
@@ -102,7 +103,8 @@ namespace GUI
                         while (true)
                         {
                             RefreshRealTImePrice(uiComapnyRow);
-                            Thread.Sleep(RealTimeInterval);
+                            // Thread.Sleep(RealTimeInterval);
+                            await Task.Delay(RealTimeInterval);
                         }
                     });
                 }
