@@ -178,7 +178,6 @@
     <Compile Include="WatchListUserControl.xaml.cs">
       <DependentUpon>WatchListUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wrapper.cs" />
     <Page Include="CandleChartUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
