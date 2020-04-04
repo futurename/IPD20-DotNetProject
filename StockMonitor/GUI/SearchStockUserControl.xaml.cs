@@ -40,7 +40,13 @@ namespace GUI
 
         public SearchStockUserControl()
         {
+
             start = DateTime.Now;
+
+            InitializeComponent();
+
+            // For DesianView, Do not delete
+            if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this)) { return; }
 
             string[] companyNames =
             {"VXUS", "AAPL", "AMZN", "GOOG", "BA", "LTM", "FB", "AAXN", "MSFT",
@@ -55,7 +61,7 @@ namespace GUI
                 taskList.Add(GUIDataHelper.GetCompanyDataRowTask(symbol));
             }
             Task t = SetListView();
-            InitializeComponent();
+            
 
             lsvWatchList.ItemsSource = watchListCompanies;
 

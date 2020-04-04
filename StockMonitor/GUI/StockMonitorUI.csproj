@@ -110,6 +110,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Global.cs" />
     <Compile Include="SearchStockUserControl.xaml.cs">
       <DependentUpon>SearchStockUserControl.xaml</DependentUpon>
     </Compile>

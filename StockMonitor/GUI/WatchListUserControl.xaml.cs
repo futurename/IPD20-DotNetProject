@@ -23,34 +23,57 @@ namespace GUI
     /// </summary>
     public partial class WatchListUserControl : UserControl
     {
-        List<Task<UIComapnyRow>> taskList;
         List<UICompanyRowWrapper> companyList;
+
+        public static readonly DependencyProperty SymbolProperty =
+        DependencyProperty.Register("Symbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
+
+        private string Symbol
+        {
+            get { return (string)GetValue(SymbolProperty); }
+            set { SetValue(SymbolProperty, value); }
+        }
 
         public WatchListUserControl()
         {
             InitializeComponent();
 
             Task.Factory.StartNew(LoadWatchList);
+
+            this.DataContext = this;
         }
 
-        private async Task LoadWatchList()
+        private void LoadWatchList()// TODO: sync -> async
         {
-            string[] companyNames = { "VXUS", "AAPL", "AMZN" };
-
-            taskList = new List<Task<UIComapnyRow>>();
-            foreach (string name in companyNames)
+            int userId = 3;
+            companyList = new List<UICompanyRowWrapper>();
+            var watchListRow = GUIDataHelper.GetWatchUICompanyRowList(userId);
+            foreach (UIComapnyRow company in watchListRow)
             {
-                taskList.Add(GUIDataHelper.GetCompanyDataRowTask(name));
-            }
-
-            foreach (Task<UIComapnyRow> task in taskList)
-            {
-                UIComapnyRow company = await task;
                 companyList.Add(new UICompanyRowWrapper(company));
             }
 
-            lstWatch.ItemsSource = companyList;
+            this.Dispatcher.Invoke(() =>
+            {
+                lstWatch.ItemsSource = companyList;
+                if(companyList.Count != 0)
+                {
+                    lstWatch.SelectedIndex = 0;
+                    Symbol = ((UICompanyRowWrapper)lstWatch.Items[0]).Company.Symbol;
+                }
+            });
         }
 
+        private void lstWatch_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UICompanyRowWrapper selCompany = (UICompanyRowWrapper)lstWatch.SelectedItem;
+            if (selCompany == null) { return; }
+
+            //TODO: Set values, text on the components
+            
+            
+            Symbol = selCompany.Company.Symbol;
+            Global.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Company.Symbol, (k, v)=> selCompany.Company.Symbol);
+        }
     }
 }

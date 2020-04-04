@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
              mc:Ignorable="d" 
-             xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" Height="298.4" Width="609.6">
+             xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
 
 
     <Grid Name="gridChartContainer" Margin="0,0,-0.4,-14.6">
@@ -20,11 +20,10 @@
             <TextBlock Text="Stock Price: $" Foreground="Gainsboro" Width="81" Margin="0,2" />
             <TextBlock x:Name="Y" Margin="0,0,-0.2,2" Foreground="Gainsboro" Width="35"/>
         </StackPanel>
-
+        <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}"  Margin="398,3,114.4,268.2" Foreground="Gray" Grid.RowSpan="2" TargetUpdated="txtSymbol_TargetUpdated"/>
         <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="525,0,10,0" VerticalAlignment="Top" Click="btReload_Click"/>
 
         <Wpf:CartesianChart x:Name="chartStockPrice"
-                    Series="{Binding SeriesCollection}"
                     Zoom="X"
                     Grid.Row="1" 
                     Hoverable="False" 
@@ -34,11 +33,9 @@
                     MouseMove="ChartMouseMove"
                     MouseEnter="ChartMouseEnter" 
                     MouseLeave="ChartMouseLeave"
-                    ZoomingSpeed="0.2" Cursor="Cross" Loaded="chartStockPrice_Loaded" AnimationsSpeed="0:0:0.1" Margin="0,0,-0.4,14.8">
+                    ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,0,-0.4,14.8">
             <Wpf:CartesianChart.AxisX>
                 <Wpf:Axis Labels="{Binding Labels}" 
-                            MinValue="{Binding Min, Mode=TwoWay}" 
-                            MaxValue="{Binding Max, Mode=TwoWay}"
                             RangeChanged="Ax_RangeChanged"
                             PreviewRangeChanged="Axis_OnPreviewRangeChanged"/>
             </Wpf:CartesianChart.AxisX>

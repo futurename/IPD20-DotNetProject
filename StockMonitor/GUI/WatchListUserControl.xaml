@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-              Height="415" Width="1175">
+             x:Name="watchList"
+             Height="415" Width="1175">
     <UserControl.Resources>
         <DataTemplate x:Key="lstWatch_DataTemplate">
             <Grid>
@@ -15,27 +16,39 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Margin="5" BorderBrush="White" BorderThickness="1">
-                    <Image Source="{Binding Path=Logo}" Stretch="Fill" Width="50" Height="50" OpacityMask="Black" />
+                    <Image Source="{Binding Path=Company.Logo}" Stretch="Fill" Width="50" Height="50" OpacityMask="Black" />
                 </Border>
                 <StackPanel Grid.Column="1" Margin="5">
                     <StackPanel Orientation="Horizontal" TextBlock.FontWeight="Bold" >
-                        <TextBlock Text="{Binding Path=Symbol, FallbackValue=Symbol}" Foreground="#FFBCBCBC" />
-                        <TextBlock Text="{Binding Path=Price, FallbackValue=Price, StringFormat={}{0:0.00}}" Padding="10,0,0,0" Foreground="White"/>
+                        <TextBlock Text="{Binding Path=Company.Symbol, FallbackValue=Symbol}" Foreground="#FFBCBCBC" />
+                        <TextBlock Text="{Binding Path=Company.Price, FallbackValue=Price, StringFormat={}{0:0.00}}" Padding="10,0,0,0" Foreground="White"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Path=Volume, FallbackValue=Volume}" Foreground="#FFBCBCBC" />
-                    <TextBlock Text="{Binding Path=Name, FallbackValue=Name}" Foreground="#FFBCBCBC" />
+                    <TextBlock Text="{Binding Path=Company.Volume, FallbackValue=Volume}" Foreground="#FFBCBCBC" />
+                    <TextBlock Text="{Binding Path=Company.Name, FallbackValue=Name}" Foreground="#FFBCBCBC" />
                 </StackPanel>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
 
     <Grid Margin="0,0,0.2,-0.4">
-        <ListBox Name="lstWatch" HorizontalAlignment="Left" Width="146" Margin="0,0,0,0.6" ItemTemplate="{DynamicResource lstWatch_DataTemplate}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <ListBox Name="lstWatch" Grid.Column="0" Margin="0,0,0,0.6" ItemTemplate="{DynamicResource lstWatch_DataTemplate}" SelectionChanged="lstWatch_SelectionChanged"/>
 
-        <Grid Name="gridChartContainer" HorizontalAlignment="Left" Margin="151,1,0,0.6" Width="597">
-                <local:CandleChartUserControl Margin="10,0,10,144.6" Height="Auto" />
+        <Grid Grid.Column="1" Margin="5,1,0.2,0.6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Grid Name="gridCandleChart" Grid.Row="0" >
+                <local:CandleChartUserControl SelectedSymbol="{Binding Symbol, ElementName=watchList}" />
+            </Grid>
+            <Grid Grid.Row="1" Margin="0,0,-1,-0.4"/>
         </Grid>
-        <Grid Background="#FFFFFFFF" HorizontalAlignment="Left" Height="416" Margin="753,-1,-9,0" VerticalAlignment="Top" Width="431"/>
+        <Grid Background="#FFFFFFFF" Height="416" Margin="4.8,-1,-8.8,0" VerticalAlignment="Top" Grid.Column="2"/>
     </Grid>
 
 </UserControl>

@@ -7,11 +7,13 @@ using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,13 +33,27 @@ namespace GUI
     /// </summary>
     public partial class CandleChartUserControl : UserControl
     {
-        private const double NumberOfValuesPerPixel = 0.25;
+
+        private object threadLock = new object();
+
+        public static readonly DependencyProperty SelectedSymbolProperty =
+        DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
+
+        public string SelectedSymbol
+        {
+            get { return (string)GetValue(SelectedSymbolProperty); }
+            set { SetValue(SelectedSymbolProperty, value); }
+        }
+
+
+        private const double NumberOfValuesPerPixel = 0.40;
         public SeriesCollection SeriesCollection { get; set; }
         public string[] Labels { get; set; }
 
         public CandleChartUserControl()
         {
             InitializeComponent();
+
 
             // In DesignMode, it avoid read app.config fail exception(in this case, cannot read "connectionString" from app.config)
             // DesignMode use compiled UserControl which doesn't include app.config file, so every behavior that read/connect
@@ -47,23 +63,27 @@ namespace GUI
             {
                 return;
             }
-
+            Task.Run(DrawCandleStick);
         }
 
         private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
-            
+            while (gridChartContainer.ActualWidth == 0) { Thread.Sleep(500);  }
+
             List<Fmg1MinQuoteWapper> valueList;
             List<string> labelList;
+
             int numOfVal = (int)(gridChartContainer.ActualWidth * NumberOfValuesPerPixel);
+
             try
             {
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
-                    string symbol = "SGH";
+                    string symbol;
+                    while(!Global.ConcurentDictionary.TryGetValue("symbol",out symbol)) { Thread.Sleep(500); }
                     var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
 
-                    valueList = (from fmg1MinQuote in minValueList.Take(numOfVal)
+                    valueList = (from fmg1MinQuote in minValueList.Take(50)
                                  select new Fmg1MinQuoteWapper(fmg1MinQuote)
                                  ).ToList<Fmg1MinQuoteWapper>();
                     labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
@@ -76,16 +96,19 @@ namespace GUI
                 return;
             }
 
-            SeriesCollection = new SeriesCollection
+            this.Dispatcher.Invoke(() =>
             {
-                new CandleSeries()
-                {
-                    Values = new ChartValues<OhlcPoint>(valueList),
-                }
-            };
+                chartStockPrice.Series.Clear();
+                chartStockPrice.Model.ClearZoom();
 
-            DataContext = this;
-
+                chartStockPrice.Series.Add(
+                    new CandleSeries()
+                    {
+                        Values = new ChartValues<OhlcPoint>(valueList)
+                    }
+                );
+                this.DataContext = this;
+            });
         }
 
         private void ChartOnDataClick(object sender, ChartPoint p)
@@ -107,6 +130,7 @@ namespace GUI
 
             Y.Text = pointChartVal.Y.ToString("N");
 
+            if(Labels == null) { return; }//FIXME : Clean code
             if (!chartStockPrice.IsLoaded){ return; }// Check chart loaded
             if (chartStockPrice.Series == null) { return; }// Check chart loaded
 
@@ -161,38 +185,46 @@ namespace GUI
 
 
         private bool limitMin = false, limitMax = false;
+        private const int MinLabels = 15;
         private void Axis_OnPreviewRangeChanged(PreviewRangeChangedEventArgs e)
         {
+            if (chartStockPrice.Series == null) { return; } // No Chart
             //if less than -0.5, cancel
             limitMin = e.PreviewMinValue < -0.5;
 
             //if greater than the number of items on our array plus a 0.5 offset, stay on max limit
-            limitMax = e.PreviewMaxValue > Labels.Length - 0.5;
+            limitMax = e.PreviewMaxValue > Labels.Length + 0.5;
 
             // if screen is left-end and zoom-in max 
-            if (e.PreviewMaxValue < 15 && e.PreviewMinValue < 0) e.Cancel = true;
+            if (e.PreviewMaxValue < MinLabels && e.PreviewMinValue < 0) {
+                e.Cancel = true;//FIXME: range
+            }
+            else if (e.PreviewMinValue > Labels.Length - MinLabels && e.PreviewMaxValue > Labels.Length) 
+            {// if screen is right-end and zoom-in max 
+                e.Cancel = true;//FIXME: range
+            }                                                                                                                
+
 
             //finally if the axis range is less than 1, cancel the event
-            if (e.PreviewMaxValue - e.PreviewMinValue < 15) e.Cancel = true;
+            if (e.PreviewMaxValue - e.PreviewMinValue < MinLabels) e.Cancel = true;
 
             Console.WriteLine("limitMin:{0}|limitMax:{1}", limitMin, limitMax);
             Console.WriteLine("PreviewMaxValue:{0}| PreviewMinValue:{1}", e.PreviewMaxValue, e.PreviewMinValue);
             Console.WriteLine("ActualMaxValueX:{0}|ActualMinValue:{1}",
                 chartStockPrice.AxisX[0].ActualMaxValue,
                 chartStockPrice.AxisX[0].ActualMinValue);
-
         }
         private void Ax_RangeChanged(LiveCharts.Events.RangeChangedEventArgs eventArgs)
         {
             Axis ax = (Axis)eventArgs.Axis;
-            if (limitMax) ax.MaxValue = Labels.Length;
-            if (limitMin) ax.MinValue = 0;
-        }
-
-
-        private void chartStockPrice_Loaded(object sender, RoutedEventArgs e)
-        {
-            DrawCandleStick();
+            if (limitMax)
+            {
+                ax.MaxValue = Labels.Length +0.5;
+            }
+            if (limitMin)
+            {
+                ax.MinValue = -0.5;
+            }
         }
 
         private void btReload_Click(object sender, RoutedEventArgs e)
@@ -204,5 +236,12 @@ namespace GUI
             timeSpan = end - start;
             Console.WriteLine($"Time spent: {timeSpan.TotalMilliseconds} mills");
         }
+
+
+        private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
+        {
+            Task.Run(DrawCandleStick);
+        }
+
     }
 }
