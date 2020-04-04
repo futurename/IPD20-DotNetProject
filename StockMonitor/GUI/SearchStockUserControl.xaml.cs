@@ -339,7 +339,6 @@ namespace GUI
                 {
                     this.Dispatcher.Invoke(() => { lsvWatchList.ItemsSource = searchComapnyRowList; });
                 });
-
             }
             else
             {
