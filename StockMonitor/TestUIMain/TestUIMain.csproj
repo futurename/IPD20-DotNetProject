@@ -147,12 +147,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StockMonitor\StockMonitorConsole.csproj">
-      <Project>{f197a330-8a06-4d22-af98-6a42d9e29c2b}</Project>
-      <Name>StockMonitorConsole</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
