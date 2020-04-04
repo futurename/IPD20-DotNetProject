@@ -84,6 +84,7 @@ namespace GUI
                     var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
 
                     valueList = (from fmg1MinQuote in minValueList.Take(50)
+                                 orderby fmg1MinQuote.Date
                                  select new Fmg1MinQuoteWapper(fmg1MinQuote)
                                  ).ToList<Fmg1MinQuoteWapper>();
                     labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
@@ -99,7 +100,11 @@ namespace GUI
             this.Dispatcher.Invoke(() =>
             {
                 chartStockPrice.Series.Clear();
-                chartStockPrice.Model.ClearZoom();
+
+                if (chartStockPrice.Model != null)
+                {
+                    //chartStockPrice.Model.ClearZoom();//FIXME
+                }
 
                 chartStockPrice.Series.Add(
                     new CandleSeries()

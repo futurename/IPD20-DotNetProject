@@ -7,13 +7,11 @@
              xmlns:StockMonitor="clr-namespace:StockMonitor;assembly=StockMonitor"
              mc:Ignorable="d" Height="415" Width="1175" >
 
-    <Grid Background="#FF26262D" Margin="0,0,0.2,-0.4">
+    <Grid Background="White" Margin="0,0,0.2,-0.4">
 
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,0.6" Width="811" FontSize="12" >
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,2.6" Width="811" FontSize="12" >
             <ListView.Resources>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Right" />
-                </Style>
+                
             </ListView.Resources>
             <ListView.View>
                 <GridView>

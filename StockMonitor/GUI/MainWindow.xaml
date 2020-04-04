@@ -7,18 +7,18 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Title="MainWindow" Height="558" Width="1245.4">
-    <Grid OpacityMask="#FF26262D" Background="#FF26262D">
-        <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" Background="#FF26262D" Foreground="#FFDDDDDD" FontSize="20"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102" Foreground="#FFDDDDDD" Background="#FF26262D"/>
-        <TabControl HorizontalAlignment="Left" Height="498" Margin="10,10,0,0" VerticalAlignment="Top" Width="1200" Background="#FF26262D">
-            <TabItem Header="Search Stock" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
-                <local:SearchStockUserControl Margin="10,0,10.4,12.6" />
+    <Grid OpacityMask="#FF26262D" Background="White">
+        <Label Content="Stock Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="146" Background="White" Foreground="Black" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102" Foreground="Black" Background="White"/>
+
+        <TabControl HorizontalAlignment="Left" Height="498" Margin="10,10,0,0" VerticalAlignment="Top" Width="1200" Foreground="Black" Background="White">
+            <TabItem Header="Search Stock"  Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="Black" Background="White" FontSize="20">
+                <local:SearchStockUserControl Margin="10,0,10.4,12.6" FontSize="12" />
             </TabItem>
-            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
-                <local:WatchListUserControl Margin="10,0,10.4,12.6" FontSize="12">
-                </local:WatchListUserControl>
+            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="Black" Background="White" FontSize="20">
+                <local:WatchListUserControl Margin="10,0,10.4,12.6" FontSize="12" />
             </TabItem>
-            <TabItem Header="TabItem" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D"/>
+            <TabItem Header="TabItem" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="Black" Background="White"/>
         </TabControl>
     </Grid>
 
