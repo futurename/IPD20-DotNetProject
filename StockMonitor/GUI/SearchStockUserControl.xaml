@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:GUI"
              xmlns:StockMonitor="clr-namespace:StockMonitor;assembly=StockMonitor"
              mc:Ignorable="d" Height="415" Width="1175" >
+   
     <Grid Background="#FF26262D" Margin="0,0,0.2,-0.4">
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,0.6" Width="811" FontSize="12">
+        
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,0.6" Width="811" FontSize="12" >
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Right" />
@@ -37,7 +39,13 @@
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
-        </ListView>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"></MenuItem>
+                    <MenuItem Name="lsvMkt_miShowStockDetails" Header="Show stock details"></MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+</ListView>
         
         <Grid Margin="816,41,0,2.6">
             <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top">
@@ -49,10 +57,17 @@
                         <GridViewColumn Header="Chg" DisplayMemberBinding="{Binding PriceChange, StringFormat=N2}"/>
                     </GridView>
                 </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="lsvWatch_miAddToWatchList" Header="Add to watch list" Click="LsvWatch_miAddToWatchList_OnClick"></MenuItem>
+                        <MenuItem Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"></MenuItem>
+                        <MenuItem Name="lsvWatch_miShowStockDetail" Header="Show stock details"></MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
             <ListBox Margin="0,191,0,0"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="#FFDDDDDD"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="197" FontSize="12"/>
+        <TextBox Name="tbSearchBox" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" FontSize="12" />
     </Grid>
 </UserControl>

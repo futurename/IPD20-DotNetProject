@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using Newtonsoft.Json;
@@ -28,12 +29,12 @@ namespace StockMonitor.Helpers
 
         private static HttpResponseMessage httpResponseMessage;
         private static HttpClientHandler httpClientHandler = new HttpClientHandler();
-        private static HttpClient httpClient = new HttpClient();
+        private static HttpClient httpClient = new HttpClient(new RetryHandler(new HttpClientHandler()));
 
         public static async Task<FmgSingleQuote> RetrieveFmgSingleQuote(string symbol)
         {
             string url = FmgBaseUrl + FmgSingleQuoteUrl + symbol;
-            var responseTask =  RetrieveFromUrl(url);
+            var responseTask = RetrieveFromUrl(url);
             string response = await responseTask;
             if (response == "{ }" || string.IsNullOrEmpty(response))
             {
@@ -48,7 +49,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                List<FmgSingleQuote> list =JsonConvert.DeserializeObject<List<FmgSingleQuote>>(response);
+                List<FmgSingleQuote> list = JsonConvert.DeserializeObject<List<FmgSingleQuote>>(response);
                 if (list.Count != 0)
                 {
                     FmgSingleQuote quote = list[0];
@@ -58,11 +59,11 @@ namespace StockMonitor.Helpers
                 {
                     throw new SystemException($"Parse single quote null {response}");
                 }
-                
+
             }
             catch (Newtonsoft.Json.JsonSerializationException ex)
             {
-                throw new SystemException("Parse Single Quote exception. " + ex.Message);
+                throw new SystemException($"Parse Single Quote exception. {response}" + ex.Message);
             }
         }
 
@@ -207,14 +208,17 @@ namespace StockMonitor.Helpers
             httpClientHandler.UseProxy = false;*/
 
             DateTime start = DateTime.Now;
+
             httpResponseMessage = await httpClient.GetAsync(url);
 
-            //httpResponseMessage.EnsureSuccessStatusCode();
+            httpResponseMessage.EnsureSuccessStatusCode();
+
             string responseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+
 
             DateTime end = DateTime.Now;
             TimeSpan span = end - start;
-           // Console.Out.WriteLine($"One retrieval from url: {span.TotalMilliseconds} mills, {url}");
+            // Console.Out.WriteLine($"One retrieval from url: {span.TotalMilliseconds} mills, {url}");
             return responseBody;
 
         }
@@ -234,7 +238,7 @@ namespace StockMonitor.Helpers
             }
         }
 
-   
+
 
         public static async Task<List<Fmg1MinQuote>> RetrieveAllFmg1MinQuote(string symbol)
         {
@@ -298,6 +302,40 @@ namespace StockMonitor.Helpers
             List<FmgStockListEntity> entityList =
                 JObject.Parse(response).GetValue("symbolsList").ToObject<List<FmgStockListEntity>>();
             return entityList.Where(p => !string.IsNullOrEmpty(p.Name)).Select(p => p).ToList();
+        }
+    }
+
+    public class RetryHandler : DelegatingHandler
+    {
+        // Strongly consider limiting the number of retries - "retry forever" is
+        // probably not the most user friendly way you could respond to "the
+        // network cable got pulled out."
+        private const int MaxRetries = 30;
+
+        public RetryHandler(HttpMessageHandler innerHandler)
+            : base(innerHandler)
+        { }
+
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            HttpResponseMessage response = null;
+            for (int i = 0; i < MaxRetries; i++)
+            {
+                if (i > 0)
+                {
+                    Console.Out.WriteLine($"\n***** RETRYING connecting the {i} times...\n");
+                }
+
+                response = await base.SendAsync(request, cancellationToken);
+                if (response.IsSuccessStatusCode)
+                {
+                    return response;
+                }
+            }
+
+            return response;
         }
     }
 }
