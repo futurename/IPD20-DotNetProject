@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="StockContext.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Exchange" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MarketCapital" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PriceToEarningRatio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="PriceToSalesRatio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Industry" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Sector" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="Website" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="CEO" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Logo" Type="longblob" Nullable="false" />
+        </EntityType>
+        <EntityType Name="HoldingShares">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Volume" Type="bigint" Nullable="false" />
+          <Property Name="Price" Type="double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Quote1Min">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Open" Type="double" Nullable="false" />
+          <Property Name="Low" Type="double" Nullable="false" />
+          <Property Name="High" Type="double" Nullable="false" />
+          <Property Name="Close" Type="double" Nullable="false" />
+          <Property Name="Volume" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuoteDaily">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Open" Type="double" Nullable="false" />
+          <Property Name="High" Type="double" Nullable="false" />
+          <Property Name="Low" Type="double" Nullable="false" />
+          <Property Name="Close" Type="double" Nullable="false" />
+          <Property Name="Volume" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Vwap" Type="double" Nullable="false" />
+          <Property Name="ChangeOverTime" Type="double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestQuoteDaily">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Open" Type="double" Nullable="false" />
+          <Property Name="High" Type="double" Nullable="false" />
+          <Property Name="Low" Type="double" Nullable="false" />
+          <Property Name="Close" Type="double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TradingRecord">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="DateTime" Type="date" Nullable="false" />
+          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Price" Type="double" Nullable="false" />
+          <Property Name="Volume" Type="bigint" Nullable="false" />
+          <Property Name="TradeType" Type="enum" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserFirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserLastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateDate" Type="date" Nullable="false" />
+          <Property Name="Balance" Type="double" Nullable="false" />
+          <Property Name="Photo" Type="longblob" />
+        </EntityType>
+        <EntityType Name="WatchListItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="HoldingShares_ibfk_1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="HoldingShares" Type="Self.HoldingShares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HoldingShares">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TradingRecord_ibfk_1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WatchListItem_ibfk_1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="WatchListItem" Type="Self.WatchListItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WatchListItem">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WatchListItem_ibfk_2">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="WatchListItem" Type="Self.WatchListItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WatchListItem">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StockContextStoreContainer">
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="HoldingShares" EntityType="Self.HoldingShares" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="Quote1Min" EntityType="Self.Quote1Min" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="QuoteDaily" EntityType="Self.QuoteDaily" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="TestQuoteDaily" EntityType="Self.TestQuoteDaily" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="TradingRecord" EntityType="Self.TradingRecord" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="WatchListItem" EntityType="Self.WatchListItem" Schema="StockMonitor" store:Type="Tables" />
+          <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
+            <End Role="User" EntitySet="User" />
+            <End Role="HoldingShares" EntitySet="HoldingShares" />
+          </AssociationSet>
+          <AssociationSet Name="TradingRecord_ibfk_1" Association="Self.TradingRecord_ibfk_1">
+            <End Role="User" EntitySet="User" />
+            <End Role="TradingRecord" EntitySet="TradingRecord" />
+          </AssociationSet>
+          <AssociationSet Name="WatchListItem_ibfk_1" Association="Self.WatchListItem_ibfk_1">
+            <End Role="User" EntitySet="User" />
+            <End Role="WatchListItem" EntitySet="WatchListItem" />
+          </AssociationSet>
+          <AssociationSet Name="WatchListItem_ibfk_2" Association="Self.WatchListItem_ibfk_2">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="WatchListItem" EntitySet="WatchListItem" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="StockContext" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Symbol" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Exchange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MarketCapital" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PriceToEarningRatio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PriceToSalesRatio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Industry" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Sector" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Website" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CEO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_2" FromRole="Company" ToRole="WatchListItem" />
+        </EntityType>
+        <EntityType Name="HoldingShare">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Volume" Type="Int64" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.HoldingShares_ibfk_1" FromRole="HoldingShares" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Quote1Min">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Open" Type="Double" Nullable="false" />
+          <Property Name="Low" Type="Double" Nullable="false" />
+          <Property Name="High" Type="Double" Nullable="false" />
+          <Property Name="Close" Type="Double" Nullable="false" />
+          <Property Name="Volume" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuoteDaily">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Open" Type="Double" Nullable="false" />
+          <Property Name="High" Type="Double" Nullable="false" />
+          <Property Name="Low" Type="Double" Nullable="false" />
+          <Property Name="Close" Type="Double" Nullable="false" />
+          <Property Name="Volume" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Vwap" Type="Double" Nullable="false" />
+          <Property Name="ChangeOverTime" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TestQuoteDaily">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Open" Type="Double" Nullable="false" />
+          <Property Name="High" Type="Double" Nullable="false" />
+          <Property Name="Low" Type="Double" Nullable="false" />
+          <Property Name="Close" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TradingRecord">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Volume" Type="Int64" Nullable="false" />
+          <Property Name="TradeType" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Self.TradingRecord_ibfk_1" FromRole="TradingRecord" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="Balance" Type="Double" Nullable="false" />
+          <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="HoldingShares" Relationship="Self.HoldingShares_ibfk_1" FromRole="User" ToRole="HoldingShares" />
+          <NavigationProperty Name="TradingRecords" Relationship="Self.TradingRecord_ibfk_1" FromRole="User" ToRole="TradingRecord" />
+          <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_1" FromRole="User" ToRole="WatchListItem" />
+        </EntityType>
+        <Association Name="HoldingShares_ibfk_1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="HoldingShares" Type="Self.HoldingShare" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="HoldingShares">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TradingRecord_ibfk_1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="StockMonitorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Companies" EntityType="Self.Company" />
+          <EntitySet Name="HoldingShares" EntityType="Self.HoldingShare" />
+          <EntitySet Name="Quote1Min" EntityType="Self.Quote1Min" />
+          <EntitySet Name="QuoteDailies" EntityType="Self.QuoteDaily" />
+          <EntitySet Name="TestQuoteDailies" EntityType="Self.TestQuoteDaily" />
+          <EntitySet Name="TradingRecords" EntityType="Self.TradingRecord" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="HoldingShares" EntitySet="HoldingShares" />
+          </AssociationSet>
+          <AssociationSet Name="TradingRecord_ibfk_1" Association="Self.TradingRecord_ibfk_1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TradingRecord" EntitySet="TradingRecords" />
+          </AssociationSet>
+          <EntitySet Name="WatchListItems" EntityType="StockContext.WatchListItem" />
+          <AssociationSet Name="WatchListItem_ibfk_2" Association="StockContext.WatchListItem_ibfk_2">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="WatchListItem" EntitySet="WatchListItems" />
+          </AssociationSet>
+          <AssociationSet Name="WatchListItem_ibfk_1" Association="StockContext.WatchListItem_ibfk_1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="WatchListItem" EntitySet="WatchListItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="WatchListItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="StockContext.WatchListItem_ibfk_2" FromRole="WatchListItem" ToRole="Company" />
+          <NavigationProperty Name="User" Relationship="StockContext.WatchListItem_ibfk_1" FromRole="WatchListItem" ToRole="User" />
+        </EntityType>
+        <Association Name="WatchListItem_ibfk_2">
+          <End Type="StockContext.Company" Role="Company" Multiplicity="1" />
+          <End Type="StockContext.WatchListItem" Role="WatchListItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WatchListItem">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="WatchListItem_ibfk_1">
+          <End Type="StockContext.User" Role="User" Multiplicity="1" />
+          <End Type="StockContext.WatchListItem" Role="WatchListItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="WatchListItem">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="StockContextStoreContainer" CdmEntityContainer="StockMonitorEntities">
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="StockContext.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Exchange" ColumnName="Exchange" />
+                <ScalarProperty Name="MarketCapital" ColumnName="MarketCapital" />
+                <ScalarProperty Name="PriceToEarningRatio" ColumnName="PriceToEarningRatio" />
+                <ScalarProperty Name="PriceToSalesRatio" ColumnName="PriceToSalesRatio" />
+                <ScalarProperty Name="Industry" ColumnName="Industry" />
+                <ScalarProperty Name="Sector" ColumnName="Sector" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="CEO" ColumnName="CEO" />
+                <ScalarProperty Name="Logo" ColumnName="Logo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HoldingShares">
+            <EntityTypeMapping TypeName="StockContext.HoldingShare">
+              <MappingFragment StoreEntitySet="HoldingShares">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Quote1Min">
+            <EntityTypeMapping TypeName="StockContext.Quote1Min">
+              <MappingFragment StoreEntitySet="Quote1Min">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="Low" ColumnName="Low" />
+                <ScalarProperty Name="High" ColumnName="High" />
+                <ScalarProperty Name="Close" ColumnName="Close" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuoteDailies">
+            <EntityTypeMapping TypeName="StockContext.QuoteDaily">
+              <MappingFragment StoreEntitySet="QuoteDaily">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="High" ColumnName="High" />
+                <ScalarProperty Name="Low" ColumnName="Low" />
+                <ScalarProperty Name="Close" ColumnName="Close" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Vwap" ColumnName="Vwap" />
+                <ScalarProperty Name="ChangeOverTime" ColumnName="ChangeOverTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TestQuoteDailies">
+            <EntityTypeMapping TypeName="StockContext.TestQuoteDaily">
+              <MappingFragment StoreEntitySet="TestQuoteDaily">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Open" ColumnName="Open" />
+                <ScalarProperty Name="High" ColumnName="High" />
+                <ScalarProperty Name="Low" ColumnName="Low" />
+                <ScalarProperty Name="Close" ColumnName="Close" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TradingRecords">
+            <EntityTypeMapping TypeName="StockContext.TradingRecord">
+              <MappingFragment StoreEntitySet="TradingRecord">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="StockContext.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="UserFirstName" ColumnName="UserFirstName" />
+                <ScalarProperty Name="UserLastName" ColumnName="UserLastName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WatchListItems">
+            <EntityTypeMapping TypeName="StockContext.WatchListItem">
+              <MappingFragment StoreEntitySet="WatchListItem">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

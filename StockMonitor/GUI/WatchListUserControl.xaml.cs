@@ -43,14 +43,16 @@ namespace GUI
             this.DataContext = this;
         }
 
-        private void LoadWatchList()// TODO: sync -> async
+        private async void LoadWatchList()// TODO: sync -> async
         {
             int userId = 3;
             companyList = new List<UICompanyRowWrapper>();
-            var watchListRow = GUIDataHelper.GetWatchUICompanyRowList(userId);
-            foreach (UIComapnyRow company in watchListRow)
+            var watchListRowTasks = GUIDataHelper.GetWatchUICompanyRowTaskList(userId);
+            foreach (Task<UIComapnyRow> task in watchListRowTasks)
             {
-                companyList.Add(new UICompanyRowWrapper(company));
+                UIComapnyRow comapnyRow = await task;
+
+                companyList.Add(new UICompanyRowWrapper(comapnyRow));
             }
 
             this.Dispatcher.Invoke(() =>

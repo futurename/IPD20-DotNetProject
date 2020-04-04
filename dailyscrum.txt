@@ -215,7 +215,35 @@
 - some issues need test for sync list of different async threads.
 
 
-2020/04/02 Donghyeok Seo
+2020/04/03 Donghyeok Seo
+1. Done since last scrum
+-Set Candle chart pan/zoom boundary
+
+2. To do until next Scrum:
+-Debugging UserControl(Candle Chart disappears)
+-Draw candle stick dynamically
+
+3. Need assistance / figure things out
+-Separate Code using UserControl
+
+
+*****************************************************
+
+2020/04/04 Wang Wei
+1. Done since last scrum:
+- Impelment add items from lsvMkt to lsvWatchlist
+- Implement remove item from lsvWatchList
+- Implement add/remove watch list items to/from database.
+
+2. To do until next Scrum:
+- Solve items order in watch list when adding/removing
+- Implement search bar
+
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+
+2020/04/04 Donghyeok Seo
 1. Done since last scrum
 -Set Candle chart pan/zoom boundary
 
