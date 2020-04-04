@@ -20,7 +20,6 @@ using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
-using static GUI.Wrapper;
 
 namespace GUI
 {
