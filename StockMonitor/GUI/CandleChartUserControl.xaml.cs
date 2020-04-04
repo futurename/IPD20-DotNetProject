@@ -32,9 +32,6 @@ namespace GUI
     /// </summary>
     public partial class CandleChartUserControl : UserControl
     {
-
-        private object threadLock = new object();
-
         public static readonly DependencyProperty SelectedSymbolProperty =
         DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
 
@@ -62,11 +59,14 @@ namespace GUI
             {
                 return;
             }
-            Task.Run(DrawCandleStick);
         }
+
+
+        int countDrawing = 0;
 
         private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
+            countDrawing++;
             while (gridChartContainer.ActualWidth == 0) { Thread.Sleep(500);  }
 
             List<Fmg1MinQuote> valueList;
@@ -192,7 +192,8 @@ namespace GUI
         private const int MinLabels = 15;
         private void Axis_OnPreviewRangeChanged(PreviewRangeChangedEventArgs e)
         {
-            if (chartStockPrice.Series == null) { return; } // No Chart
+            if(Labels == null) { return; }// No Chart
+            if (chartStockPrice.Series == null) { return; } 
             //if less than -0.5, cancel
             limitMin = e.PreviewMinValue < -0.5;
 
@@ -242,10 +243,17 @@ namespace GUI
         }
 
 
+        Task currentTask = null;
         private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            Task.Run(DrawCandleStick);
-        }
+            if (txtSymbol.Text == "") { return; }
 
+            if (currentTask != null)
+            {
+                currentTask.Dispose();
+            }
+
+            currentTask = Task.Run(DrawCandleStick);
+        }
     }
 }
