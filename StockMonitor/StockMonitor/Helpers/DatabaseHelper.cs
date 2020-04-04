@@ -4,21 +4,28 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using StockMonitor.Models.UIClasses;
 
 namespace StockMonitor.Helpers
 {
     public static class DatabaseHelper
     {
-        private static DbStockMonitor _dbContext = new DbStockMonitor();
+        // private static DbStockMonitor _dbContext = new DbStockMonitor();
+
         public static void InsertCompanyToDb(string symbol)
         {
+
             Company company = GUIDataHelper.GetCompanyBySymbol(symbol);
             try
             {
-                _dbContext.Companies.Add(company);
-                _dbContext.SaveChanges();
-                Console.Out.WriteLine(company.ToString());
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+
+                    _dbContext.Companies.Add(company);
+                    _dbContext.SaveChanges();
+                    Console.Out.WriteLine(company.ToString());
+                }
             }
             catch (Exception e)
             {
@@ -30,13 +37,16 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                Stopwatch sw = Stopwatch.StartNew();
-                Company company =
-                    _dbContext.Companies.AsNoTracking().FirstOrDefault(p => p.Symbol == symbol) as Company;
-                sw.Stop();
-                TimeSpan span = sw.Elapsed;
-                Console.Out.WriteLine($"Get company {symbol} from db: {span.TotalMilliseconds} mills");
-                return company;
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+                    Stopwatch sw = Stopwatch.StartNew();
+                    Company company =
+                        _dbContext.Companies.AsNoTracking().FirstOrDefault(p => p.Symbol == symbol) as Company;
+                    sw.Stop();
+                    TimeSpan span = sw.Elapsed;
+                    Console.Out.WriteLine($"Get company {symbol} from db: {span.TotalMilliseconds} mills");
+                    return company;
+                }
             }
             catch (SystemException ex)
             {
@@ -48,9 +58,12 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                List<QuoteDaily> result = _dbContext.QuoteDailies.AsNoTracking().Where(p => p.Symbol == symbol)
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+                    List<QuoteDaily> result = _dbContext.QuoteDailies.AsNoTracking().Where(p => p.Symbol == symbol)
                         .ToList();
-                return result;
+                    return result;
+                }
             }
             catch (SystemException ex)
             {
@@ -62,8 +75,12 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                TradingRecord record = _dbContext.TradingRecords.AsNoTracking().FirstOrDefault(r => r.Id == recordId);
-                return record;
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+                    TradingRecord record =
+                        _dbContext.TradingRecords.AsNoTracking().FirstOrDefault(r => r.Id == recordId);
+                    return record;
+                }
             }
             catch (SystemException ex)
             {
@@ -75,19 +92,20 @@ namespace StockMonitor.Helpers
         {
             try
             {
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+                    Stopwatch sw = Stopwatch.StartNew();
+                    List<int> result = _dbContext.WatchListItems.AsNoTracking().Where(i => i.UserId == userId)
+                        .Select(i => i.CompanyId)
+                        .ToList();
 
-                Stopwatch sw = Stopwatch.StartNew();
-                List<int> result = _dbContext.WatchListItems.AsNoTracking().Where(i => i.UserId == userId)
-                    .Select(i => i.CompanyId)
-                    .ToList();
+                    sw.Stop();
+                    Console.Out.WriteLine(
+                        $"\n>>> Time to get watchlistitems for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
 
-                sw.Stop();
-                Console.Out.WriteLine(
-                    $"\n>>> Time to get watchlistitems for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
-
-                //result.ForEach(p=>Console.WriteLine(p.ToString()));
-                return result;
-
+                    //result.ForEach(p=>Console.WriteLine(p.ToString()));
+                    return result;
+                }
             }
             catch (SystemException ex)
             {
@@ -99,17 +117,19 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                Stopwatch sw = Stopwatch.StartNew();
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+                    Stopwatch sw = Stopwatch.StartNew();
 
-                List<int> companyIds = GetWatchCompanyIdsFromDb(userId);
-                List<Company> result = _dbContext.WatchListItems.Include("Company").AsNoTracking()
-                    .Where(u => u.UserId == userId).Select(p => p.Company).ToList();
+                    List<int> companyIds = GetWatchCompanyIdsFromDb(userId);
+                    List<Company> result = _dbContext.WatchListItems.Include("Company").AsNoTracking()
+                        .Where(u => u.UserId == userId).Select(p => p.Company).ToList();
 
-                sw.Stop();
-                Console.Out.WriteLine(
-                    $"\n----- Time to match all watch item with all companies for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
-                return result;
-
+                    sw.Stop();
+                    Console.Out.WriteLine(
+                        $"\n----- Time to match all watch item with all companies for user: {userId} is {sw.Elapsed.TotalMilliseconds} mills");
+                    return result;
+                }
             }
             catch (SystemException ex)
             {
@@ -122,17 +142,20 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                var result = _dbContext.WatchListItems.Include("Company")
-                    .FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
-                if (result == null)
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
                 {
-                    throw new SystemException($"*** No such item in watchlist db, {userId}, {companyId}");
-                }
-                else
-                {
-                    _dbContext.WatchListItems.Attach(result);
-                    _dbContext.WatchListItems.Remove(result);
-                    _dbContext.SaveChanges();
+                    var result = _dbContext.WatchListItems.Include("Company")
+                        .FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
+                    if (result == null)
+                    {
+                        throw new SystemException($"*** No such item in watchlist db, {userId}, {companyId}");
+                    }
+                    else
+                    {
+                        _dbContext.WatchListItems.Attach(result);
+                        _dbContext.WatchListItems.Remove(result);
+                        _dbContext.SaveChanges();
+                    }
                 }
             }
             catch (SystemException ex)
@@ -148,18 +171,21 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                var result = _dbContext.WatchListItems
-                    .Include("Company").FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
-                if (result != null)
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
                 {
-                    throw new SystemException("Item EXISTS in database");
-                }
-                else
-                {
-                    WatchListItem item = new WatchListItem { UserId = userId, CompanyId = companyId };
-                    _dbContext.WatchListItems.Add(item);
-                    _dbContext.SaveChanges();
-                    Console.Out.WriteLine($"*** SUCCESSFULLY add item to watch list. {userId}, {companyId}");
+                    var result = _dbContext.WatchListItems
+                        .Include("Company").FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
+                    if (result != null)
+                    {
+                        throw new SystemException("Item EXISTS in database");
+                    }
+                    else
+                    {
+                        WatchListItem item = new WatchListItem { UserId = userId, CompanyId = companyId };
+                        _dbContext.WatchListItems.Add(item);
+                        _dbContext.SaveChanges();
+                        Console.Out.WriteLine($"*** SUCCESSFULLY add item to watch list. {userId}, {companyId}");
+                    }
                 }
             }
             catch (SystemException ex)
