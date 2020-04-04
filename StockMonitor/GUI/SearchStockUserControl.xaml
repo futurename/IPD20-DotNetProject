@@ -5,27 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
              xmlns:StockMonitor="clr-namespace:StockMonitor;assembly=StockMonitor"
-             mc:Ignorable="d" Height="415" Width="1175" >
+             mc:Ignorable="d" Height="415" Width="1200" >
 
     <Grid Background="White" Margin="0,0,0.2,-0.4">
 
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,2.6" Width="811" FontSize="12" >
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,1.4" Width="916" FontSize="12" >
             <ListView.Resources>
-                
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="12"></Setter>
+                    <Setter Property="FontWeight" Value="Bold"></Setter>
+                </Style>
             </ListView.Resources>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
-                    <GridViewColumn Header="Price"  DisplayMemberBinding="{Binding Company.Price, StringFormat=N2}" />
-                    <GridViewColumn Header="Chg%" DisplayMemberBinding="{Binding Company.ChangePercentage, StringFormat=N3}"/>
-                    <GridViewColumn Header="Chg" DisplayMemberBinding="{Binding Company.PriceChange, StringFormat=N2}"/>
-                    <GridViewColumn Header="Vol" DisplayMemberBinding="{Binding Company.Volume,  StringFormat='\{0:#,##0,K\}'}"/>
-                    <GridViewColumn Header="Open" DisplayMemberBinding="{Binding Company.Open, StringFormat={}{0:0.00}}"/>
-                    <GridViewColumn Header="MktCap" DisplayMemberBinding="{Binding MarketCapital, StringFormat='\{0:#,##0,,M\}'}"/>
-                    <GridViewColumn Header="P/E" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat={}{0:0.00}}"/>
-                    <GridViewColumn Header="P/S" DisplayMemberBinding="{Binding PriceToSalesRatio, StringFormat={}{0:0.00}}"/>
-                    <GridViewColumn Header="Industry" DisplayMemberBinding="{Binding Company.Industry}"/>
-                    <GridViewColumn Header="Logo" >
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style>
+                            <Setter Property="TextElement.FontSize" Value="14"/>
+                            <Setter Property="TextElement.FontWeight" Value="Bold"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn Header="Symbol" Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border>
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--<Image Source="{Binding Company.Logo}"  Height="25" />-->
+                                        <TextBlock Text="{Binding Symbol}"></TextBlock>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+
+                    </GridViewColumn>
+                    <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Company.Price, StringFormat=N2}" />
+                    <GridViewColumn Header="Chg%" Width="60" DisplayMemberBinding="{Binding Company.ChangePercentage, StringFormat=N3}"/>
+                    <GridViewColumn Header="Chg"  Width="60" DisplayMemberBinding="{Binding Company.PriceChange, StringFormat=N2}"/>
+                    <GridViewColumn Header="Vol"  Width="60" DisplayMemberBinding="{Binding Company.Volume,  StringFormat='\{0:#,##0,K\}'}"/>
+                    <GridViewColumn Header="Open" Width="60" DisplayMemberBinding="{Binding Company.Open, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="MktCap"  Width="90" DisplayMemberBinding="{Binding MarketCapital, StringFormat='\{0:#,##0,,M\}'}"/>
+                    <GridViewColumn Header="P/E"  Width="50" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="P/S"  Width="50" DisplayMemberBinding="{Binding PriceToSalesRatio, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="Industry"  Width="170" DisplayMemberBinding="{Binding Company.Industry}"/>
+                    <!--<GridViewColumn Header="Logo"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate >
                                 <Border Margin="5" BorderBrush="Black" BorderThickness="1">
@@ -33,7 +55,7 @@
                                 </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                    </GridViewColumn>-->
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>
@@ -45,7 +67,7 @@
         </ListView>
 
         <Grid Margin="816,41,0,2.6">
-            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top">
+            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top" Margin="107,0,10,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Symbol}"/>
@@ -62,11 +84,11 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <ListBox Margin="0,191,0,0"/>
+            <ListBox Margin="107,191,10,0.4"/>
         </Grid>
-        <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="#FFDDDDDD"/>
+        <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="Black"/>
         <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Text="Search symbol here" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169" FontSize="12" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
-        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="100" Margin="65,41,0,0" VerticalAlignment="Top" Width="197">
+        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="65,41,0,0" VerticalAlignment="Top" Width="169">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border>
@@ -77,7 +99,7 @@
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-            
+
         </ListBox>
 
     </Grid>
