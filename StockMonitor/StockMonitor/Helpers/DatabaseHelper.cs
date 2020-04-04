@@ -123,33 +123,36 @@ namespace StockMonitor.Helpers
             try
             {
                 var result = _dbContext.WatchListItems.AsNoTracking().Include("Company")
-                    .Where(w => w.UserId == userId && w.CompanyId == companyId).Select(i => i);
+                    .FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
                 if (result == null)
                 {
-                    Console.Out.WriteLine($"*** No such item in watchlist db, {userId}, {companyId}");
+                    throw new SystemException($"*** No such item in watchlist db, {userId}, {companyId}");
                 }
                 else
                 {
-                    WatchListItem item = result as WatchListItem;
-                    _dbContext.WatchListItems.Remove(item);
+                    _dbContext.WatchListItems.Attach(result);
+                    _dbContext.WatchListItems.Remove(result);
                     _dbContext.SaveChanges();
                 }
             }
             catch (SystemException ex)
             {
-                Console.Out.WriteLine($"\n*** Delete item from watchlist fails. userid: {userId}, companyId: {companyId}. " + ex.Message);
+                throw new SystemException(
+                    $"\n*** Delete item from watchlist fails. userid: {userId}, companyId: {companyId}. " +
+                    ex.Message);
             }
+
         }
 
         public static void AddItemToWatchList(int userId, int companyId)
         {
             try
             {
-                var result = _dbContext.WatchListItems.AsNoTracking().Include("Company")
-                    .Where(w => w.UserId == userId && w.CompanyId == companyId).Select(w => w);
+                var result = _dbContext.WatchListItems.AsNoTracking()
+                    .Include("Company").FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
                 if (result != null)
                 {
-                    Console.Out.WriteLine($"*** item EXISTS in watchlist db, {userId}, {companyId}");
+                    throw new SystemException("Item EXISTS in database");
                 }
                 else
                 {
@@ -161,7 +164,7 @@ namespace StockMonitor.Helpers
             }
             catch (SystemException ex)
             {
-                Console.Out.WriteLine($"\n*** Add item to watchlist failed. {userId}:{companyId}. " + ex.Message);
+                throw new SystemException($"\n*** Add item to watchlist failed. {userId}:{companyId}. " + ex.Message);
             }
 
         }

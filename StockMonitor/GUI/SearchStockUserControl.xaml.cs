@@ -32,7 +32,7 @@ namespace GUI
         List<Task<UIComapnyRow>> taskList;
 
         BlockingCollection<UICompanyRowWrapper> companyDataRowList;
-        BlockingCollection<UIComapnyRow> watctList;
+        BlockingCollection<UIComapnyRow> watchList;
 
         DateTime start, end;
 
@@ -116,7 +116,7 @@ namespace GUI
                     });
                 }
 
-                foreach (var uiComapnyRow in watctList)
+                foreach (var uiComapnyRow in watchList)
                 {
                     Task.Factory.StartNew(async () =>
                     {
@@ -141,14 +141,14 @@ namespace GUI
 
         private async Task InitWatchListTaskList(List<Task<UIComapnyRow>> uiCompanyRowTaskList)
         {
-            watctList = new BlockingCollection<UIComapnyRow>();
+            watchList = new BlockingCollection<UIComapnyRow>();
             foreach (Task<UIComapnyRow> task in uiCompanyRowTaskList)
             {
                 UIComapnyRow comapnyRow = await task;
-                watctList.Add(comapnyRow);
+                watchList.Add(comapnyRow);
             }
 
-            lsvWatchList.ItemsSource = watctList;
+            lsvWatchList.ItemsSource = watchList;
         }
 
         private async void Refresh1MinData(UIComapnyRow comapnyRow)
@@ -253,19 +253,20 @@ namespace GUI
                     Task t = GUIDataHelper.DeleteFromWatchListTask(CurrentUserId, companyRow.CompanyId);
                     Task.WhenAll(t).ContinueWith(p =>
                     {
-                        List<UIComapnyRow> tempList = new List<UIComapnyRow>(watctList);
+                        List<UIComapnyRow> tempList = new List<UIComapnyRow>(watchList);
                         tempList.Remove(companyRow);
-                        watctList = new BlockingCollection<UIComapnyRow>(new ConcurrentBag<UIComapnyRow>(tempList));
+                        watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentBag<UIComapnyRow>(tempList));
 
-                        MessageBox.Show("Watchlist count left"  + watctList.Count.ToString());
+                       // MessageBox.Show("Watchlist count left: "  + watctList.Count.ToString());
 
                         this.Dispatcher.Invoke(() =>
                         {
-                            lsvWatchList.ItemsSource = watctList;
-                            lsvWatchList.Items.Refresh();
+                            lsvWatchList.ItemsSource = watchList;
+                           
+                            
                         });
+                        MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
-
                 }
                 catch (SystemException ex)
                 {
@@ -287,12 +288,17 @@ namespace GUI
 
                     Task.WhenAll(t).ContinueWith(p =>
                     {
-                        watctList.Add(comapnyRow);
+                        watchList.Add(comapnyRow);
+                        List<UIComapnyRow> tempList = new List<UIComapnyRow>(watchList);
+                        watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentBag<UIComapnyRow>(tempList));
+
                         this.Dispatcher.Invoke(() =>
                         {
-                            lsvWatchList.ItemsSource = watctList;
-                            lsvWatchList.Items.Refresh();
+                            lsvWatchList.ItemsSource = watchList;
+                            //lsvWatchList.Items.Refresh();
+
                         });
+                        MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
                 }
                 catch (SystemException ex)

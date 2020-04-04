@@ -192,12 +192,27 @@ namespace StockMonitor.Helpers
 
         public static async Task DeleteFromWatchListTask(int userId, int companyId)
         {
-             await Task.Run(() => DatabaseHelper.DeleteFromWatchListById(userId, companyId));
+            try
+            {
+                await Task.Run(() => DatabaseHelper.DeleteFromWatchListById(userId, companyId));
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public static async Task AddItemToWatchListTast(int userId, int companyId)
         {
-             await Task.Run(() => DatabaseHelper.AddItemToWatchList(userId, companyId));
+            try
+            {
+                await Task.Run(() => DatabaseHelper.AddItemToWatchList(userId, companyId));
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+
         }
 
     }

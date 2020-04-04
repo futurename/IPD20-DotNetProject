@@ -68,6 +68,6 @@
             <ListBox Margin="0,191,0,0"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="#FFDDDDDD"/>
-        <TextBox Name="tbSearchBox" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="197" FontSize="12"/>
+        <TextBox Name="tbSearchBox" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" FontSize="12"/>
     </Grid>
 </UserControl>
