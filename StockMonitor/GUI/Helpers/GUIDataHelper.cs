@@ -215,11 +215,11 @@ namespace StockMonitor.Helpers
 
         }
 
-        public static async Task<List<string>> GetSearchSymbolListTask(string searchString)
+        public static async Task<List<Company>> GetSearchCompanyListTask(string searchString)
         {
             try
             {
-                return await Task.Run(()=>DatabaseHelper.GetSymbolListBySearch(searchString));
+                return await Task.Run(()=>DatabaseHelper.GetCompanyListBySearch(searchString));
             }
             catch (SystemException ex)
             {

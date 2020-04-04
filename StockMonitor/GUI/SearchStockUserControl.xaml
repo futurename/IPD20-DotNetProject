@@ -27,12 +27,11 @@
                     <GridViewColumn Header="P/E" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="P/S" DisplayMemberBinding="{Binding PriceToSalesRatio, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="Industry" DisplayMemberBinding="{Binding Company.Industry}"/>
-                    <GridViewColumn Header="Sector" DisplayMemberBinding="{Binding Company.Sector}"/>
-                    <GridViewColumn Header="Logo">
+                    <GridViewColumn Header="Logo" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate >
                                 <Border Margin="5" BorderBrush="Black" BorderThickness="1">
-                                    <Image Source="{Binding Company.Logo}" Stretch="Fill" Width="30" Height="30" />
+                                    <Image Source="{Binding Company.Logo}"  Height="25" HorizontalAlignment="Center" />
                                 </Border>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -68,9 +67,20 @@
             <ListBox Margin="0,191,0,0"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="#FFDDDDDD"/>
-        <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Text="Search symbol here" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" FontSize="12" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
-        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="100" Margin="65,41,0,0" VerticalAlignment="Top" Width="197"/>
-
+        <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Text="Search symbol here" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169" FontSize="12" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
+        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="100" Margin="65,41,0,0" VerticalAlignment="Top" Width="197">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <Image Source="{Binding Logo}" Height="18"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            
+        </ListBox>
 
     </Grid>
 </UserControl>

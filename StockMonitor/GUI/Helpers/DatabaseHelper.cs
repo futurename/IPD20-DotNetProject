@@ -196,7 +196,7 @@ namespace StockMonitor.Helpers
         }
 
 
-        public static List<string> GetSymbolListBySearch(string searchString)
+        public static List<Company> GetCompanyListBySearch(string searchString)
         {
             try
             {
@@ -206,7 +206,7 @@ namespace StockMonitor.Helpers
                         .OrderBy(c => c.Symbol).Take(10).ToList();
                     if (searchItems.Count != 0)
                     {
-                        return searchItems.Select(item => (item as Company).Symbol).ToList();
+                        return searchItems.Select(item => item as Company).ToList();
                     }
                     else
                     {

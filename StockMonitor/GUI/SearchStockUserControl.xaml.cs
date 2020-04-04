@@ -330,7 +330,7 @@ namespace GUI
 
             Task.Run(() =>
             {
-                List<string> symbolList = GUIDataHelper.GetSearchSymbolListTask(searchSymbol).Result;
+                List<Company> symbolList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
                 if (symbolList != null)
                 {
                    this.Dispatcher.Invoke(() =>
