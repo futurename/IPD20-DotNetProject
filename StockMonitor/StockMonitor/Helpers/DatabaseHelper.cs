@@ -122,7 +122,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                var result = _dbContext.WatchListItems.AsNoTracking().Include("Company")
+                var result = _dbContext.WatchListItems.Include("Company")
                     .FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
                 if (result == null)
                 {
@@ -148,7 +148,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                var result = _dbContext.WatchListItems.AsNoTracking()
+                var result = _dbContext.WatchListItems
                     .Include("Company").FirstOrDefault(w => w.UserId == userId && w.CompanyId == companyId);
                 if (result != null)
                 {
