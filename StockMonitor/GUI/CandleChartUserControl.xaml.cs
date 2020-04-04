@@ -24,7 +24,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static GUI.Wrapper;
 
 namespace GUI
 {
@@ -70,7 +69,7 @@ namespace GUI
         {
             while (gridChartContainer.ActualWidth == 0) { Thread.Sleep(500);  }
 
-            List<Fmg1MinQuoteWapper> valueList;
+            List<Fmg1MinQuote> valueList;
             List<string> labelList;
 
             int numOfVal = (int)(gridChartContainer.ActualWidth * NumberOfValuesPerPixel);
@@ -85,8 +84,8 @@ namespace GUI
 
                     valueList = (from fmg1MinQuote in minValueList.Take(50)
                                  orderby fmg1MinQuote.Date
-                                 select new Fmg1MinQuoteWapper(fmg1MinQuote)
-                                 ).ToList<Fmg1MinQuoteWapper>();
+                                 select fmg1MinQuote
+                                 ).ToList<Fmg1MinQuote>();
                     labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
                     Labels = labelList.ToArray();
                 }

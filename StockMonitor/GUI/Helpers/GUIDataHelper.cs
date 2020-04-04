@@ -18,43 +18,21 @@ namespace StockMonitor.Helpers
     public static class GUIDataHelper
     {
 
-        public static async Task<UIComapnyRow> GetCompanyDataRowTask(string symbol)
-        {
+        public static async Task<UIComapnyRow> GetCompanyDataRowTask(string symbol)//ex FormatException
+        {//ex: ArgumentException, SystemException, FormatException
             DateTime start = DateTime.Now;
 
-            FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol);
-            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol);
+            FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol); //ex: ArgumentException
+            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol); //ex: ArgumentException
 
             DateTime end = DateTime.Now;
             TimeSpan timeSpan = new TimeSpan();
             timeSpan = end - start;
             Console.Out.WriteLine($"Time: {timeSpan.TotalMilliseconds} mills for {symbol}");
 
-            Company company = DatabaseHelper.GetCompanyFromDb(symbol);
+            Company company = DatabaseHelper.GetCompanyFromDb(symbol);//ex: SystemException
 
-            double openPrice = singleQuote.open;
-            double curPrice = fmgQuoteOnlyPrice.Price;
-            double changePercentage = (curPrice - openPrice) / openPrice * 100;
-            double change = curPrice - openPrice;
-
-            UIComapnyRow companyRow = new UIComapnyRow()
-            {
-                Symbol = symbol,
-                Price = fmgQuoteOnlyPrice.Price,
-                Open = openPrice,
-                Volume = singleQuote.volume,
-                ChangePercentage = changePercentage,
-                PriceChange = change,
-                MarketCapital = company.MarketCapital,
-                Sector = company.Sector,
-                PriceToEarningRatio = company.PriceToEarningRatio,
-                PriceToSalesRatio = company.PriceToSalesRatio,
-                Industry = company.Industry,
-                Logo = company.Logo,
-                Description = company.Description,
-                CompanyId = company.Id
-            };
-            return companyRow;
+            return new UIComapnyRow(company,fmgQuoteOnlyPrice, singleQuote);//ex: FormatException
         }
 
         public static Company GetCompanyBySymbol(string symbol)
@@ -161,28 +139,7 @@ namespace StockMonitor.Helpers
                 await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
             FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(company.Symbol);
 
-            double openPrice = singleQuote.open;
-            double curPrice = fmgQuoteOnlyPrice.Price;
-            double changePercentage = (curPrice - openPrice) / openPrice * 100;
-            double change = curPrice - openPrice;
-
-            UIComapnyRow companyRow = new UIComapnyRow()
-            {
-                Symbol = company.Symbol,
-                Price = fmgQuoteOnlyPrice.Price,
-                Open = openPrice,
-                Volume = singleQuote.volume,
-                ChangePercentage = changePercentage,
-                PriceChange = change,
-                MarketCapital = company.MarketCapital,
-                Sector = company.Sector,
-                PriceToEarningRatio = company.PriceToEarningRatio,
-                PriceToSalesRatio = company.PriceToSalesRatio,
-                Industry = company.Industry,
-                Logo = company.Logo,
-                Description = company.Description,
-                CompanyId = company.Id
-            };
+            UIComapnyRow companyRow = new UIComapnyRow(company, fmgQuoteOnlyPrice, singleQuote);//ex: FormatException
 
             sw.Stop();
             Console.Out.WriteLine(

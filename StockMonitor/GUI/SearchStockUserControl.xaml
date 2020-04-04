@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
-             xmlns:StockMonitor="clr-namespace:StockMonitor;assembly=StockMonitor"
              mc:Ignorable="d" Height="415" Width="1200" >
 
     <Grid Background="White" Margin="0,0,0.2,-0.4">
@@ -38,15 +37,15 @@
                         </GridViewColumn.CellTemplate>
 
                     </GridViewColumn>
-                    <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Company.Price, StringFormat=N2}" />
-                    <GridViewColumn Header="Chg%" Width="60" DisplayMemberBinding="{Binding Company.ChangePercentage, StringFormat=N3}"/>
-                    <GridViewColumn Header="Chg"  Width="60" DisplayMemberBinding="{Binding Company.PriceChange, StringFormat=N2}"/>
-                    <GridViewColumn Header="Vol"  Width="60" DisplayMemberBinding="{Binding Company.Volume,  StringFormat='\{0:#,##0,K\}'}"/>
-                    <GridViewColumn Header="Open" Width="60" DisplayMemberBinding="{Binding Company.Open, StringFormat={}{0:0.00}}"/>
+                    <GridViewColumn Header="Price" Width="60" DisplayMemberBinding="{Binding Price, StringFormat=N2}" />
+                    <GridViewColumn Header="Chg%" Width="60" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N3}"/>
+                    <GridViewColumn Header="Chg"  Width="60" DisplayMemberBinding="{Binding PriceChange, StringFormat=N2}"/>
+                    <GridViewColumn Header="Vol"  Width="60" DisplayMemberBinding="{Binding Volume,  StringFormat='\{0:#,##0,K\}'}"/>
+                    <GridViewColumn Header="Open" Width="60" DisplayMemberBinding="{Binding Open, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="MktCap"  Width="90" DisplayMemberBinding="{Binding MarketCapital, StringFormat='\{0:#,##0,,M\}'}"/>
                     <GridViewColumn Header="P/E"  Width="50" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="P/S"  Width="50" DisplayMemberBinding="{Binding PriceToSalesRatio, StringFormat={}{0:0.00}}"/>
-                    <GridViewColumn Header="Industry"  Width="170" DisplayMemberBinding="{Binding Company.Industry}"/>
+                    <GridViewColumn Header="Industry"  Width="170" DisplayMemberBinding="{Binding Industry}"/>
                     <!--<GridViewColumn Header="Logo"  >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate >

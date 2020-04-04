@@ -16,15 +16,15 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Margin="5" BorderBrush="Black" BorderThickness="1">
-                    <Image Source="{Binding Path=Company.Logo}" Stretch="Fill" Width="50" Height="50" OpacityMask="Black" />
+                    <Image Source="{Binding Path=Logo}" Stretch="Fill" Width="50" Height="50" OpacityMask="Black" />
                 </Border>
                 <StackPanel Grid.Column="1" Margin="5">
                     <StackPanel Orientation="Horizontal" TextBlock.FontWeight="Bold" >
-                        <TextBlock Text="{Binding Path=Company.Symbol, FallbackValue=Symbol}" Foreground="Black" />
-                        <TextBlock Text="{Binding Path=Company.Price, FallbackValue=Price, StringFormat={}{0:0.00}}" Padding="10,0,0,0" Foreground="Black"/>
+                        <TextBlock Text="{Binding Path=Symbol, FallbackValue=Symbol}" Foreground="Black" />
+                        <TextBlock Text="{Binding Path=Price, FallbackValue=Price, StringFormat=N2}" Padding="10,0,0,0" Foreground="Black"/>
                     </StackPanel>
-                    <TextBlock Text="{Binding Path=Company.Volume, FallbackValue=Volume}" Foreground="Black" />
-                    <TextBlock Text="{Binding Path=Company.Name, FallbackValue=Name}" Foreground="Black" />
+                    <TextBlock Text="{Binding Path=Volume, FallbackValue=Volume, StringFormat='\{0:#,##0,K\}'}" Foreground="Black" />
+                    <TextBlock Text="{Binding Path=PriceChange, FallbackValue=PriceChange, StringFormat=N2}" Foreground="Black" />
                 </StackPanel>
             </Grid>
         </DataTemplate>

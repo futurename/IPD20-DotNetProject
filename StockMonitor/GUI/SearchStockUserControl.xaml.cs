@@ -31,7 +31,7 @@ namespace GUI
     {
         List<Task<UIComapnyRow>> taskList;
 
-        BlockingCollection<UICompanyRowWrapper> companyDataRowList;
+        BlockingCollection<UIComapnyRow> companyDataRowList;
         BlockingCollection<UIComapnyRow> watchList;
 
         DateTime start, end;
@@ -69,14 +69,11 @@ namespace GUI
 
         }
 
-
-
-
         private void LoopRefreshData(Task mainListTask, Task watchlistTask)
         {
             Task.WhenAll(mainListTask, watchlistTask).ContinueWith(p =>
             {
-                foreach (var companyRowWrapper in companyDataRowList)
+                foreach (var companyRow in companyDataRowList)
                 {
                     Task.Factory.StartNew(async () =>
                     {
@@ -84,7 +81,7 @@ namespace GUI
                         {
                             while (true)
                             {
-                                RefreshRealTImePrice(companyRowWrapper.Company);
+                                RefreshRealTImePrice(companyRow);
                                 //Thread.Sleep(RealTimeInterval);
                                 await Task.Delay(RealTimeInterval);
                             }
@@ -92,7 +89,7 @@ namespace GUI
                         catch (Exception ex)
                         {
                             Console.Out.WriteLine(
-                                $"Mainwindow realtimeprice loop thread exception {companyRowWrapper.Company.Symbol} at {DateTime.Now}");
+                                $"Mainwindow realtimeprice loop thread exception {companyRow.Symbol} at {DateTime.Now}");
                         }
                     });
 
@@ -102,7 +99,7 @@ namespace GUI
                         {
                             while (true)
                             {
-                                Refresh1MinData(companyRowWrapper.Company);
+                                Refresh1MinData(companyRow);
                                 await Task.Delay(OneMinTimeInterval);
                                 //Thread.Sleep(OneMinTimeInterval);
                             }
@@ -110,7 +107,7 @@ namespace GUI
                         catch (Exception ex)
                         {
                             Console.Out.WriteLine(
-                                $"1Mindata loop thread exception {companyRowWrapper.Company.Symbol} at {DateTime.Now}");
+                                $"1Mindata loop thread exception {companyRow.Symbol} at {DateTime.Now}");
                         }
                     });
                 }
@@ -209,14 +206,14 @@ namespace GUI
 
         private async Task InitListView()
         {
-            companyDataRowList = new BlockingCollection<UICompanyRowWrapper>();
+            companyDataRowList = new BlockingCollection<UIComapnyRow>();
 
             foreach (Task<UIComapnyRow> task in taskList)
             {
                 try
                 {
                     UIComapnyRow company = await task;
-                    companyDataRowList.Add(new UICompanyRowWrapper(company));
+                    companyDataRowList.Add(company);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
@@ -279,7 +276,7 @@ namespace GUI
             var item = lsvMarketPreview.SelectedItem;
             if (item != null)
             {
-                UIComapnyRow comapnyRow = (item as UICompanyRowWrapper).Company;
+                UIComapnyRow comapnyRow = item as UIComapnyRow;
                 try
                 {
                     int companyId = comapnyRow.CompanyId;
