@@ -257,13 +257,13 @@ namespace GUI
                         tempList.Remove(companyRow);
                         watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentBag<UIComapnyRow>(tempList));
 
-                       // MessageBox.Show("Watchlist count left: "  + watctList.Count.ToString());
+                        // MessageBox.Show("Watchlist count left: "  + watctList.Count.ToString());
 
                         this.Dispatcher.Invoke(() =>
                         {
                             lsvWatchList.ItemsSource = watchList;
-                           
-                            
+
+
                         });
                         MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
@@ -286,7 +286,7 @@ namespace GUI
                     int companyId = comapnyRow.CompanyId;
                     Task t = GUIDataHelper.AddItemToWatchListTast(CurrentUserId, companyId);
 
-                    Task.WhenAll(t).ContinueWith(p =>
+                    Task.WhenAll(t).ContinueWith(p =>   //FIXME
                     {
                         watchList.Add(comapnyRow);
                         List<UIComapnyRow> tempList = new List<UIComapnyRow>(watchList);
@@ -295,7 +295,6 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             lsvWatchList.ItemsSource = watchList;
-                            //lsvWatchList.Items.Refresh();
 
                         });
                         MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
@@ -319,38 +318,63 @@ namespace GUI
         private void TbSearchBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
             lbSearchResult.Visibility = Visibility.Hidden;
-            if (string.IsNullOrWhiteSpace(tbSearchBox.Text))
-            {
-                tbSearchBox.Text = "Search symbol here";
-            }
+            tbSearchBox.Text = "Search symbol here";
+                Task.Run(() => { this.Dispatcher.Invoke(() => { lsvWatchList.ItemsSource = watchList; }); });
+            
         }
 
         private void TbSearchBox_OnPreviewKeyUp(object sender, KeyEventArgs e)
         {
             string searchSymbol = tbSearchBox.Text;
 
-            Task.Run(() =>
+            if (e.Key == Key.Enter)
             {
-                List<Company> symbolList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
-                if (symbolList != null)
+                List<UIComapnyRow> searchComapnyRowList = new List<UIComapnyRow>();
+                Task t = Task.Run(() =>
                 {
-                   this.Dispatcher.Invoke(() =>
-                   {
-                       lbSearchResult.ItemsSource = symbolList;
-                       lbSearchResult.Height = symbolList.Count * 25;
-                       lbSearchResult.Visibility = Visibility.Visible;
-                       
-                   });
-                   
-                }
-                else
+                    List<Company> companyList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
+                    foreach (Company comapny in companyList)
+                    {
+                        Task<UIComapnyRow> subTask = GUIDataHelper.GetCompanyDataRowTask(comapny.Symbol);
+                        searchComapnyRowList.Add(subTask.Result);
+                    }
+                });
+                Task.WhenAll(t).ContinueWith(p =>
                 {
-                    this.Dispatcher.Invoke(() => { lbSearchResult.Visibility = Visibility.Hidden; });
-                }
-            });
+                    this.Dispatcher.Invoke(() => { lsvWatchList.ItemsSource = searchComapnyRowList; });
+                });
 
+            }
+            else
+            {
+                Task.Run(() =>
+                {
+                    List<Company> companyList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
+                    if (companyList != null) {
 
-        
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            lbSearchResult.ItemsSource = companyList;
+                            lbSearchResult.Height = companyList.Count * 25;
+                            lbSearchResult.Visibility = Visibility.Visible;
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke(() => { lbSearchResult.Visibility = Visibility.Hidden; });
+                    }
+                });
+            }
+
         }
+
+
+
+
+
+
     }
+
+
+
 }
