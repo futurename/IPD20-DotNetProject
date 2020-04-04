@@ -67,6 +67,7 @@ namespace GUI
             LoopRefreshData(mainListTask, watchlistTask);
 
 
+
         }
 
 
@@ -336,9 +337,11 @@ namespace GUI
                    this.Dispatcher.Invoke(() =>
                    {
                        lbSearchResult.ItemsSource = symbolList;
-                       
+                       lbSearchResult.Height = symbolList.Count * 25;
                        lbSearchResult.Visibility = Visibility.Visible;
+                       
                    });
+                   
                 }
                 else
                 {

@@ -93,14 +93,14 @@
             </ListView>
             <ListBox Margin="110,191,10,0.4"/>
         </Grid>
-        <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="Black"/>
-        <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Text="Search symbol here" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="169" FontSize="12" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
-        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="65,41,0,0" VerticalAlignment="Top" Width="169">
+        <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="56" FontSize="15" FontWeight="Bold" Foreground="Black"/>
+        <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
+        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="80,41,0,0" VerticalAlignment="Top" Width="200">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="100" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Name="rtbSymbolResult" Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="70" VerticalAlignment="Center"></TextBlock>
                             <Image Source="{Binding Logo}" Height="18"/>
                         </StackPanel>
                     </Border>

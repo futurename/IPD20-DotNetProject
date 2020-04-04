@@ -12,7 +12,7 @@
         <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" Background="#FF26262D" Foreground="#FFDDDDDD" FontSize="20"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102" Foreground="#FFDDDDDD" Background="#FF26262D"/>
         <TabControl HorizontalAlignment="Left" Height="498" Margin="10,10,0,0" VerticalAlignment="Top" Width="1200" >
-            <TabItem Header="Search Stock" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="Black" FontSize="20" FontWeight="Bold">
+            <TabItem Header="Stock Market" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="Black" FontSize="20" FontWeight="Bold">
                 <local:SearchStockUserControl Margin="10,0,-2,10" />
             </TabItem>
             <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
