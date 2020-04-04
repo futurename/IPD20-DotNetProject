@@ -32,7 +32,6 @@ namespace StockMonitor.Models.UIClasses
         public double ChangePercentage { get; set; }
 
         public double PriceChange { get; set; }
-    
         public long Volume { get; set; }
         public double Open { get; set; }
         public string MarketCapital { get; set; }
@@ -42,11 +41,12 @@ namespace StockMonitor.Models.UIClasses
         public string Sector { get; set; }
         public byte[] Logo { get; set; }
         public string Description { get; set; }
+        public string CompanyName { get; set; }
 
 
         public override string ToString()
         {
-            return $"{Symbol}:{Price}, {ChangePercentage}%,{PriceChange},{Sector}";
+            return $"{Symbol}, {CompanyName}:{Price}, {ChangePercentage}%,{PriceChange},{Sector}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

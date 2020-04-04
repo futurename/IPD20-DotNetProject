@@ -6,20 +6,24 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="558" Width="1245.4">
-    <Grid OpacityMask="#FF26262D" Background="#FF26262D">
+        Title="MainWindow" Height="592.875" Width="1245.4">
+
+    <Grid>
         <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" Background="#FF26262D" Foreground="#FFDDDDDD" FontSize="20"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102" Foreground="#FFDDDDDD" Background="#FF26262D"/>
-        <TabControl HorizontalAlignment="Left" Height="498" Margin="10,10,0,0" VerticalAlignment="Top" Width="1200" Background="#FF26262D">
-            <TabItem Header="Search Stock" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
-                <local:SearchStockUserControl Margin="10,0,10.4,12.6" />
+        <TabControl HorizontalAlignment="Left" Height="498" Margin="10,10,0,0" VerticalAlignment="Top" Width="1200" >
+            <TabItem Header="Search Stock" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="Black" FontSize="20" FontWeight="Bold">
+                <local:SearchStockUserControl Margin="10,0,-2,10" />
             </TabItem>
             <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D" FontSize="20">
                 <local:WatchListUserControl Margin="10,0,10.4,12.6" FontSize="12">
                 </local:WatchListUserControl>
             </TabItem>
             <TabItem Header="TabItem" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="#FFDDDDDD" Background="#FF26262D"/>
+
         </TabControl>
+        <TextBlock Name="tbStatusBar" HorizontalAlignment="Left" Margin="10,517,0,0" TextWrapping="Wrap" Text="Status bar" VerticalAlignment="Top" Width="1200" Height="31"/>
+
     </Grid>
 
 </Window>

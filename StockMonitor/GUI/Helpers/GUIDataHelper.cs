@@ -52,7 +52,8 @@ namespace StockMonitor.Helpers
                 Industry = company.Industry,
                 Logo = company.Logo,
                 Description = company.Description,
-                CompanyId = company.Id
+                CompanyId = company.Id,
+                CompanyName = company.CompanyName
             };
             return companyRow;
         }
@@ -181,7 +182,8 @@ namespace StockMonitor.Helpers
                 Industry = company.Industry,
                 Logo = company.Logo,
                 Description = company.Description,
-                CompanyId = company.Id
+                CompanyId = company.Id,
+                CompanyName = company.CompanyName
             };
 
             sw.Stop();
