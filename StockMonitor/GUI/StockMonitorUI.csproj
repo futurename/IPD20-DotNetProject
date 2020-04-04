@@ -122,7 +122,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Global.cs" />
-    <Compile Include="Helpers\DatabaseDataInitHelper.cs" />
+    <Compile Include="Helpers\DANGER_DatabaseDataInitHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\GUIDataHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />

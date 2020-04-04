@@ -194,6 +194,32 @@ namespace StockMonitor.Helpers
             }
 
         }
+
+
+        public static List<string> GetSymbolListBySearch(string searchString)
+        {
+            try
+            {
+                using (DbStockMonitor _dbContext = new DbStockMonitor())
+                {
+                    var searchItems = _dbContext.Companies.AsNoTracking().Where(c => c.Symbol.Contains(searchString))
+                        .OrderBy(c => c.Symbol).Take(10).ToList();
+                    if (searchItems.Count != 0)
+                    {
+                        return searchItems.Select(item => (item as Company).Symbol).ToList();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException($"Get company list by search failed: {searchString} " + ex.Message);
+            }
+        }
+
     }
 
 }

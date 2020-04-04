@@ -13,14 +13,13 @@ using StockMonitor.Models.JSONModels;
 
 namespace StockMonitor.Helpers
 {
-    public static class DatabaseDataInitHelper
+    public static class DANGER_DatabaseDataInitHelper
     {
         public static void FirstImportStockListToDatabase()
         {
             int counter = 0;
             using (DbStockMonitor context = new DbStockMonitor())
             {
-
                 counter = context.Companies.Count();
                 Console.Out.WriteLine($"Counter start: {counter}");
             }

@@ -67,7 +67,6 @@ namespace GUI
             LoopRefreshData(mainListTask, watchlistTask);
 
 
-
         }
 
 
@@ -306,6 +305,49 @@ namespace GUI
                     Console.Out.WriteLine($"!!! Add item from watchlist failed: {ex.Message}");
                 }
             }
+        }
+
+        private void TbSearchBox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (tbSearchBox.Text == "Search symbol here")
+            {
+                tbSearchBox.Text = "";
+            }
+        }
+
+        private void TbSearchBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            lbSearchResult.Visibility = Visibility.Hidden;
+            if (string.IsNullOrWhiteSpace(tbSearchBox.Text))
+            {
+                tbSearchBox.Text = "Search symbol here";
+            }
+        }
+
+        private void TbSearchBox_OnPreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            string searchSymbol = tbSearchBox.Text;
+
+            Task.Run(() =>
+            {
+                List<string> symbolList = GUIDataHelper.GetSearchSymbolListTask(searchSymbol).Result;
+                if (symbolList != null)
+                {
+                   this.Dispatcher.Invoke(() =>
+                   {
+                       lbSearchResult.ItemsSource = symbolList;
+                       
+                       lbSearchResult.Visibility = Visibility.Visible;
+                   });
+                }
+                else
+                {
+                    this.Dispatcher.Invoke(() => { lbSearchResult.Visibility = Visibility.Hidden; });
+                }
+            });
+
+
+        
         }
     }
 }

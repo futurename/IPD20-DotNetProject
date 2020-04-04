@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:GUI"
              xmlns:StockMonitor="clr-namespace:StockMonitor;assembly=StockMonitor"
              mc:Ignorable="d" Height="415" Width="1175" >
-   
+
     <Grid Background="#FF26262D" Margin="0,0,0.2,-0.4">
-        
+
         <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,0.6" Width="811" FontSize="12" >
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
@@ -45,8 +45,8 @@
                     <MenuItem Name="lsvMkt_miShowStockDetails" Header="Show stock details"></MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
-</ListView>
-        
+        </ListView>
+
         <Grid Margin="816,41,0,2.6">
             <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top">
                 <ListView.View>
@@ -68,6 +68,9 @@
             <ListBox Margin="0,191,0,0"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="50" FontSize="12" Foreground="#FFDDDDDD"/>
-        <TextBox Name="tbSearchBox" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" FontSize="12" />
+        <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Text="Search symbol here" HorizontalAlignment="Left" Height="23" Margin="65,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" FontSize="12" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
+        <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="100" Margin="65,41,0,0" VerticalAlignment="Top" Width="197"/>
+
+
     </Grid>
 </UserControl>
