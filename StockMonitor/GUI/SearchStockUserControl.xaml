@@ -4,15 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
+             xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
              mc:Ignorable="d" Height="415" Width="1250" >
 
-    <Grid Background="White" Margin="0,0,0.2,-0.4">
+    <Grid Background="White" Margin="0,0,0,-42">
+        <Grid.Resources>
+            <uiClasses:ValueConverter x:Key="ValueConverter"></uiClasses:ValueConverter>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="777*"/>
+            <ColumnDefinition Width="74*"/>
+            <ColumnDefinition Width="53*"/>
+            <ColumnDefinition Width="346*"/>
+        </Grid.ColumnDefinitions>
 
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="0,41,0,1.4" Width="922" FontSize="12" >
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="923" FontSize="12" Grid.ColumnSpan="4" >
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="12"></Setter>
+                    <Setter Property="FontSize" Value="14"></Setter>
                     <Setter Property="FontWeight" Value="Bold"></Setter>
                     <Setter Property="Height" Value="50"></Setter>
                 </Style>
@@ -39,9 +49,75 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Price" Width="70" DisplayMemberBinding="{Binding Price, StringFormat=N2}" />
-                    <GridViewColumn Header="Chg%" Width="70" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N3}"/>
-                    <GridViewColumn Header="Chg"  Width="60" DisplayMemberBinding="{Binding PriceChange, StringFormat=N2}"/>
+                    <GridViewColumn Header="Price" Width="70" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                    <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                    <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                    <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Chg%" Width="70">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ChangePercentage, StringFormat=N3, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                    <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                    <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                    <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Chg"  Width="60" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding PriceChange, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                    <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                    <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                    <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Vol"  Width="70" DisplayMemberBinding="{Binding Volume,  StringFormat='\{0:#,##0,K\}'}"/>
                     <GridViewColumn Header="Open" Width="70" DisplayMemberBinding="{Binding Open, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="MktCap"  Width="100" DisplayMemberBinding="{Binding MarketCapital, StringFormat='\{0:#,##0,,M\}'}"/>
@@ -58,8 +134,8 @@
             </ListView.ContextMenu>
         </ListView>
 
-        <Grid Margin="816,41,0,2.6">
-            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top" Margin="110,0,10,0">
+        <Grid Margin="39.404,41,0,3.4" Grid.ColumnSpan="3" Grid.Column="1">
+            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top" Margin="130,0,23.596,0">
                 <ListView.Resources>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -77,9 +153,76 @@
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
                         <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Symbol}" Width="60"/>
-                        <GridViewColumn Header="Price"  DisplayMemberBinding="{Binding Price, StringFormat=N2}" Width="60" />
-                        <GridViewColumn Header="Chg%" DisplayMemberBinding="{Binding ChangePercentage, StringFormat=N3}" Width="60"/>
-                        <GridViewColumn Header="Chg" DisplayMemberBinding="{Binding PriceChange, StringFormat=N2}" Width="60"/>
+                        <GridViewColumn Header="Price"  Width="60" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock.Style>
+                                            <Style>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                        <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Chg%"  Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ChangePercentage, StringFormat=N3, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock.Style>
+                                            <Style>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                        <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Chg" Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding PriceChange, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBlock.Style>
+                                            <Style>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                        <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                        <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
@@ -90,7 +233,7 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <ListBox Margin="110,191,10,0.4"/>
+            <ListBox Margin="131,191,22.596,-0.4"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="56" FontSize="15" FontWeight="Bold" Foreground="Black"/>
         <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
