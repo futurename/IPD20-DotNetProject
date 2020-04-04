@@ -244,16 +244,16 @@ namespace GUI
 
 
         Task currentTask = null;
+        CancellationTokenSource tokenSource;
         private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            if (txtSymbol.Text == "") { return; }
-
-            if (currentTask != null)
-            {
-                currentTask.Dispose();
+            
+            if (tokenSource != null) {
+                tokenSource.Cancel();//CancelTask
             }
 
-            currentTask = Task.Run(DrawCandleStick);
+            tokenSource = new CancellationTokenSource();
+            currentTask = Task.Run(DrawCandleStick, tokenSource.Token);
         }
     }
 }
