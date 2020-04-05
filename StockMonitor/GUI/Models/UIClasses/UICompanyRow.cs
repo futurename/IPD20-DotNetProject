@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace StockMonitor.Models.UIClasses
@@ -88,19 +90,58 @@ namespace StockMonitor.Models.UIClasses
         public long Volume { get; set; }
         public double Open { get; set; }
         public double MarketCapital { get; set; }
+
+        public double NotifyPriceLow { get; set; }
+        public double NotifyPriceHigh { get; set; }
+
         private void SetMarketCapital(string marketCapitalStr)
         {
-            MarketCapital = double.Parse(marketCapitalStr, CultureInfo.InvariantCulture);//ex
+            try
+            {
+                MarketCapital = double.Parse(marketCapitalStr, CultureInfo.InvariantCulture); //ex
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!!!Parsing marketCapital string to double exception, {marketCapitalStr}. {ex.Message}");
+            }
         }
         public double PriceToEarningRatio { get; set; }
         private void SetPriceToEarningRatio(string priceToEarningRatioStr)
         {
-            PriceToEarningRatio = double.Parse(priceToEarningRatioStr, CultureInfo.InvariantCulture);//ex
+            try
+            {
+                PriceToEarningRatio = double.Parse(priceToEarningRatioStr, CultureInfo.InvariantCulture); //ex
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!!!Parsing priceToEarningRatio string to double exception, {priceToEarningRatioStr}. {ex.Message}");
+            }
         }
+
+        public ImageSource ByteToImage(byte[] imageData)
+        {
+            BitmapImage biImg = new BitmapImage();
+            MemoryStream ms = new MemoryStream(imageData);
+            biImg.BeginInit();
+            biImg.StreamSource = ms;
+            biImg.EndInit();
+
+            ImageSource imgSrc = biImg as ImageSource;
+
+            return imgSrc;
+        }
+
         public double PriceToSalesRatio { get; set; }
         private void SetPriceToSalesRatio(string priceToSalesRatioStr)
         {
-            PriceToSalesRatio = double.Parse(priceToSalesRatioStr, CultureInfo.InvariantCulture);//ex
+            try
+            {
+                 PriceToSalesRatio = double.Parse(priceToSalesRatioStr, CultureInfo.InvariantCulture); //ex
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!!!Parsing priceToSalesRatio string to double exception, {priceToSalesRatioStr}. {ex.Message}");
+            }
         }
         public string Industry { get; set; }
         public byte[] Logo { get; set; }
@@ -142,4 +183,5 @@ namespace StockMonitor.Models.UIClasses
             return null;
         }
     }
+
 }

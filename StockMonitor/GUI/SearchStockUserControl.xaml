@@ -7,7 +7,7 @@
              xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
              mc:Ignorable="d" Height="415" Width="1250" >
 
-    <Grid Background="White" Margin="0,0,0,-42">
+    <Grid Background="White" Margin="0,0,0,-42" HorizontalAlignment="Left" Width="1250">
         <Grid.Resources>
             <uiClasses:ValueConverter x:Key="ValueConverter"></uiClasses:ValueConverter>
         </Grid.Resources>
@@ -75,7 +75,7 @@
                     <GridViewColumn Header="Chg%" Width="70">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding ChangePercentage, StringFormat=N3, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="{Binding ChangePercentage, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock.Style>
                                         <Style>
                                             <Style.Triggers>
@@ -130,6 +130,8 @@
                 <ContextMenu>
                     <MenuItem Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"></MenuItem>
                     <MenuItem Name="lsvMkt_miShowStockDetails" Header="Show stock details"></MenuItem>
+                    <MenuItem Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"></MenuItem>
+                    
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
@@ -229,14 +231,14 @@
                     <ContextMenu>
                         <MenuItem Name="lsvWatch_miAddToWatchList" Header="Add to watch list" Click="LsvWatch_miAddToWatchList_OnClick"></MenuItem>
                         <MenuItem Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"></MenuItem>
-                        <MenuItem Name="lsvWatch_miShowStockDetail" Header="Show stock details"></MenuItem>
+                        <MenuItem Name="lsvWatch_SetTargetPrice" Header="Set price notification" Click="LsvWatch_SetTargetPrice_OnClick"></MenuItem>
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
             <ListBox Margin="131,191,22.596,-0.4"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="56" FontSize="15" FontWeight="Bold" Foreground="Black"/>
-        <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15" LostFocus="TbSearchBox_OnLostFocus" GotFocus="TbSearchBox_OnGotFocus" />
+        <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15"  GotFocus="TbSearchBox_OnGotFocus" />
         <ListBox Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="80,41,0,0" VerticalAlignment="Top" Width="187">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -250,6 +252,7 @@
             </ListBox.ItemTemplate>
 
         </ListBox>
+        <Button Name="btClearSearch" FontSize="14" FontWeight="Bold" Content="Clear" Click="BtClearSearch_OnClick" HorizontalAlignment="Left" Margin="263,13,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </UserControl>

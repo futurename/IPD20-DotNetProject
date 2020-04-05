@@ -101,6 +101,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ToastNotifications, Version=2.5.1.0, Culture=neutral, PublicKeyToken=e89d9d7314a7c797, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToastNotifications.2.5.1\lib\net40\ToastNotifications.dll</HintPath>
+    </Reference>
+    <Reference Include="ToastNotifications.Messages, Version=2.5.1.0, Culture=neutral, PublicKeyToken=e89d9d7314a7c797, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToastNotifications.Messages.2.5.1\lib\net40\ToastNotifications.Messages.dll</HintPath>
+    </Reference>
     <Reference Include="Ubiety.Dns.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.8.0.19\lib\net48\Ubiety.Dns.Core.dll</HintPath>
     </Reference>
@@ -147,6 +153,9 @@
     </Compile>
     <Compile Include="SearchStockUserControl.xaml.cs">
       <DependentUpon>SearchStockUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SetTargetPriceNotificationDialog.xaml.cs">
+      <DependentUpon>SetTargetPriceNotificationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="StockMonitorModel.Context.cs">
       <DependentUpon>StockMonitorModel.Context.tt</DependentUpon>
@@ -198,6 +207,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SearchStockUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetTargetPriceNotificationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

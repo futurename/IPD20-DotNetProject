@@ -1,0 +1,49 @@
+﻿<Window x:Class="GUI.SetTargetPriceNotificationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
+        mc:Ignorable="d"
+        Title="Set price notification" Height="300" Width="300">
+    <StackPanel Name="spDialogPanel" Orientation="Vertical" DataContext="{Binding UICompanyRow}">
+        <StackPanel.Resources>
+            <uiClasses:ValueConverter x:Key="ValueConverter"></uiClasses:ValueConverter>
+        </StackPanel.Resources>
+        <StackPanel Orientation="Horizontal" Height="30">
+            <Image Source="{Binding Logo}" Name="imgLogo" Height="25" Width="100"  Margin="40,0,0,0"/>
+            <TextBlock Name="tbSymbol" Text="{Binding Symbol}" Margin="20,0,0,0" Width="100" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"></TextBlock>
+        </StackPanel>
+        <TextBlock Name="tbCompanyName" TextAlignment="Center" Height="20" Text="{Binding CompanyName}" FontSize="16" FontStyle="Italic" Margin="30,5,0,0" Width="200" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Name="tbPrice" FontSize="20" Margin="0,5,0,5" FontWeight="Bold" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" VerticalAlignment="Center" Width="80" >
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                            <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                            <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                            <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Target high:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
+            <TextBox Name="tbTargetHigh" Text="{Binding ElementName=sbTargetHigh, Path=Value}" Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
+            <ScrollBar Name="sbTargetHigh" d:LayoutOverrides="Width" Value="0" Margin="20,0,0,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Target low:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
+            <TextBox Name="tbTargetLow" Text="{Binding ElementName=sbTargetLow, Path=Value}" Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
+            <ScrollBar Name="sbTargetLow" d:LayoutOverrides="Width" Value="0" Margin="20,0,0,0"/>
+        </StackPanel>
+        <Button Content="Clear setting" Width="80" Margin="15"/>
+        <Button Content="Save setting" Width="80" Margin="0"/>
+    </StackPanel>
+</Window>
