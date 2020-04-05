@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:GUI"
         xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
         mc:Ignorable="d"
-        Title="Set price notification" Height="300" Width="300">
+        Title="Set price notification" Height="300" Width="300" ResizeMode="NoResize">
     <StackPanel Name="spDialogPanel" Orientation="Vertical" DataContext="{Binding UICompanyRow}">
         <StackPanel.Resources>
-            <uiClasses:ValueConverter x:Key="ValueConverter"></uiClasses:ValueConverter>
+            <uiClasses:PriceColorValueConverter x:Key="ValueConverter"></uiClasses:PriceColorValueConverter>
         </StackPanel.Resources>
         <StackPanel Orientation="Horizontal" Height="30">
             <Image Source="{Binding Logo}" Name="imgLogo" Height="25" Width="100"  Margin="40,0,0,0"/>
@@ -35,15 +35,13 @@
         </TextBlock>
         <StackPanel Orientation="Horizontal">
             <Label Content="Target high:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
-            <TextBox Name="tbTargetHigh" Text="{Binding ElementName=sbTargetHigh, Path=Value}" Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
-            <ScrollBar Name="sbTargetHigh" d:LayoutOverrides="Width" Value="0" Margin="20,0,0,0"/>
+            <TextBox Name="tbTargetHigh"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
             <Label Content="Target low:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
-            <TextBox Name="tbTargetLow" Text="{Binding ElementName=sbTargetLow, Path=Value}" Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
-            <ScrollBar Name="sbTargetLow" d:LayoutOverrides="Width" Value="0" Margin="20,0,0,0"/>
+            <TextBox Name="tbTargetLow"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
         </StackPanel>
-        <Button Content="Clear setting" Width="80" Margin="15"/>
-        <Button Content="Save setting" Width="80" Margin="0"/>
+        <Button  Name="btClearSetting" Content="Clear setting" Width="80" Margin="15" Click="BtClearSetting_OnClick"/>
+        <Button Name="btSaveSetting" Content="Save setting" Width="80" Margin="0" Click="btSaveSetting_Click"/>
     </StackPanel>
 </Window>

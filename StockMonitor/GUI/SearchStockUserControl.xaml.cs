@@ -41,7 +41,7 @@ namespace GUI
         DateTime start, end;
 
         private const int RealTimeInterval = 3000;
-        private const int OneMinTimeInterval = 60000;
+        private const int OneMinTimeInterval = 3000;
         private const int CurrentUserId = 3;
 
         public SearchStockUserControl()
@@ -69,12 +69,10 @@ namespace GUI
             InitializeComponent();
 
 
-            
 
             LoopRefreshData(mainListTask, watchlistTask);
 
-
-
+            
 
 
 
@@ -173,7 +171,7 @@ namespace GUI
                     /**************************************************
                     following line simulate Volume change during close hours.
                     ****************************************************/
-                    comapnyRow.Volume += new Random().Next(10000) * 1000;
+                    comapnyRow.Volume += new Random().Next(1000) * 10000;
                 }
             }
             catch (SystemException ex)
@@ -211,7 +209,7 @@ namespace GUI
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            notifier.ShowInformation($"HIGHER price warning: {comapnyRow.Symbol}, target high: {comapnyRow.NotifyPriceHigh:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
+                            notifier.ShowInformation($"Higher price warning: {comapnyRow.Symbol}, target high: {comapnyRow.NotifyPriceHigh:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
                         });
                     }
 
@@ -219,7 +217,7 @@ namespace GUI
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            notifier.ShowInformation($"LOWER price warning: {comapnyRow.Symbol}, target low: {comapnyRow.NotifyPriceLow:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
+                            notifier.ShowInformation($"Lower price warning: {comapnyRow.Symbol}, target low: {comapnyRow.NotifyPriceLow:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
                         });
                     }
                 }
@@ -321,7 +319,7 @@ namespace GUI
                             lsvWatchList.ItemsSource = watchList;
 
                         });
-                        MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
+                       MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
                 }
                 catch (SystemException ex)
@@ -432,7 +430,10 @@ namespace GUI
                 priceDialgo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 if (priceDialgo.ShowDialog() == true)
                 {
-
+                
+                   
+                         
+                   
                 }
             }
         }

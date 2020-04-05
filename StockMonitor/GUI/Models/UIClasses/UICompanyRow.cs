@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
@@ -17,19 +18,19 @@ namespace StockMonitor.Models.UIClasses
 {
     public class UIComapnyRow : INotifyPropertyChanged
     {
-        public UIComapnyRow (//ex: FormatException
-            string symbol, 
+        public UIComapnyRow(//ex: FormatException
+            string symbol,
             double price,
             double openPrice,
             long volume,
             double changePercentage,
-            double priceChange, 
-            string marketCapitalStr, 
-            string priceToEarningRatioStr, 
-            string priceToSalesRatioStr, 
-            string industry, 
-            byte[] logo, 
-            string description, 
+            double priceChange,
+            string marketCapitalStr,
+            string priceToEarningRatioStr,
+            string priceToSalesRatioStr,
+            string industry,
+            byte[] logo,
+            string description,
             int companyId)
         {
             Symbol = symbol;
@@ -48,8 +49,8 @@ namespace StockMonitor.Models.UIClasses
         }
 
         public UIComapnyRow( //FormatException
-            Company company, 
-            FmgQuoteOnlyPrice fmgQuoteOnlyPrice, 
+            Company company,
+            FmgQuoteOnlyPrice fmgQuoteOnlyPrice,
             FmgSingleQuote singleQuote)
         {
             Symbol = company.Symbol;
@@ -81,18 +82,49 @@ namespace StockMonitor.Models.UIClasses
                 OnPropertyChanged("Price");
                 OnPropertyChanged("PriceChange");
                 OnPropertyChanged("ChangePercentage");
-                OnPropertyChanged("Volume");
+               
             }
         }
         public int CompanyId { get; set; }
         public double ChangePercentage { get; set; }
         public double PriceChange { get; set; }
-        public long Volume { get; set; }
+        private long _volume;
+
+        public long Volume
+        {
+            get => _volume;
+            set
+            {
+                _volume = value;
+                OnPropertyChanged("Volume");
+            }
+        }
         public double Open { get; set; }
         public double MarketCapital { get; set; }
 
-        public double NotifyPriceLow { get; set; }
-        public double NotifyPriceHigh { get; set; }
+        private double _notifyPriceLow;
+
+        public double NotifyPriceLow
+        {
+            get => _notifyPriceLow;
+            set
+            {
+                _notifyPriceLow = value;
+                OnPropertyChanged("NotifyPriceLow");
+            }
+        }
+
+        private double _notifyPriceHigh;
+
+        public double NotifyPriceHigh
+        {
+            get => _notifyPriceHigh;
+            set
+            {
+                _notifyPriceHigh = value;
+                OnPropertyChanged("NotifyPriceHigh");
+            }
+        }
 
         private void SetMarketCapital(string marketCapitalStr)
         {
@@ -136,7 +168,7 @@ namespace StockMonitor.Models.UIClasses
         {
             try
             {
-                 PriceToSalesRatio = double.Parse(priceToSalesRatioStr, CultureInfo.InvariantCulture); //ex
+                PriceToSalesRatio = double.Parse(priceToSalesRatioStr, CultureInfo.InvariantCulture); //ex
             }
             catch (SystemException ex)
             {
@@ -150,7 +182,7 @@ namespace StockMonitor.Models.UIClasses
 
         public override string ToString()
         {
-            return $"{Symbol}, {CompanyName}:{Price}, {ChangePercentage}%,{PriceChange}";
+            return $"{Symbol}, {CompanyName}:{Price}, {ChangePercentage}%,{PriceChange}, High: {NotifyPriceHigh}, Low: {NotifyPriceLow}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -161,7 +193,7 @@ namespace StockMonitor.Models.UIClasses
         }
     }
 
-    public class ValueConverter : IValueConverter
+    public class PriceColorValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -183,5 +215,31 @@ namespace StockMonitor.Models.UIClasses
             return null;
         }
     }
+
+    public class NotifySettingValueConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value != null)
+            {
+                if (Math.Abs(double.Parse(value.ToString())) < 0.0001)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
 
 }

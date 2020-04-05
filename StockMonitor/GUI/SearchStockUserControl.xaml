@@ -9,7 +9,8 @@
 
     <Grid Background="White" Margin="0,0,0,-42" HorizontalAlignment="Left" Width="1250">
         <Grid.Resources>
-            <uiClasses:ValueConverter x:Key="ValueConverter"></uiClasses:ValueConverter>
+            <uiClasses:PriceColorValueConverter x:Key="PriceColorValueConverter"></uiClasses:PriceColorValueConverter>
+            <uiClasses:NotifySettingValueConverter x:Key="NotifySettingValueConverter"></uiClasses:NotifySettingValueConverter>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="777*"/>
@@ -18,7 +19,7 @@
             <ColumnDefinition Width="346*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="923" FontSize="12" Grid.ColumnSpan="4" >
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="957" FontSize="12" Grid.ColumnSpan="4" >
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -35,16 +36,63 @@
                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
                         </Style>
                     </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Header="Symbol" Width="180">
+                    <GridViewColumn Header="Symbol" Width="210">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="160">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="100"></Image>
-                                        <TextBlock Text="{Binding Symbol}" FontSize="14" HorizontalAlignment="Center" Width="60"></TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="150">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="100"></Image>
+                                            <TextBlock Text="{Binding Symbol}" FontSize="14" HorizontalAlignment="Center" Width="50"></TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" FontWeight="Regular" FontSize="12" Width="160"
+                                               HorizontalAlignment="Center" Height="20"></TextBlock>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" FontWeight="Regular" FontSize="12" Width="160"
-                                               HorizontalAlignment="Center" Height="18"></TextBlock>
+                                    <StackPanel Orientation="Vertical" Height="40" Width="60">
+                                        <Image   Height="10" Source="pack://application:,,,/Resources/star.png" HorizontalAlignment="Center">
+                                            <Image.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding NotifyPriceHigh, Converter={StaticResource NotifySettingValueConverter}}" Value="false">
+                                                            <Setter Property="Image.Visibility" Value="Hidden"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding NotifyPriceHigh, Converter={StaticResource NotifySettingValueConverter}}" Value="true">
+                                                            <Setter Property="Image.Visibility" Value="Visible"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                        <TextBlock HorizontalAlignment="Center"  FontWeight="Bold" FontSize="9" Text="{Binding NotifyPriceHigh, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBlock.Style>
+                                                <Style>
+                                                    
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding NotifyPriceHigh, Converter={StaticResource NotifySettingValueConverter}}" Value="false">
+                                                            <Setter Property="TextBlock.Visibility" Value="Hidden"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding NotifyPriceHigh, Converter={StaticResource NotifySettingValueConverter}}" Value="true">
+                                                            <Setter Property="TextBlock.Visibility" Value="Visible"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBlock HorizontalAlignment="Center"  FontWeight="Bold" FontSize="9" Text="{Binding NotifyPriceLow, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
+                                            <TextBlock.Style>
+                                                <Style>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding NotifyPriceLow, Converter={StaticResource NotifySettingValueConverter}}" Value="false">
+                                                            <Setter Property="TextBlock.Visibility" Value="Hidden"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding NotifyPricezLow, Converter={StaticResource NotifySettingValueConverter}}" Value="true">
+                                                            <Setter Property="TextBlock.Visibility" Value="Visible"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -56,13 +104,13 @@
                                     <TextBlock.Style>
                                         <Style>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
                                                     <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
                                                     <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
                                                     <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -79,13 +127,13 @@
                                     <TextBlock.Style>
                                         <Style>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
                                                     <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
                                                     <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
                                                     <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -102,13 +150,13 @@
                                     <TextBlock.Style>
                                         <Style>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
                                                     <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
                                                     <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
                                                     <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -118,7 +166,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Vol"  Width="70" DisplayMemberBinding="{Binding Volume,  StringFormat='\{0:#,##0,K\}'}"/>
+                    <GridViewColumn Header="Vol"  Width="70" DisplayMemberBinding="{Binding Volume,  StringFormat='\{0:#,##0,K\}', UpdateSourceTrigger=PropertyChanged}"/>
                     <GridViewColumn Header="Open" Width="70" DisplayMemberBinding="{Binding Open, StringFormat={}{0:0.00}}"/>
                     <GridViewColumn Header="MktCap"  Width="100" DisplayMemberBinding="{Binding MarketCapital, StringFormat='\{0:#,##0,,M\}'}"/>
                     <GridViewColumn Header="P/E"  Width="50" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat={}{0:0.00}}"/>
@@ -131,13 +179,13 @@
                     <MenuItem Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"></MenuItem>
                     <MenuItem Name="lsvMkt_miShowStockDetails" Header="Show stock details"></MenuItem>
                     <MenuItem Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"></MenuItem>
-                    
+
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
 
         <Grid Margin="39.404,41,0,3.4" Grid.ColumnSpan="3" Grid.Column="1">
-            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top" Margin="130,0,23.596,0">
+            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top" Margin="160,5,12.596,0">
                 <ListView.Resources>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -162,13 +210,13 @@
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
                                                         <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
                                                         <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -185,13 +233,13 @@
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
                                                         <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
                                                         <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -208,13 +256,13 @@
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="1">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
                                                         <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="2">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
                                                         <Setter Property="TextBlock.Foreground" Value="Green"></Setter>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource ValueConverter}}" Value="3">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"></Setter>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -235,7 +283,7 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <ListBox Margin="131,191,22.596,-0.4"/>
+            <ListBox Margin="161,190,10.596,-0.4"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="56" FontSize="15" FontWeight="Bold" Foreground="Black"/>
         <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15"  GotFocus="TbSearchBox_OnGotFocus" />

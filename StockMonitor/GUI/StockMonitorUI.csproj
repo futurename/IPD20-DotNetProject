@@ -254,6 +254,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\star.png" />
+    <Resource Include="Resources\false.png" />
     <Content Include="StockMonitorModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>StockMonitorModel.edmx</DependentUpon>
@@ -265,6 +267,7 @@
       <LastGenOutput>StockMonitorModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
