@@ -15,36 +15,6 @@ namespace StockMonitor.Models.UIClasses
 {
     public class UIComapnyRow : INotifyPropertyChanged
     {
-        public UIComapnyRow (//ex: FormatException
-            string symbol, 
-            double price,
-            double openPrice,
-            long volume,
-            double changePercentage,
-            double priceChange, 
-            string marketCapitalStr, 
-            string priceToEarningRatioStr, 
-            string priceToSalesRatioStr, 
-            string industry, 
-            byte[] logo, 
-            string description, 
-            int companyId)
-        {
-            Symbol = symbol;
-            Price = price;
-            Open = openPrice;
-            Volume = volume;
-            ChangePercentage = changePercentage;
-            PriceChange = priceChange;
-            SetMarketCapital(marketCapitalStr); //ex: FormatException
-            SetPriceToEarningRatio(priceToEarningRatioStr); //ex: FormatException
-            SetPriceToSalesRatio(priceToSalesRatioStr); //ex: FormatException
-            Industry = industry;
-            Logo = logo;
-            Description = description;
-            CompanyId = companyId;
-        }
-
         public UIComapnyRow( //FormatException
             Company company, 
             FmgQuoteOnlyPrice fmgQuoteOnlyPrice, 

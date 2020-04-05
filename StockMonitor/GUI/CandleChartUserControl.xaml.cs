@@ -62,12 +62,9 @@ namespace GUI
         }
 
 
-        int countDrawing = 0;
-
         private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
-            countDrawing++;
-            while (gridChartContainer.ActualWidth == 0) { Thread.Sleep(500);  }
+            while (gridChartContainer.ActualWidth == 0) { Thread.Sleep(200);  }
 
             List<Fmg1MinQuote> valueList;
             List<string> labelList;
@@ -244,16 +241,14 @@ namespace GUI
 
 
         Task currentTask = null;
-        CancellationTokenSource tokenSource;
         private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
             
-            if (tokenSource != null) {
-                tokenSource.Cancel();//CancelTask
+            if (currentTask != null) {
+                currentTask.Dispose();//CancelTask
             }
 
-            tokenSource = new CancellationTokenSource();
-            currentTask = Task.Run(DrawCandleStick, tokenSource.Token);
+            currentTask = Task.Run(DrawCandleStick);
         }
     }
 }
