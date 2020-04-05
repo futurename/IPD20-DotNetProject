@@ -161,10 +161,10 @@ namespace StockMonitor.Helpers
             string filepath =
                 "C:\\Users\\WW\\Desktop\\SourceTree\\IPD20-DotNetProject\\StockMonitor\\InvalidSymbols.txt";
             List<string> list = File.ReadAllText(filepath).Split('\n').ToList();
-             foreach (var symbol in list)
+            foreach (var symbol in list)
+            {
+                using (DbStockMonitor context = new DbStockMonitor())
                 {
-                    using (DbStockMonitor context = new DbStockMonitor())
-                    {
 
                     var dailyQuoteList =
                          context.QuoteDailies.Where(r => r.Symbol == symbol).ToList();
@@ -190,6 +190,42 @@ namespace StockMonitor.Helpers
                 }
             }
 
+        }
+
+
+        public static void FilterCompanyHasSingleQuoteResult()
+        {
+            using (DbStockMonitor context = new DbStockMonitor())
+            {
+                List<Company> allCompanyList = context.Companies.AsNoTracking().ToList();
+                foreach (var company in allCompanyList)
+                {
+
+                    string response = RetrieveJsonDataHelper.GetQuoteStringBySymbol(company.Symbol).Result;
+                    if (response.Length < 20)
+                    {
+                        List<QuoteDaily> dailyQuoteList =
+                            context.QuoteDailies.AsNoTracking().Where(q=>q.Symbol == company.Symbol).ToList();
+                        Console.Out.WriteLine($"*** Found: {company.Symbol},will remove {dailyQuoteList.Count} records. response: {response}");
+
+                        for (int i = 0;i < dailyQuoteList.Count; i++)
+                        {
+                            
+                            context.QuoteDailies.Remove(dailyQuoteList[i]);
+                            if(i % 50 == 0 && i != 0)
+                            {
+                                Console.Out.WriteLine($"{company.Symbol}: Deleted 50 records, left: {dailyQuoteList.Count - i}");
+                            }
+                            context.SaveChanges();
+                        }
+
+                        context.Companies.Remove(company);
+                        context.SaveChanges();
+                        
+                    }
+                }
+            }
+           
         }
     }
 }
