@@ -90,13 +90,17 @@ namespace GUI
                 ct.ThrowIfCancellationRequested();
                 await Task.Delay(500);
                 
-                FmgQuoteOnlyPrice realTimeQuote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(Symbol);
+                //FmgQuoteOnlyPrice realTimeQuote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(Symbol);
+                var r = new Random();
+
+                double random = r.NextDouble() * 50 + 50;
 
                 DateTime now = DateTime.Now;
-                ChartValues.Add(new FmgQuoteOnlyPriceWrapper() { Price = realTimeQuote.Price, Time = now });
+                ChartValues.Add(new FmgQuoteOnlyPriceWrapper() { Price = random, Time = now });
 
                 SetAxisLimits(now);
-                txtPrice.Text = "$" + realTimeQuote.Price.ToString("N2");
+                //txtPrice.Text = "$" + realTimeQuote.Price.ToString("N2");
+                txtPrice.Text = "$" + random.ToString("N2");
 
                 if (ChartValues.Count > 20) { ChartValues.RemoveAt(0); }
             }
