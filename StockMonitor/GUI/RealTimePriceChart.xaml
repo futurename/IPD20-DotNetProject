@@ -8,11 +8,11 @@
         xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="RealTimePriceChart" Height="569.432" Width="1100.711">
     <Grid>
-        <Button Name="btToggleReading" Content="Start" HorizontalAlignment="Left" Height="23" Margin="1015,13,0,0" VerticalAlignment="Top" Width="69" Click="btToggleReading_Click"/>
+        <Button Name="btToggleReading" Content="Start" HorizontalAlignment="Left" Height="32" Margin="1015,13,0,0" VerticalAlignment="Top" Width="69" Click="btToggleReading_Click"/>
         <Wpf:CartesianChart
             AnimationsSpeed="0:0:0.5"
             Hoverable="False"
-            DataTooltip="{x:Null}" Margin="0,47,0.4,0">
+            DataTooltip="{x:Null}" Margin="0,64,0.4,0">
             <Wpf:CartesianChart.Series>
                 <Wpf:LineSeries Values="{Binding ChartValues}"
                                 StrokeThickness="6" 
@@ -30,8 +30,7 @@
                 </Wpf:Axis>
             </Wpf:CartesianChart.AxisX>
         </Wpf:CartesianChart>
-            <TextBlock Name="txtSymbol" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Symbol" VerticalAlignment="Top" Margin="10,13,0,0" FontSize="24"/>
-            <TextBlock Name="txtPrice" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Price" VerticalAlignment="Top" Margin="93,23,0,0" Height="13" Width="73" TextAlignment="Right"/>
-
+        <TextBlock Name="txtSymbol" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Symbol" VerticalAlignment="Top" Margin="10,13,0,0" FontSize="24"/>
+        <TextBlock Name="txtPrice" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Price" VerticalAlignment="Top" Margin="93,23,0,0" Height="13" Width="73" TextAlignment="Right"/>
     </Grid>
 </Window>
