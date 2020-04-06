@@ -42,7 +42,8 @@ namespace GUI
 
         private const int RealTimeInterval = 3000;
         private const int OneMinTimeInterval = 3000;
-        private const int CurrentUserId = 3;
+        private const int CurrentUserId = 1;
+        BlockingCollection<string> allRunningSymbolList = new BlockingCollection<string>();
 
         public SearchStockUserControl()
         {
@@ -53,6 +54,10 @@ namespace GUI
                 "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX", "STZ"
             };
+            foreach (var symbol in companyNames)
+            {
+                allRunningSymbolList.Add(symbol);
+            }
 
             taskList = new List<Task<UIComapnyRow>>();
 
@@ -72,7 +77,7 @@ namespace GUI
 
             LoopRefreshData(mainListTask, watchlistTask);
 
-            
+          
 
 
 
@@ -217,7 +222,7 @@ namespace GUI
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            notifier.ShowWarning($"Lower price warning: {comapnyRow.Symbol}, target low: {comapnyRow.NotifyPriceLow:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
+                            notifier.ShowError($"Lower price warning: {comapnyRow.Symbol}, target low: {comapnyRow.NotifyPriceLow:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
                         });
                     }
                 }
@@ -275,19 +280,16 @@ namespace GUI
                     Task t = GUIDataHelper.DeleteFromWatchListTask(CurrentUserId, companyRow.CompanyId);
                     Task.WhenAll(t).ContinueWith(p =>
                     {
-                        List<UIComapnyRow> tempList = new List<UIComapnyRow>(watchList);
+                        List<UIComapnyRow> tempList = watchList.ToList();
                         tempList.Remove(companyRow);
-                        watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentBag<UIComapnyRow>(tempList));
 
-                        // MessageBox.Show("Watchlist count left: "  + watctList.Count.ToString());
+                        watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                         this.Dispatcher.Invoke(() =>
                         {
                             lsvWatchList.ItemsSource = watchList;
-
-
                         });
-                        MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
+                        //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
                 }
                 catch (SystemException ex)
@@ -305,22 +307,52 @@ namespace GUI
                 UIComapnyRow comapnyRow = item as UIComapnyRow;
                 try
                 {
-                    int companyId = comapnyRow.CompanyId;
-                    Task t = GUIDataHelper.AddItemToWatchListTast(CurrentUserId, companyId);
-
-                    Task.WhenAll(t).ContinueWith(p =>   //FIXME
+                    List<UIComapnyRow> tempList = watchList.ToList();
+                    if (tempList.Find(row => row.Symbol == comapnyRow.Symbol)!= null) 
                     {
-                        watchList.Add(comapnyRow);
-                        List<UIComapnyRow> tempList = new List<UIComapnyRow>(watchList);
-                        watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentBag<UIComapnyRow>(tempList));
+                       this.Dispatcher.Invoke(() =>
+                       {
+                           MessageBox.Show( $"{comapnyRow.Symbol} EXISTS in the watchlist", "Duplicate company",
+                               MessageBoxButton.OK, MessageBoxImage.Error);
+                       });
+                        return;
+                    }
+                    else
+                    {
+                        int companyId = comapnyRow.CompanyId;
+                        Task t = GUIDataHelper.AddItemToWatchListTast(CurrentUserId, companyId);
 
-                        this.Dispatcher.Invoke(() =>
+                        Task.WhenAll(t).ContinueWith(p =>
                         {
-                            lsvWatchList.ItemsSource = watchList;
+                            tempList.Add(comapnyRow);
+                            watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                lsvWatchList.ItemsSource = watchList;
+
+                            });
+                            Task.Factory.StartNew(async () =>
+                            {
+                                while (true)
+                                {
+                                    try
+                                    {
+                                        RefreshRealTImePrice(comapnyRow);
+                                        //Thread.Sleep(RealTimeInterval);
+                                        await Task.Delay(RealTimeInterval);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.Out.WriteLine(
+                                            $"Watchlist loop thread exception {comapnyRow.Symbol} at {DateTime.Now}");
+                                    }
+                                }
+                            });
+
+                            // MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                         });
-                       MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
-                    });
+                    }
                 }
                 catch (SystemException ex)
                 {
@@ -398,8 +430,8 @@ namespace GUI
 
             cfg.Dispatcher = Application.Current.Dispatcher;
         });
-        
-        
+
+
         private void BtClearSearch_OnClick(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Text = "Search symbol here";
@@ -437,14 +469,15 @@ namespace GUI
             if (item != null)
             {
                 UIComapnyRow companyRow = item as UIComapnyRow;
-                SetTargetPriceNotificationDialog priceDialgo = new SetTargetPriceNotificationDialog(companyRow);
-                priceDialgo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                if (priceDialgo.ShowDialog() == true)
+                SetTargetPriceNotificationDialog priceDialog = new SetTargetPriceNotificationDialog(companyRow);
+                priceDialog.Owner = Application.Current.MainWindow;
+                priceDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (priceDialog.ShowDialog() == true)
                 {
-                
-                   
-                         
-                   
+
+
+
+
                 }
             }
         }
