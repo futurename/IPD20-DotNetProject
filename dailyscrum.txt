@@ -246,11 +246,41 @@
 
 2020/04/04 Donghyeok Seo
 1. Done since last scrum
--Set Candle chart pan/zoom boundary
-
-2. To do until next Scrum:
 -Debugging UserControl(Candle Chart disappears)
 -Draw candle stick dynamically
 
+2. To do until next Scrum:
+-Drawing Chart cancel when user select other watchlist
+-Drawing Chart cancel when user switch tab menu
+
 3. Need assistance / figure things out
--Separate Code using UserControl
+
+*****************************************************
+
+2020/04/05 Wang Wei
+1. Done since last scrum:
+- Implementing dynamically color change when price changing.
+- Implementing searching result and show instant result when inputing letters
+- Modify layout of market and watchlist views.
+- Implementing price notification window
+- Implementing popup notification when price reaches target number
+- Add text and icon mark for those which have set price notification
+
+2. To do until next Scrum:
+- prepare demo
+- review codes and fix bugs.
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+
+2020/04/05 Donghyeok Seo
+1. Done since last scrum
+-Drawing Chart cancel when user select other watchlist
+-Drawing Chart cancel when user switch tab menu
+
+2. To do until next Scrum:
+-Drawing real time price Chart when user double click company on the list
+-prepare demo
+-Study how to manage multithreading 
+
+3. Need assistance / figure things out

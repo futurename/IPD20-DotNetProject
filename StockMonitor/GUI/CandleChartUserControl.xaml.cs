@@ -32,9 +32,6 @@ namespace GUI
     /// </summary>
     public partial class CandleChartUserControl : UserControl
     {
-
-        private object threadLock = new object();
-
         public static readonly DependencyProperty SelectedSymbolProperty =
         DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
 
@@ -62,12 +59,15 @@ namespace GUI
             {
                 return;
             }
-            Task.Run(DrawCandleStick);
         }
 
         private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
-            while (gridChartContainer.ActualWidth == 0) { Thread.Sleep(500);  }
+            
+            while (gridChartContainer.ActualWidth == 0) {
+                ct.ThrowIfCancellationRequested();
+                await Task.Delay(200);  
+            }
 
             List<Fmg1MinQuote> valueList;
             List<string> labelList;
@@ -79,7 +79,10 @@ namespace GUI
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
                     string symbol;
-                    while(!Global.ConcurentDictionary.TryGetValue("symbol",out symbol)) { Thread.Sleep(500); }
+                    while(!Global.ConcurentDictionary.TryGetValue("symbol",out symbol)) {
+                        ct.ThrowIfCancellationRequested();
+                        await Task.Delay(200); 
+                    }
                     var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
 
                     valueList = (from fmg1MinQuote in minValueList.Take(50)
@@ -102,9 +105,9 @@ namespace GUI
 
                 if (chartStockPrice.Model != null)
                 {
-                    //chartStockPrice.Model.ClearZoom();//FIXME
+                    chartStockPrice.Model.ClearZoom();//FIXME
                 }
-
+                ct.ThrowIfCancellationRequested();
                 chartStockPrice.Series.Add(
                     new CandleSeries()
                     {
@@ -132,7 +135,7 @@ namespace GUI
         {
             var pointChartVal = chartStockPrice.ConvertToChartValues(e.GetPosition(chartStockPrice));
 
-            Y.Text = pointChartVal.Y.ToString("N");
+            txtPrice.Text = pointChartVal.Y.ToString("N");
 
             if(Labels == null) { return; }//FIXME : Clean code
             if (!chartStockPrice.IsLoaded){ return; }// Check chart loaded
@@ -192,7 +195,8 @@ namespace GUI
         private const int MinLabels = 15;
         private void Axis_OnPreviewRangeChanged(PreviewRangeChangedEventArgs e)
         {
-            if (chartStockPrice.Series == null) { return; } // No Chart
+            if(Labels == null) { return; }// No Chart
+            if (chartStockPrice.Series == null) { return; } 
             //if less than -0.5, cancel
             limitMin = e.PreviewMinValue < -0.5;
 
@@ -231,21 +235,55 @@ namespace GUI
             }
         }
 
+
+        public CancellationTokenSource tokenSource;
+        public CancellationToken ct;
         private void btReload_Click(object sender, RoutedEventArgs e)
         {
-            DateTime start = DateTime.Now;
-            DrawCandleStick();
-            DateTime end = DateTime.Now;
-            TimeSpan timeSpan = new TimeSpan();
-            timeSpan = end - start;
-            Console.WriteLine($"Time spent: {timeSpan.TotalMilliseconds} mills");
-        }
+            if(tokenSource != null)
+            {
+                tokenSource.Cancel();
+            }
 
+            try
+            {
+                tokenSource = new CancellationTokenSource();
+                ct = tokenSource.Token;
+                Task.Factory.StartNew(DrawCandleStick,tokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Drawing canceled.\r\n");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Drawing failed.\r\n");
+            }
+        }
 
         private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            Task.Run(DrawCandleStick);
-        }
+            txtPrice.Text = "";
 
+            if (tokenSource != null)
+            {
+                tokenSource.Cancel();
+            }
+
+            try
+            {
+                tokenSource = new CancellationTokenSource();
+                ct = tokenSource.Token;
+                Task.Factory.StartNew(DrawCandleStick, tokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Drawing canceled.\r\n");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Drawing failed.\r\n");
+            }
+        }
     }
 }

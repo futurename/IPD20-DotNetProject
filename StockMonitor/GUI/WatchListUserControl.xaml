@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
              mc:Ignorable="d"
+             d:DesignHeight="604" d:DesignWidth="1229"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             x:Name="watchList"
-             Height="415" Width="1175">
+             x:Name="watchList">
     <UserControl.Resources>
         <DataTemplate x:Key="lstWatch_DataTemplate">
             <Grid>
@@ -34,21 +34,36 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <ListBox Name="lstWatch" Grid.Column="0" Margin="0,0,0,0.6" ItemTemplate="{DynamicResource lstWatch_DataTemplate}" SelectionChanged="lstWatch_SelectionChanged"/>
 
         <Grid Grid.Column="1" Margin="5,1,0.2,0.6">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
+                <RowDefinition Height="3*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Grid Name="gridCandleChart" Grid.Row="0" >
                 <local:CandleChartUserControl SelectedSymbol="{Binding Symbol, ElementName=watchList}" />
             </Grid>
-            <Grid Grid.Row="1" Margin="0,0,-1,-0.4" Background="White"/>
+            <Grid Grid.Row="1" Margin="0,0,-1,-0.4" Background="White">
+                <Label Content="Open Price:" HorizontalAlignment="Left" Height="25" Margin="12,10,0,0" VerticalAlignment="Top" Width="72"/>
+                <Label Content="Market Capital:" HorizontalAlignment="Left" Margin="12,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.125,-0.026"/>
+                <TextBlock Name="txtOpenPrice" HorizontalAlignment="Left" Margin="89,15,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" RenderTransformOrigin="0.349,0.542"/>
+                <TextBlock Name="txtMarketCapital" HorizontalAlignment="Left" Margin="107,53,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
+                <Label Content="Price To Earning Ratio:" HorizontalAlignment="Left" Margin="358,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.236,0.255" Width="128"/>
+                <TextBlock Name="txtEarningRatio" HorizontalAlignment="Left" Margin="491,15,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
+                <Label Content="Price To Sales Ratio:" HorizontalAlignment="Left" Margin="358,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.236,0.255" Width="128"/>
+                <TextBlock Name="txtSalesRatio" HorizontalAlignment="Left" Margin="491,53,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
+            </Grid>
         </Grid>
-        <Grid Background="#FFFFFFFF" Height="416" Margin="4.8,-1,-8.8,0" VerticalAlignment="Top" Grid.Column="2"/>
+        <Grid Background="#FFFFFFFF" Margin="4.8,-1,0.8,0.4" Grid.Column="2">
+            <StackPanel Margin="10,32,4.6,95" Orientation="Vertical">
+                <TextBlock x:Name="txtCompanyName" Margin="0,0,19.6,0" TextWrapping="Wrap" Text="Company Name" VerticalAlignment="Top" FontSize="30"/>
+                <TextBlock x:Name="txtIndustry" Margin="0,0,9.8,0" TextWrapping="Wrap" Text="Industry" VerticalAlignment="Top" FontSize="16" Foreground="Gray" Height="24"/>
+                <TextBlock x:Name="txtDescription" Margin="0,0,14.6,0" TextWrapping="Wrap" Text="Description" VerticalAlignment="Top" Height="200"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 
 </UserControl>

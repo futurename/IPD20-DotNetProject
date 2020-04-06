@@ -151,6 +151,9 @@
     <Compile Include="QuoteDaily.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="RealTimePriceChart.xaml.cs">
+      <DependentUpon>RealTimePriceChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SearchStockUserControl.xaml.cs">
       <DependentUpon>SearchStockUserControl.xaml</DependentUpon>
     </Compile>
@@ -206,6 +209,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="RealTimePriceChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SearchStockUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

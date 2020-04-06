@@ -70,10 +70,17 @@ namespace GUI
             UIComapnyRow selCompany = (UIComapnyRow)lstWatch.SelectedItem;
             if (selCompany == null) { return; }
 
-            //TODO: Set values, text on the components
-            
+            Global.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Symbol, (k, v) => selCompany.Symbol);
+
             Symbol = selCompany.Symbol;
-            Global.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Symbol, (k, v)=> selCompany.Symbol);
+
+            txtOpenPrice.Text = selCompany.Open.ToString("N2");
+            txtMarketCapital.Text = selCompany.MarketCapital.ToString("#,##0,,M");
+            txtEarningRatio.Text = selCompany.PriceToEarningRatio.ToString("0.00");
+            txtSalesRatio.Text = selCompany.PriceToSalesRatio.ToString("0.00");
+            txtCompanyName.Text = selCompany.CompanyName;
+            txtIndustry.Text = selCompany.Industry;
+            txtDescription.Text = selCompany.Description;
         }
     }
 }
