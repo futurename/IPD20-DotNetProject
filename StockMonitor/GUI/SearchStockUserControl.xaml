@@ -19,7 +19,7 @@
             <ColumnDefinition Width="346*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="957" FontSize="12" Grid.ColumnSpan="4" MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" >
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="963" FontSize="12" Grid.ColumnSpan="4" MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" >
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -36,7 +36,7 @@
                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
                         </Style>
                     </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Header="Symbol" Width="215">
+                    <GridViewColumn Header="Symbol" Width="220">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -48,8 +48,8 @@
                                         <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" FontWeight="Regular" FontSize="12" Width="160"
                                                HorizontalAlignment="Center" Height="20"></TextBlock>
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" Height="40" Width="55">
-                                        <Image   Height="10" Source="pack://application:,,,/Resources/star.png" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Vertical" Height="40" Width="60" Margin="0,0,5,2">
+                                        <Image   Height="12" Source="pack://application:,,,/Resources/star.png" HorizontalAlignment="Center">
                                             <Image.Style>
                                                 <Style>
                                                     <Style.Triggers>
@@ -85,7 +85,7 @@
                                                         <DataTrigger Binding="{Binding NotifyPriceLow, Converter={StaticResource NotifySettingValueConverter}}" Value="false">
                                                             <Setter Property="TextBlock.Visibility" Value="Hidden"></Setter>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding NotifyPricezLow, Converter={StaticResource NotifySettingValueConverter}}" Value="true">
+                                                        <DataTrigger Binding="{Binding NotifyPriceLow, Converter={StaticResource NotifySettingValueConverter}}" Value="true">
                                                             <Setter Property="TextBlock.Visibility" Value="Visible"></Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -185,7 +185,7 @@
         </ListView>
 
         <Grid Margin="39.404,41,0,3.4" Grid.ColumnSpan="3" Grid.Column="1">
-            <ListView Name="lsvWatchList" Height="227" VerticalAlignment="Top" Margin="160,5,12.596,0">
+            <ListView Name="lsvWatchList" Height="227" VerticalAlignment="Top" Margin="162,0,9.596,0">
                 <ListView.Resources>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -283,7 +283,7 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <ListBox Margin="161,237,10.596,-0.4"/>
+            <ListBox Margin="162,232,9.596,4.6"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="56" FontSize="15" FontWeight="Bold" Foreground="Black"/>
         <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15"  GotFocus="TbSearchBox_OnGotFocus" />

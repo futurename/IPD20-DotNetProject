@@ -52,7 +52,7 @@ namespace GUI
             string[] companyNames =
             {
                 "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
-                "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX", "STZ"
+                "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
             };
             foreach (var symbol in companyNames)
             {
@@ -77,7 +77,7 @@ namespace GUI
 
             LoopRefreshData(mainListTask, watchlistTask);
 
-          
+
 
 
 
@@ -214,15 +214,15 @@ namespace GUI
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            notifier.ShowSuccess($"Higher price warning: {comapnyRow.Symbol}, target high: {comapnyRow.NotifyPriceHigh:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
-                        });
+                            notifier.ShowSuccess($"Higher price warning:\n{comapnyRow.CompanyName} : {comapnyRow.Symbol} \nNow: {comapnyRow.Price:N2} Target high: { comapnyRow.NotifyPriceHigh:N2}\nTime: { DateTime.Now:HH: mm: ss}");
+                            });
                     }
 
                     if ((comapnyRow.NotifyPriceLow != 0 && comapnyRow.Price < comapnyRow.NotifyPriceLow))
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            notifier.ShowError($"Lower price warning: {comapnyRow.Symbol}, target low: {comapnyRow.NotifyPriceLow:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
+                            notifier.ShowError($"Lower price warning:\n{comapnyRow.CompanyName} : {comapnyRow.Symbol} \nNow: {comapnyRow.Price:N2} Target low: {comapnyRow.NotifyPriceLow:N2}\nTime: {DateTime.Now:HH:mm:ss}");
                         });
                     }
                 }
@@ -308,13 +308,13 @@ namespace GUI
                 try
                 {
                     List<UIComapnyRow> tempList = watchList.ToList();
-                    if (tempList.Find(row => row.Symbol == comapnyRow.Symbol)!= null) 
+                    if (tempList.Find(row => row.Symbol == comapnyRow.Symbol) != null)
                     {
-                       this.Dispatcher.Invoke(() =>
-                       {
-                           MessageBox.Show( $"{comapnyRow.Symbol} EXISTS in the watchlist", "Duplicate company",
-                               MessageBoxButton.OK, MessageBoxImage.Error);
-                       });
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            MessageBox.Show($"{comapnyRow.Symbol} EXISTS in the watchlist", "Duplicate company",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
+                        });
                         return;
                     }
                     else
@@ -456,7 +456,7 @@ namespace GUI
         {
             UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
 
-            if(selCompany == null) { return; }
+            if (selCompany == null) { return; }
 
             RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany);
 
