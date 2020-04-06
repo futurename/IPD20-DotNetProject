@@ -11,6 +11,6 @@ namespace GUI
     class Global
     {
         public static ConcurrentDictionary<string, string> ConcurentDictionary = new ConcurrentDictionary<string, string>();
-       public  static BlockingCollection<UIComapnyRow> watchList;
+        public  static BlockingCollection<UIComapnyRow> watchList;
     }
 }

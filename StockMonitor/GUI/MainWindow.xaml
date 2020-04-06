@@ -6,22 +6,25 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="699.299" Width="1245.4">
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Title="MainWindow" d:DesignHeight="699.299" d:DesignWidth="1245.4">
 
     <Grid>
-        <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" Background="White" Foreground="Black" FontSize="20"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102" Foreground="Black" Background="White"/>
-        <TabControl HorizontalAlignment="Left" Height="604" Margin="10,10,0,0" VerticalAlignment="Top" Width="1229" >
+        <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" FontSize="20"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102"/>
+        <TabControl Margin="10,10,0.2,55.6" >
             <TabItem Header="Stock Market" Height="65" Width="200" Margin="150,-1,-150,0.8" Foreground="Black" FontSize="20" FontWeight="Bold">
-                <local:SearchStockUserControl Margin="-11,0,-5,0" VerticalAlignment="Top" Height="526" />
+                <local:SearchStockUserControl Margin="-11,0,-5,0" />
             </TabItem>
-            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="Black" Background="White">
+            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="Black" FontSize="20" FontWeight="Bold">
                 <local:WatchListUserControl Margin="-11,0,-5,0"/>
             </TabItem>
-            <TabItem Header="TabItem" Height="65" Width="200" Margin="150,0,-150,-0.2" Foreground="Black" Background="White"/>
-
         </TabControl>
-        <TextBlock Name="tbStatusBar" HorizontalAlignment="Left" Margin="10,629,0,0" TextWrapping="Wrap" Text="Status bar" VerticalAlignment="Top" Width="1200" Height="31"/>
+        <TextBlock Name="tbStatusBar" Margin="10,629,29.2,9.6" TextWrapping="Wrap" Text="Status bar"/>
 
     </Grid>
 

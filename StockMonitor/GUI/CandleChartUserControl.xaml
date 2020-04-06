@@ -5,22 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
              mc:Ignorable="d" 
+             xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type UserControl}">
+            <Style.Triggers>
+                <Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                    <Setter Property="Background" Value="#FFFFFF" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
-
-    <Grid Name="gridChartContainer" Margin="0,0,-0.4,-14.6">
+    <Grid Name="gridChartContainer">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="Stock Price: $" Foreground="Black" Margin="10,2,482,2" HorizontalAlignment="Left" />
-        <TextBlock Name="txtPrice" Margin="82,2,0,2" Foreground="Black" HorizontalAlignment="Left"/>
-        <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}"  Margin="0,4,150.6,267.2" Foreground="#FF5F5F5F" Grid.RowSpan="2" TargetUpdated="txtSymbol_TargetUpdated" HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5" Width="45"/>
-
-        <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="471,3,9.6,0" VerticalAlignment="Top" Click="btReload_Click" Grid.RowSpan="2"/>
+        <Grid Grid.Row="0" >
+            <TextBlock Text="Stock Price: $" HorizontalAlignment="Left" Width="70" Margin="0,7,0,0"/>
+            <TextBlock Name="txtPrice" Margin="82,7,0,0" HorizontalAlignment="Left"/>
+            <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}" Margin="376,7,0,0" HorizontalAlignment="Left" TargetUpdated="txtSymbol_TargetUpdated"/>
+            <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="464,0,0,0" VerticalAlignment="Top" Click="btReload_Click" FontSize="10" Width="100"/>
+        </Grid>
 
         <Wpf:CartesianChart x:Name="chartStockPrice"
                     Zoom="X"
@@ -32,16 +42,16 @@
                     MouseMove="ChartMouseMove"
                     MouseEnter="ChartMouseEnter" 
                     MouseLeave="ChartMouseLeave"
-                    ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,0,-0.4,14.8">
+                    ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,1.8,31,16.8">
             <Wpf:CartesianChart.AxisX>
                 <Wpf:Axis Labels="{Binding Labels}" 
                             RangeChanged="Ax_RangeChanged"
                             PreviewRangeChanged="Axis_OnPreviewRangeChanged" Foreground="#FF5F5F5F"/>
             </Wpf:CartesianChart.AxisX>
         </Wpf:CartesianChart>
-        <Label Name="lbl_Y_Axis" Margin="35,207,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Width="500" Grid.Row="1" Visibility="Hidden" />
-        <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,33,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Height="215" Grid.Row="1" Visibility="Hidden"/>
-        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,256,0,0" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Foreground="Black" Width="62" Background="White" Opacity="0.8" Grid.Row="1" Visibility="Hidden" />
+        <Label Name="lbl_Y_Axis" Margin="35,205.8,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Width="500" Grid.Row="2" Visibility="Hidden" />
+        <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,31.8,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Height="215" Grid.Row="2" Visibility="Hidden"/>
+        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,254.8,0,-0.2" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Foreground="Black" Width="62" Background="White" Opacity="0.8" Grid.Row="2" Visibility="Hidden" />
     </Grid>
 
 </UserControl>
