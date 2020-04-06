@@ -36,10 +36,16 @@
         <StackPanel Orientation="Horizontal">
             <Label Content="Target high:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
             <TextBox Name="tbTargetHigh"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
+            <Button Name="btHighRoundDown" Click="BtHighRoundDown_OnClick" Content="Down" FontSize="9" Margin="10,5,0,5" Width="30" Background="Red" Foreground="White" FontWeight="Bold"></Button>
+            <Button Name="btHighRoundup" Click="BtHighRoundup_OnClick" Content="Up" FontSize="9" Margin="10,5,0,5" Width="30" Background="Green" Foreground="White" FontWeight="Bold" ></Button>
+            
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
             <Label Content="Target low:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
             <TextBox Name="tbTargetLow"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
+            <Button Name="btLowRoundUp" Click="BtLowRoundUp_OnClick" Content="Up" FontSize="9" Margin="10,5,0,5" Width="30" Foreground="White" FontWeight="Bold" Background="Green"/>
+            <Button Name="btLowRoundDown" Click="BtLowRoundDown_OnClick" Content="Down" FontSize="9" Margin="10,5,0,5" Width="30" Foreground="White" FontWeight="Bold" Background="Red"/>
+           
         </StackPanel>
         <Button  Name="btClearSetting" Content="Clear setting" Width="80" Margin="15" Click="BtClearSetting_OnClick"/>
         <Button Name="btSaveSetting" Content="Save setting" Width="80" Margin="0" Click="btSaveSetting_Click"/>

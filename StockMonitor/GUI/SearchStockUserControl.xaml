@@ -36,19 +36,19 @@
                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
                         </Style>
                     </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Header="Symbol" Width="210">
+                    <GridViewColumn Header="Symbol" Width="215">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="150">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="160">
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="100"></Image>
+                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="110"></Image>
                                             <TextBlock Text="{Binding Symbol}" FontSize="14" HorizontalAlignment="Center" Width="50"></TextBlock>
                                         </StackPanel>
                                         <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" FontWeight="Regular" FontSize="12" Width="160"
                                                HorizontalAlignment="Center" Height="20"></TextBlock>
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" Height="40" Width="60">
+                                    <StackPanel Orientation="Vertical" Height="40" Width="55">
                                         <Image   Height="10" Source="pack://application:,,,/Resources/star.png" HorizontalAlignment="Center">
                                             <Image.Style>
                                                 <Style>
@@ -185,7 +185,7 @@
         </ListView>
 
         <Grid Margin="39.404,41,0,3.4" Grid.ColumnSpan="3" Grid.Column="1">
-            <ListView Name="lsvWatchList" Height="186" VerticalAlignment="Top" Margin="160,5,12.596,0">
+            <ListView Name="lsvWatchList" Height="227" VerticalAlignment="Top" Margin="160,5,12.596,0">
                 <ListView.Resources>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -283,7 +283,7 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <ListBox Margin="161,190,10.596,-0.4"/>
+            <ListBox Margin="161,237,10.596,-0.4"/>
         </Grid>
         <Label Content="Search" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="56" FontSize="15" FontWeight="Bold" Foreground="Black"/>
         <TextBox VerticalContentAlignment="Center" Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" Foreground="DarkBlue" Text="Search symbol here" HorizontalAlignment="Left" Height="28" Margin="80,10,0,0" VerticalAlignment="Top" Width="169" FontSize="15"  GotFocus="TbSearchBox_OnGotFocus" />
