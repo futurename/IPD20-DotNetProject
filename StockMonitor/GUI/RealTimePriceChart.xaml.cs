@@ -54,11 +54,11 @@ namespace GUI
             }
         }
         public bool IsReading { get; set; }
-        public RealTimePriceChart()
+        public RealTimePriceChart(UIComapnyRow selCompany)
         {
             InitializeComponent();
 
-            Symbol = "AAPL";
+            Symbol = selCompany.Symbol;
 
             txtSymbol.Text = Symbol;
 

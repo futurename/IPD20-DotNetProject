@@ -17,18 +17,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Text="Stock Price: $" Foreground="Black" Margin="10,2,482,2" HorizontalAlignment="Left" />
-        <TextBlock x:Name="Y" Margin="82,0,0,2" Foreground="Black" HorizontalAlignment="Left"/>
-        <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}"  Margin="0,3,114,268.2" Foreground="#FF5F5F5F" Grid.RowSpan="2" TargetUpdated="txtSymbol_TargetUpdated" HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5" Width="45">
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="-1"/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBlock.RenderTransform>
-        </TextBlock>
-        <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="515,3,10,0" VerticalAlignment="Top" Click="btReload_Click" Grid.RowSpan="2"/>
+        <TextBlock Name="txtPrice" Margin="82,2,0,2" Foreground="Black" HorizontalAlignment="Left"/>
+        <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}"  Margin="0,4,150.6,267.2" Foreground="#FF5F5F5F" Grid.RowSpan="2" TargetUpdated="txtSymbol_TargetUpdated" HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5" Width="45"/>
+
+        <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="471,3,9.6,0" VerticalAlignment="Top" Click="btReload_Click" Grid.RowSpan="2"/>
 
         <Wpf:CartesianChart x:Name="chartStockPrice"
                     Zoom="X"

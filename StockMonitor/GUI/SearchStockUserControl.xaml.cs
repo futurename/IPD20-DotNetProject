@@ -420,6 +420,17 @@ namespace GUI
             }
         }
 
+        private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
+
+            if(selCompany == null) { return; }
+
+            RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany);
+
+            realTimeChart.ShowDialog();
+        }
+
         private void LsvMkt_miSetTargetPrice_OnClick(object sender, RoutedEventArgs e)
         {
             var item = lsvMarketPreview.SelectedItem;

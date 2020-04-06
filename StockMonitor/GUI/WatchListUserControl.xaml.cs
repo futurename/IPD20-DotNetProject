@@ -70,8 +70,9 @@ namespace GUI
             UIComapnyRow selCompany = (UIComapnyRow)lstWatch.SelectedItem;
             if (selCompany == null) { return; }
 
+            Global.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Symbol, (k, v) => selCompany.Symbol);
+
             Symbol = selCompany.Symbol;
-            Global.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Symbol, (k, v)=> selCompany.Symbol);
 
             txtOpenPrice.Text = selCompany.Open.ToString("N2");
             txtMarketCapital.Text = selCompany.MarketCapital.ToString("#,##0,,M");

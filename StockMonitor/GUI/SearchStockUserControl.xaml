@@ -19,7 +19,7 @@
             <ColumnDefinition Width="346*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="957" FontSize="12" Grid.ColumnSpan="4" >
+        <ListView Name="lsvMarketPreview" HorizontalAlignment="Left" Margin="10,41,0,1" Width="957" FontSize="12" Grid.ColumnSpan="4" MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" >
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
