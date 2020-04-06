@@ -263,6 +263,7 @@
   <ItemGroup>
     <Resource Include="Resources\star.png" />
     <Resource Include="Resources\false.png" />
+    <Resource Include="Resources\bell.png" />
     <Content Include="StockMonitorModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>StockMonitorModel.edmx</DependentUpon>

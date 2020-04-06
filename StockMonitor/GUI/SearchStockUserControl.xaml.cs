@@ -36,7 +36,7 @@ namespace GUI
         List<Task<UIComapnyRow>> taskList;
 
         BlockingCollection<UIComapnyRow> companyDataRowList;
-        BlockingCollection<UIComapnyRow> watchList;
+        
 
         DateTime start, end;
 
@@ -128,7 +128,7 @@ namespace GUI
                     });
                 }
 
-                foreach (var uiComapnyRow in watchList)
+                foreach (var uiComapnyRow in Global.watchList)
                 {
                     Task.Factory.StartNew(async () =>
                     {
@@ -153,14 +153,14 @@ namespace GUI
 
         private async Task InitWatchListTaskList(List<Task<UIComapnyRow>> uiCompanyRowTaskList)
         {
-            watchList = new BlockingCollection<UIComapnyRow>();
+            Global.watchList = new BlockingCollection<UIComapnyRow>();
             foreach (Task<UIComapnyRow> task in uiCompanyRowTaskList)
             {
                 UIComapnyRow comapnyRow = await task;
-                watchList.Add(comapnyRow);
+                Global.watchList.Add(comapnyRow);
             }
 
-            lsvWatchList.ItemsSource = watchList;
+            lsvWatchList.ItemsSource = Global.watchList;
         }
 
         private async void Refresh1MinData(UIComapnyRow comapnyRow)
@@ -280,14 +280,14 @@ namespace GUI
                     Task t = GUIDataHelper.DeleteFromWatchListTask(CurrentUserId, companyRow.CompanyId);
                     Task.WhenAll(t).ContinueWith(p =>
                     {
-                        List<UIComapnyRow> tempList = watchList.ToList();
+                        List<UIComapnyRow> tempList = Global.watchList.ToList();
                         tempList.Remove(companyRow);
 
-                        watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+                        Global.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                         this.Dispatcher.Invoke(() =>
                         {
-                            lsvWatchList.ItemsSource = watchList;
+                            lsvWatchList.ItemsSource = Global.watchList;
                         });
                         //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
@@ -307,7 +307,7 @@ namespace GUI
                 UIComapnyRow comapnyRow = item as UIComapnyRow;
                 try
                 {
-                    List<UIComapnyRow> tempList = watchList.ToList();
+                    List<UIComapnyRow> tempList = Global.watchList.ToList();
                     if (tempList.Find(row => row.Symbol == comapnyRow.Symbol) != null)
                     {
                         this.Dispatcher.Invoke(() =>
@@ -325,11 +325,11 @@ namespace GUI
                         Task.WhenAll(t).ContinueWith(p =>
                         {
                             tempList.Add(comapnyRow);
-                            watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+                            Global.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                             this.Dispatcher.Invoke(() =>
                             {
-                                lsvWatchList.ItemsSource = watchList;
+                                lsvWatchList.ItemsSource = Global.watchList;
 
                             });
                             Task.Factory.StartNew(async () =>
