@@ -221,7 +221,6 @@ namespace StockMonitor.Helpers
 
                         context.Companies.Remove(company);
                         context.SaveChanges();
-                        
                     }
                 }
             }

@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace StockMonitor.Models.UIClasses
@@ -15,9 +18,39 @@ namespace StockMonitor.Models.UIClasses
 {
     public class UIComapnyRow : INotifyPropertyChanged
     {
+        public UIComapnyRow(//ex: FormatException
+            string symbol,
+            double price,
+            double openPrice,
+            long volume,
+            double changePercentage,
+            double priceChange,
+            string marketCapitalStr,
+            string priceToEarningRatioStr,
+            string priceToSalesRatioStr,
+            string industry,
+            byte[] logo,
+            string description,
+            int companyId)
+        {
+            Symbol = symbol;
+            Price = price;
+            Open = openPrice;
+            Volume = volume;
+            ChangePercentage = changePercentage;
+            PriceChange = priceChange;
+            SetMarketCapital(marketCapitalStr); //ex: FormatException
+            SetPriceToEarningRatio(priceToEarningRatioStr); //ex: FormatException
+            SetPriceToSalesRatio(priceToSalesRatioStr); //ex: FormatException
+            Industry = industry;
+            Logo = logo;
+            Description = description;
+            CompanyId = companyId;
+        }
+
         public UIComapnyRow( //FormatException
-            Company company, 
-            FmgQuoteOnlyPrice fmgQuoteOnlyPrice, 
+            Company company,
+            FmgQuoteOnlyPrice fmgQuoteOnlyPrice,
             FmgSingleQuote singleQuote)
         {
             Symbol = company.Symbol;
@@ -49,28 +82,98 @@ namespace StockMonitor.Models.UIClasses
                 OnPropertyChanged("Price");
                 OnPropertyChanged("PriceChange");
                 OnPropertyChanged("ChangePercentage");
-                OnPropertyChanged("Volume");
+               
             }
         }
         public int CompanyId { get; set; }
         public double ChangePercentage { get; set; }
         public double PriceChange { get; set; }
-        public long Volume { get; set; }
+        private long _volume;
+
+        public long Volume
+        {
+            get => _volume;
+            set
+            {
+                _volume = value;
+                OnPropertyChanged("Volume");
+            }
+        }
         public double Open { get; set; }
         public double MarketCapital { get; set; }
+
+        private double _notifyPriceLow;
+
+        public double NotifyPriceLow
+        {
+            get => _notifyPriceLow;
+            set
+            {
+                _notifyPriceLow = value;
+                OnPropertyChanged("NotifyPriceLow");
+            }
+        }
+
+        private double _notifyPriceHigh;
+
+        public double NotifyPriceHigh
+        {
+            get => _notifyPriceHigh;
+            set
+            {
+                _notifyPriceHigh = value;
+                OnPropertyChanged("NotifyPriceHigh");
+            }
+        }
+
         private void SetMarketCapital(string marketCapitalStr)
         {
-            MarketCapital = double.Parse(marketCapitalStr, CultureInfo.InvariantCulture);//ex
+            try
+            {
+                MarketCapital = double.Parse(marketCapitalStr, CultureInfo.InvariantCulture); //ex
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!!!Parsing marketCapital string to double exception, {marketCapitalStr}. {ex.Message}");
+            }
         }
         public double PriceToEarningRatio { get; set; }
         private void SetPriceToEarningRatio(string priceToEarningRatioStr)
         {
-            PriceToEarningRatio = double.Parse(priceToEarningRatioStr, CultureInfo.InvariantCulture);//ex
+            try
+            {
+                PriceToEarningRatio = double.Parse(priceToEarningRatioStr, CultureInfo.InvariantCulture); //ex
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!!!Parsing priceToEarningRatio string to double exception, {priceToEarningRatioStr}. {ex.Message}");
+            }
         }
+
+        public ImageSource ByteToImage(byte[] imageData)
+        {
+            BitmapImage biImg = new BitmapImage();
+            MemoryStream ms = new MemoryStream(imageData);
+            biImg.BeginInit();
+            biImg.StreamSource = ms;
+            biImg.EndInit();
+
+            ImageSource imgSrc = biImg as ImageSource;
+
+            return imgSrc;
+        }
+
         public double PriceToSalesRatio { get; set; }
         private void SetPriceToSalesRatio(string priceToSalesRatioStr)
         {
-            PriceToSalesRatio = double.Parse(priceToSalesRatioStr, CultureInfo.InvariantCulture);//ex
+            try
+            {
+                PriceToSalesRatio = double.Parse(priceToSalesRatioStr, CultureInfo.InvariantCulture); //ex
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"\n!!!!Parsing priceToSalesRatio string to double exception, {priceToSalesRatioStr}. {ex.Message}");
+            }
         }
         public string Industry { get; set; }
         public byte[] Logo { get; set; }
@@ -79,7 +182,7 @@ namespace StockMonitor.Models.UIClasses
 
         public override string ToString()
         {
-            return $"{Symbol}, {CompanyName}:{Price}, {ChangePercentage}%,{PriceChange}";
+            return $"{Symbol}, {CompanyName}:{Price}, {ChangePercentage}%,{PriceChange}, High: {NotifyPriceHigh}, Low: {NotifyPriceLow}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -90,7 +193,7 @@ namespace StockMonitor.Models.UIClasses
         }
     }
 
-    public class ValueConverter : IValueConverter
+    public class PriceColorValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -112,4 +215,31 @@ namespace StockMonitor.Models.UIClasses
             return null;
         }
     }
+
+    public class NotifySettingValueConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value != null)
+            {
+                if (Math.Abs(double.Parse(value.ToString())) < 0.0001)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+
 }

@@ -20,43 +20,57 @@ namespace StockMonitor.Helpers
 
         public static async Task<UIComapnyRow> GetCompanyDataRowTask(string symbol)//ex FormatException
         {//ex: ArgumentException, SystemException, FormatException
-            DateTime start = DateTime.Now;
+            try
+            {
+                DateTime start = DateTime.Now;
 
-            FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol); //ex: ArgumentException
-            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol); //ex: ArgumentException
+                FmgQuoteOnlyPrice fmgQuoteOnlyPrice = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(symbol); //ex: ArgumentException
+                FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol); //ex: ArgumentException
 
-            DateTime end = DateTime.Now;
-            TimeSpan timeSpan = new TimeSpan();
-            timeSpan = end - start;
-            Console.Out.WriteLine($"Time: {timeSpan.TotalMilliseconds} mills for {symbol}");
+                DateTime end = DateTime.Now;
+                TimeSpan timeSpan = new TimeSpan();
+                timeSpan = end - start;
+                Console.Out.WriteLine($"Time: {timeSpan.TotalMilliseconds} mills for {symbol}");
 
-            Company company = DatabaseHelper.GetCompanyFromDb(symbol);//ex: SystemException
+                Company company = DatabaseHelper.GetCompanyFromDb(symbol);//ex: SystemException
 
-            return new UIComapnyRow(company,fmgQuoteOnlyPrice, singleQuote);//ex: FormatException
+                return new UIComapnyRow(company, fmgQuoteOnlyPrice, singleQuote);//ex: FormatException
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public static Company GetCompanyBySymbol(string symbol)
         {
-            FmgCompanyProfile fmgCompanyProfile = RetrieveJsonDataHelper.RetrieveFmgCompanyProfile(symbol);
-            FmgInvestmentValuationRatios fmgInvestmentValuationRatios =
-                RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios(symbol);
-            Company company = new Company()
+            try
             {
-                CompanyName = fmgCompanyProfile.CompanyName,
-                Symbol = symbol,
-                Exchange = fmgCompanyProfile.Exchange,
-                MarketCapital = fmgCompanyProfile.MktCap,
-                PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio,
-                PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio,
-                Industry = fmgCompanyProfile.Industry,
-                Sector = fmgCompanyProfile.Sector,
-                Description = fmgCompanyProfile.Description,
-                //Website = fmgCompanyProfile.Website,
-                CEO = fmgCompanyProfile.Ceo,
-                Website = fmgCompanyProfile.Website,
-                Logo = GetImageFromUrl(fmgCompanyProfile.Image)
-            };
-            return company;
+                FmgCompanyProfile fmgCompanyProfile = RetrieveJsonDataHelper.RetrieveFmgCompanyProfile(symbol);
+                FmgInvestmentValuationRatios fmgInvestmentValuationRatios =
+                    RetrieveJsonDataHelper.RetrieveFmgInvestmentValuationRatios(symbol);
+                Company company = new Company()
+                {
+                    CompanyName = fmgCompanyProfile.CompanyName,
+                    Symbol = symbol,
+                    Exchange = fmgCompanyProfile.Exchange,
+                    MarketCapital = fmgCompanyProfile.MktCap,
+                    PriceToEarningRatio = fmgInvestmentValuationRatios.PriceEarningsRatio,
+                    PriceToSalesRatio = fmgInvestmentValuationRatios.PriceToSalesRatio,
+                    Industry = fmgCompanyProfile.Industry,
+                    Sector = fmgCompanyProfile.Sector,
+                    Description = fmgCompanyProfile.Description,
+                    //Website = fmgCompanyProfile.Website,
+                    CEO = fmgCompanyProfile.Ceo,
+                    Website = fmgCompanyProfile.Website,
+                    Logo = GetImageFromUrl(fmgCompanyProfile.Image)
+                };
+                return company;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         private static byte[] GetImageFromUrl(string url)
@@ -70,81 +84,110 @@ namespace StockMonitor.Helpers
 
         public static List<QuoteDaily> GetQuoteDailyList(string symbol)
         {
-            List<QuoteDaily> result = new List<QuoteDaily>();
-            List<FmgCandleDaily> quoteList = RetrieveJsonDataHelper.RetrieveFmgDataDaily(symbol);
-            foreach (var dailyQuote in quoteList)
+            try
             {
-                QuoteDaily quoteDaily = new QuoteDaily
+                List<QuoteDaily> result = new List<QuoteDaily>();
+                List<FmgCandleDaily> quoteList = RetrieveJsonDataHelper.RetrieveFmgDataDaily(symbol);
+                foreach (var dailyQuote in quoteList)
                 {
-                    Symbol = symbol,
-                    Date = dailyQuote.Date,
-                    Open = dailyQuote.Open,
-                    High = dailyQuote.High,
-                    Low = dailyQuote.Low,
-                    Close = dailyQuote.Close,
-                    Volume = dailyQuote.Volume,
-                    Vwap = dailyQuote.Vwap,
-                    ChangeOverTime = dailyQuote.ChangeOverTime
-                };
-                result.Add(quoteDaily);
-            }
+                    QuoteDaily quoteDaily = new QuoteDaily
+                    {
+                        Symbol = symbol,
+                        Date = dailyQuote.Date,
+                        Open = dailyQuote.Open,
+                        High = dailyQuote.High,
+                        Low = dailyQuote.Low,
+                        Close = dailyQuote.Close,
+                        Volume = dailyQuote.Volume,
+                        Vwap = dailyQuote.Vwap,
+                        ChangeOverTime = dailyQuote.ChangeOverTime
+                    };
+                    result.Add(quoteDaily);
+                }
 
-            return result;
+                return result;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
 
         public static async Task<UICompanyRowDetail> GetUICompanyRowDetailTask(string symbol, List<UIComapnyRow> companyList)
         {
-            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol);
-            UIComapnyRow companyRow = companyList.Find(c => c.Symbol == symbol);
-            Company company = DatabaseHelper.GetCompanyFromDb(symbol);
-            UICompanyRowDetail result = new UICompanyRowDetail
+            try
             {
-                Symbol = symbol,
-                Name = company.CompanyName,
-                Price = companyRow.Price,
-                Open = companyRow.Open,
-                High = singleQuote.dayHigh,
-                Low = singleQuote.dayLow,
-                Volume = companyRow.Volume,
-                Change = companyRow.PriceChange,
-                ChangePercentage = companyRow.ChangePercentage,
-                Description = company.Description,
-                Ceo = company.CEO,
-                Industry = company.Industry,
-                Sector = company.Sector
-            };
-            return result;
+                FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(symbol);
+                UIComapnyRow companyRow = companyList.Find(c => c.Symbol == symbol);
+                Company company = DatabaseHelper.GetCompanyFromDb(symbol);
+                UICompanyRowDetail result = new UICompanyRowDetail
+                {
+                    Symbol = symbol,
+                    Name = company.CompanyName,
+                    Price = companyRow.Price,
+                    Open = companyRow.Open,
+                    High = singleQuote.dayHigh,
+                    Low = singleQuote.dayLow,
+                    Volume = companyRow.Volume,
+                    Change = companyRow.PriceChange,
+                    ChangePercentage = companyRow.ChangePercentage,
+                    Description = company.Description,
+                    Ceo = company.CEO,
+                    Industry = company.Industry,
+                    Sector = company.Sector
+                };
+                return result;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
 
         public static List<Task<UIComapnyRow>> GetWatchUICompanyRowTaskList(int userId)
         {
-            List<Company> watchListCompanies = DatabaseHelper.GetWatchListCompaniesFromDb(userId);
-
-            List<Task<UIComapnyRow>> taskList = new List<Task<UIComapnyRow>>();
-            foreach (var company in watchListCompanies)
+            try
             {
-                taskList.Add(GetWatchUIComanyRowTask(userId, company));
-            }
+                List<Company> watchListCompanies = DatabaseHelper.GetWatchListCompaniesFromDb(userId);
 
-            return taskList;
+                List<Task<UIComapnyRow>> taskList = new List<Task<UIComapnyRow>>();
+                foreach (var company in watchListCompanies)
+                {
+                    taskList.Add(GetWatchUIComanyRowTask(userId, company));
+                }
+
+                return taskList;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         private static async Task<UIComapnyRow> GetWatchUIComanyRowTask(int userId, Company company)
         {
-            Stopwatch sw = Stopwatch.StartNew();
+            try
+            {
+                Stopwatch sw = Stopwatch.StartNew();
 
-            FmgQuoteOnlyPrice fmgQuoteOnlyPrice =
-                await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
-            FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(company.Symbol);
+                FmgQuoteOnlyPrice fmgQuoteOnlyPrice =
+                    await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(company.Symbol);
+                FmgSingleQuote singleQuote = await RetrieveJsonDataHelper.RetrieveFmgSingleQuote(company.Symbol);
 
-            UIComapnyRow companyRow = new UIComapnyRow(company, fmgQuoteOnlyPrice, singleQuote);//ex: FormatException
+                UIComapnyRow
+                    companyRow = new UIComapnyRow(company, fmgQuoteOnlyPrice, singleQuote); //ex: FormatException
 
-            sw.Stop();
-            Console.Out.WriteLine(
-                $"\n---- Add one companyRow to result in GetWatchUICompanyRowList: {company.Symbol}, time: {sw.Elapsed.TotalMilliseconds} mills");
-            return companyRow;
+                sw.Stop();
+                Console.Out.WriteLine(
+                    $"\n---- Add one companyRow to result in GetWatchUICompanyRowList: {company.Symbol}, time: {sw.Elapsed.TotalMilliseconds} mills");
+                return companyRow;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
         public static async Task DeleteFromWatchListTask(int userId, int companyId)
@@ -176,7 +219,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                return await Task.Run(()=>DatabaseHelper.GetCompanyListBySearch(searchString));
+                return await Task.Run(() => DatabaseHelper.GetCompanyListBySearch(searchString));
             }
             catch (SystemException ex)
             {

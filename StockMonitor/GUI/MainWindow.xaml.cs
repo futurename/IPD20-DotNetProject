@@ -14,6 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
+
 
 namespace GUI
 {
@@ -25,7 +29,10 @@ namespace GUI
         public MainWindow()
         {
             InitializeComponent();
+
         }
+
+      
 
     }
 }

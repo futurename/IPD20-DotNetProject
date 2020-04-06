@@ -16,10 +16,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LiveCharts;
 using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 
 namespace GUI
 {
@@ -36,7 +41,7 @@ namespace GUI
         DateTime start, end;
 
         private const int RealTimeInterval = 3000;
-        private const int OneMinTimeInterval = 60000;
+        private const int OneMinTimeInterval = 3000;
         private const int CurrentUserId = 3;
 
         public SearchStockUserControl()
@@ -45,7 +50,7 @@ namespace GUI
 
             string[] companyNames =
             {
-                "AAPL", "AMZN", "GOOG", "LTM", "FB", "AAXN", "MSFT",
+                "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX", "STZ"
             };
 
@@ -63,11 +68,17 @@ namespace GUI
 
             InitializeComponent();
 
+
+
             LoopRefreshData(mainListTask, watchlistTask);
+
+            
 
 
 
         }
+
+
 
         private void LoopRefreshData(Task mainListTask, Task watchlistTask)
         {
@@ -160,7 +171,7 @@ namespace GUI
                     /**************************************************
                     following line simulate Volume change during close hours.
                     ****************************************************/
-                    comapnyRow.Volume += new Random().Next(10000) * 1000;
+                    comapnyRow.Volume += new Random().Next(1000) * 10000;
                 }
             }
             catch (SystemException ex)
@@ -178,7 +189,7 @@ namespace GUI
                 /**************************************************
                     following line simulate Volume change during close hours.
                 ****************************************************/
-                quote.Price += new Random().NextDouble() * quote.Price / 10;
+                quote.Price += new Random().NextDouble() * quote.Price / 20;
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
@@ -188,18 +199,33 @@ namespace GUI
                 else
                 {
                     Console.Out.WriteLine(
-                        $"{comapnyRow.Symbol} CHANGE, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                        $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
                     comapnyRow.Price = quote.Price;
                     double change = comapnyRow.Price - comapnyRow.Open;
-                    double changePercentage = (change / comapnyRow.Open) / comapnyRow.Open * 100;
+                    double changePercentage = change / comapnyRow.Open * 100;
                     comapnyRow.PriceChange = change;
                     comapnyRow.ChangePercentage = changePercentage;
+                    if ((comapnyRow.NotifyPriceHigh != 0 && comapnyRow.Price > comapnyRow.NotifyPriceHigh))
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            notifier.ShowInformation($"Higher price warning: {comapnyRow.Symbol}, target high: {comapnyRow.NotifyPriceHigh:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
+                        });
+                    }
+
+                    if ((comapnyRow.NotifyPriceLow != 0 && comapnyRow.Price < comapnyRow.NotifyPriceLow))
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            notifier.ShowInformation($"Lower price warning: {comapnyRow.Symbol}, target low: {comapnyRow.NotifyPriceLow:N2}, current: {comapnyRow.Price:N2} on {DateTime.Now:HH:mm:ss}");
+                        });
+                    }
                 }
             }
             catch (SystemException ex)
             {
                 Console.Out.WriteLine(
-                    $"\n!!! RefreshRealtimePrice exception for {comapnyRow.Symbol} at {DateTime.Now}");
+                    $"\n!!! RefreshRealtimePrice exception for {comapnyRow.Symbol} at {DateTime.Now} for {ex.Message}");
             }
         }
 
@@ -293,7 +319,7 @@ namespace GUI
                             lsvWatchList.ItemsSource = watchList;
 
                         });
-                        MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
+                       MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
                 }
                 catch (SystemException ex)
@@ -311,13 +337,6 @@ namespace GUI
             }
         }
 
-        private void TbSearchBox_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            lbSearchResult.Visibility = Visibility.Hidden;
-            tbSearchBox.Text = "Search symbol here";
-                Task.Run(() => { this.Dispatcher.Invoke(() => { lsvWatchList.ItemsSource = watchList; }); });
-            
-        }
 
         private void TbSearchBox_OnPreviewKeyUp(object sender, KeyEventArgs e)
         {
@@ -337,16 +356,18 @@ namespace GUI
                 });
                 Task.WhenAll(t).ContinueWith(p =>
                 {
-                    this.Dispatcher.Invoke(() => { lsvWatchList.ItemsSource = searchComapnyRowList; });
+                    this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = searchComapnyRowList; });
                 });
+                tbSearchBox.Text = "Search symbol here";
+                lbSearchResult.Visibility = Visibility.Hidden;
             }
             else
             {
                 Task.Run(() =>
                 {
                     List<Company> companyList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
-                    if (companyList != null) {
-
+                    if (companyList != null)
+                    {
                         this.Dispatcher.Invoke(() =>
                         {
                             lbSearchResult.ItemsSource = companyList;
@@ -360,14 +381,62 @@ namespace GUI
                     }
                 });
             }
-
         }
 
 
+        private Notifier notifier = new Notifier(cfg =>
+        {
+            cfg.PositionProvider = new WindowPositionProvider(
+                parentWindow: Application.Current.MainWindow,
+                corner: Corner.BottomRight,
+                offsetX: 5,
+                offsetY: 5);
 
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                notificationLifetime: TimeSpan.FromSeconds(3),
+                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
 
+            cfg.Dispatcher = Application.Current.Dispatcher;
+        });
+        
+        
+        private void BtClearSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Text = "Search symbol here";
+            Task.Run(() => { this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = companyDataRowList; }); });
+        }
 
+        private void LsvWatch_SetTargetPrice_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = lsvMarketPreview.SelectedItem;
+            if (item != null)
+            {
+                UIComapnyRow companyRow = item as UIComapnyRow;
+                SetTargetPriceNotificationDialog priceDialgo = new SetTargetPriceNotificationDialog(companyRow);
+                if (priceDialgo.ShowDialog() == true)
+                {
 
+                }
+            }
+        }
+
+        private void LsvMkt_miSetTargetPrice_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = lsvMarketPreview.SelectedItem;
+            if (item != null)
+            {
+                UIComapnyRow companyRow = item as UIComapnyRow;
+                SetTargetPriceNotificationDialog priceDialgo = new SetTargetPriceNotificationDialog(companyRow);
+                priceDialgo.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (priceDialgo.ShowDialog() == true)
+                {
+                
+                   
+                         
+                   
+                }
+            }
+        }
     }
 
 

@@ -33,19 +33,26 @@ namespace StockMonitor.Helpers
 
         public static async Task<FmgSingleQuote> RetrieveFmgSingleQuote(string symbol)
         {
-            string url = FmgBaseUrl + FmgSingleQuoteUrl + symbol;
-            var responseTask = RetrieveFromUrl(url);
-            string response = await responseTask;
-            if (response == "{ }" || string.IsNullOrEmpty(response))
+            try
             {
-                throw new ArgumentException("FmgMajorIndexes null. " + url);
-            }
+                string url = FmgBaseUrl + FmgSingleQuoteUrl + symbol;
+                var responseTask = RetrieveFromUrl(url);
+                string response = await responseTask;
+                if (response == "{ }" || string.IsNullOrEmpty(response))
+                {
+                    throw new ArgumentException("FmgMajorIndexes null. " + url);
+                }
 
-            FmgSingleQuote quote = ParseStringToSingleQuote(response);
-            return quote;
+                FmgSingleQuote quote = ParseStringToSingleQuote(response);
+                return quote;
+            }
+            catch (SystemException ex)
+            {
+                throw new SystemException(ex.Message);
+            }
         }
 
-        private static FmgSingleQuote ParseStringToSingleQuote(string response)
+        public static FmgSingleQuote ParseStringToSingleQuote(string response)
         {
             try
             {
