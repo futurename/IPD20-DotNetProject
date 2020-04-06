@@ -43,6 +43,7 @@ namespace GUI
         private const int RealTimeInterval = 3000;
         private const int OneMinTimeInterval = 3000;
         private const int CurrentUserId = 1;
+        BlockingCollection<string> allRunningSymbolList = new BlockingCollection<string>();
 
         public SearchStockUserControl()
         {
@@ -53,6 +54,10 @@ namespace GUI
                 "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX", "STZ"
             };
+            foreach (var symbol in companyNames)
+            {
+                allRunningSymbolList.Add(symbol);
+            }
 
             taskList = new List<Task<UIComapnyRow>>();
 
@@ -327,6 +332,24 @@ namespace GUI
                                 lsvWatchList.ItemsSource = watchList;
 
                             });
+                            Task.Factory.StartNew(async () =>
+                            {
+                                while (true)
+                                {
+                                    try
+                                    {
+                                        RefreshRealTImePrice(comapnyRow);
+                                        //Thread.Sleep(RealTimeInterval);
+                                        await Task.Delay(RealTimeInterval);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.Out.WriteLine(
+                                            $"Watchlist loop thread exception {comapnyRow.Symbol} at {DateTime.Now}");
+                                    }
+                                }
+                            });
+
                             // MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                         });
                     }
