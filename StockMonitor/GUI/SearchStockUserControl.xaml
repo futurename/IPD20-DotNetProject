@@ -49,7 +49,7 @@
                                                HorizontalAlignment="Center" Height="20"></TextBlock>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical" Height="40" Width="60" Margin="0,0,5,2">
-                                        <Image   Height="12" Source="pack://application:,,,/Resources/bell.png" HorizontalAlignment="Center">
+                                        <Image   Height="12" Source="pack://application:,,,/Resources/bell1.jpg" HorizontalAlignment="Center">
                                             <Image.Style>
                                                 <Style>
                                                     <Style.Triggers>

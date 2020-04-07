@@ -79,7 +79,7 @@ namespace GUI
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
                     string symbol;
-                    while(!Global.ConcurentDictionary.TryGetValue("symbol",out symbol)) {
+                    while(!GlobalVariables.ConcurentDictionary.TryGetValue("symbol",out symbol)) {
                         ct.ThrowIfCancellationRequested();
                         await Task.Delay(200); 
                     }

@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
+using Org.BouncyCastle.Math.EC.Endo;
 using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
@@ -54,6 +55,9 @@ namespace GUI
                 "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
                 "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
             };
+            
+
+
             foreach (var symbol in companyNames)
             {
                 allRunningSymbolList.Add(symbol);
@@ -61,28 +65,59 @@ namespace GUI
 
             taskList = new List<Task<UIComapnyRow>>();
 
-            List<Task<UIComapnyRow>> uiCompanyRowTaskList = GUIDataHelper.GetWatchUICompanyRowTaskList(CurrentUserId);
-            Task watchlistTask = InitWatchListTaskList(uiCompanyRowTaskList);
-
             foreach (string symbol in companyNames)
             {
-                taskList.Add(GUIDataHelper.GetCompanyDataRowTask(symbol));
+                taskList.Add(GUIDataHelper.GetUICompanyRowTaskBySymbol(symbol));
             }
 
             Task mainListTask = InitListView();
 
+            List<Task<UIComapnyRow>> uiCompanyRowTaskList = GUIDataHelper.GetWatchUICompanyRowTaskList(CurrentUserId);
+            Task watchlistTask = InitWatchListTaskList(uiCompanyRowTaskList);
+
+            InitUICompanyRowsManager();
+
+
             InitializeComponent();
 
-
+           
 
             LoopRefreshData(mainListTask, watchlistTask);
 
-
-
+           
 
 
         }
 
+
+        private void InitUICompanyRowsManager()
+        {
+            List<string> companyNames = new List<string>
+            {
+                "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
+                "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
+            };
+
+            foreach (var symbol in companyNames)
+            {
+                Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                        UIComapnyRow companyRow = await GUIDataHelper.GetUICompanyRowTaskBySymbol(symbol);
+                        
+
+                    }
+                    catch (SystemException ex)
+                    {
+                        MessageBox.Show("Init defalut task manager failed:" + ex.Message);
+                    }
+
+                });
+            }
+        }
+
+        
 
 
         private void LoopRefreshData(Task mainListTask, Task watchlistTask)
@@ -97,9 +132,21 @@ namespace GUI
                         {
                             while (true)
                             {
+                             /*   int threadId = Thread.CurrentThread.ManagedThreadId;
+
+                                GlobalVariables.taskManager.TryAdd(threadId, companyRow.Symbol);
+                                    
+                                Console.Out.WriteLine($"\n&&&& current id: {threadId}");
+                                foreach (KeyValuePair<int, string> pair in GlobalVariables.taskManager)
+                                {
+                                    Console.Out.WriteLine($"All threads running traverse: {pair.Key}: {pair.Value}, total: {GlobalVariables.taskManager.Count}");
+                                }*/
+
+
                                 RefreshRealTImePrice(companyRow);
                                 //Thread.Sleep(RealTimeInterval);
                                 await Task.Delay(RealTimeInterval);
+                                Console.Out.WriteLine("\n&&&& current thread managed id: " + Thread.CurrentThread.ManagedThreadId);
                             }
                         }
                         catch (Exception ex)
@@ -128,7 +175,7 @@ namespace GUI
                     });
                 }
 
-                foreach (var uiComapnyRow in Global.watchList)
+                foreach (var uiComapnyRow in GlobalVariables.watchList)
                 {
                     Task.Factory.StartNew(async () =>
                     {
@@ -153,14 +200,14 @@ namespace GUI
 
         private async Task InitWatchListTaskList(List<Task<UIComapnyRow>> uiCompanyRowTaskList)
         {
-            Global.watchList = new BlockingCollection<UIComapnyRow>();
+            GlobalVariables.watchList = new BlockingCollection<UIComapnyRow>();
             foreach (Task<UIComapnyRow> task in uiCompanyRowTaskList)
             {
                 UIComapnyRow comapnyRow = await task;
-                Global.watchList.Add(comapnyRow);
+                GlobalVariables.watchList.Add(comapnyRow);
             }
 
-            lsvWatchList.ItemsSource = Global.watchList;
+            lsvWatchList.ItemsSource = GlobalVariables.watchList;
         }
 
         private async void Refresh1MinData(UIComapnyRow comapnyRow)
@@ -194,7 +241,7 @@ namespace GUI
                 /**************************************************
                     following line simulate Volume change during close hours.
                 ****************************************************/
-                quote.Price += new Random().NextDouble() * quote.Price / 20;
+                quote.Price += new Random().NextDouble()* (new Random().Next(2) == 1? -1 : 1) * quote.Price / 40;
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
@@ -280,14 +327,14 @@ namespace GUI
                     Task t = GUIDataHelper.DeleteFromWatchListTask(CurrentUserId, companyRow.CompanyId);
                     Task.WhenAll(t).ContinueWith(p =>
                     {
-                        List<UIComapnyRow> tempList = Global.watchList.ToList();
+                        List<UIComapnyRow> tempList = GlobalVariables.watchList.ToList();
                         tempList.Remove(companyRow);
 
-                        Global.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+                        GlobalVariables.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                         this.Dispatcher.Invoke(() =>
                         {
-                            lsvWatchList.ItemsSource = Global.watchList;
+                            lsvWatchList.ItemsSource = GlobalVariables.watchList;
                         });
                         //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
@@ -307,7 +354,7 @@ namespace GUI
                 UIComapnyRow comapnyRow = item as UIComapnyRow;
                 try
                 {
-                    List<UIComapnyRow> tempList = Global.watchList.ToList();
+                    List<UIComapnyRow> tempList = GlobalVariables.watchList.ToList();
                     if (tempList.Find(row => row.Symbol == comapnyRow.Symbol) != null)
                     {
                         this.Dispatcher.Invoke(() =>
@@ -325,11 +372,11 @@ namespace GUI
                         Task.WhenAll(t).ContinueWith(p =>
                         {
                             tempList.Add(comapnyRow);
-                            Global.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+                            GlobalVariables.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                             this.Dispatcher.Invoke(() =>
                             {
-                                lsvWatchList.ItemsSource = Global.watchList;
+                                lsvWatchList.ItemsSource = GlobalVariables.watchList;
 
                             });
                             Task.Factory.StartNew(async () =>
@@ -382,7 +429,7 @@ namespace GUI
                     List<Company> companyList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
                     foreach (Company comapny in companyList)
                     {
-                        Task<UIComapnyRow> subTask = GUIDataHelper.GetCompanyDataRowTask(comapny.Symbol);
+                        Task<UIComapnyRow> subTask = GUIDataHelper.GetUICompanyRowTaskBySymbol(comapny.Symbol);
                         searchComapnyRowList.Add(subTask.Result);
                     }
                 });
@@ -474,10 +521,7 @@ namespace GUI
                 priceDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 if (priceDialog.ShowDialog() == true)
                 {
-
-
-
-
+                    
                 }
             }
         }

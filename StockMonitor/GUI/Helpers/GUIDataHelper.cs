@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using GUI;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
 using StockMonitor.Models.UIClasses;
@@ -18,7 +19,7 @@ namespace StockMonitor.Helpers
     public static class GUIDataHelper
     {
 
-        public static async Task<UIComapnyRow> GetCompanyDataRowTask(string symbol)//ex FormatException
+        public static async Task<UIComapnyRow> GetUICompanyRowTaskBySymbol(string symbol)//ex FormatException
         {//ex: ArgumentException, SystemException, FormatException
             try
             {
@@ -227,5 +228,6 @@ namespace StockMonitor.Helpers
             }
         }
 
+     
     }
 }

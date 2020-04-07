@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using GUI;
 using StockMonitor.Models.UIClasses;
 
 namespace StockMonitor.Helpers
@@ -221,5 +221,4 @@ namespace StockMonitor.Helpers
         }
 
     }
-
 }
