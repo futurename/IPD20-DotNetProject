@@ -311,6 +311,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Button Name="btCancelDefaultThreads" Content="Cancel Default Threads" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="183" Click="btCancelDefaultThreads_Click"/>
+        <Button Name="btCancelWatchlistThreads" Content="Cancel Watchlist Threads" HorizontalAlignment="Left" Margin="686,10,0,0" VerticalAlignment="Top" Width="201" Click="btCancelWatchlistThreads_Click"/>
 
 
     </Grid>
