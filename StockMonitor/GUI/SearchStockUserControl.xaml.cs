@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
+using Org.BouncyCastle.Math.EC.Endo;
 using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
@@ -35,48 +36,25 @@ namespace GUI
     {
         List<Task<UIComapnyRow>> taskList;
 
-        BlockingCollection<UIComapnyRow> companyDataRowList;
-        
+
+        public BlockingCollection<string> companyNames = new BlockingCollection<string>() {
+            "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
+            "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
+        };
 
         DateTime start, end;
 
         private const int RealTimeInterval = 3000;
         private const int OneMinTimeInterval = 3000;
-        private const int CurrentUserId = 1;
-        BlockingCollection<string> allRunningSymbolList = new BlockingCollection<string>();
+        private const int CurrentUserId = 3;
 
         public SearchStockUserControl()
         {
-            start = DateTime.Now;
-
-            string[] companyNames =
-            {
-                "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
-                "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
-            };
-            foreach (var symbol in companyNames)
-            {
-                allRunningSymbolList.Add(symbol);
-            }
-
-            taskList = new List<Task<UIComapnyRow>>();
-
-            List<Task<UIComapnyRow>> uiCompanyRowTaskList = GUIDataHelper.GetWatchUICompanyRowTaskList(CurrentUserId);
-            Task watchlistTask = InitWatchListTaskList(uiCompanyRowTaskList);
-
-            foreach (string symbol in companyNames)
-            {
-                taskList.Add(GUIDataHelper.GetCompanyDataRowTask(symbol));
-            }
-
-            Task mainListTask = InitListView();
-
+           
             InitializeComponent();
 
 
-
-            LoopRefreshData(mainListTask, watchlistTask);
-
+     
 
 
 
@@ -85,82 +63,151 @@ namespace GUI
 
 
 
-        private void LoopRefreshData(Task mainListTask, Task watchlistTask)
+
+        private void InitListViewDataSource()
         {
-            Task.WhenAll(mainListTask, watchlistTask).ContinueWith(p =>
-            {
-                foreach (var companyRow in companyDataRowList)
-                {
-                    Task.Factory.StartNew(async () =>
-                    {
-                        try
-                        {
-                            while (true)
-                            {
-                                RefreshRealTImePrice(companyRow);
-                                //Thread.Sleep(RealTimeInterval);
-                                await Task.Delay(RealTimeInterval);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Out.WriteLine(
-                                $"Mainwindow realtimeprice loop thread exception {companyRow.Symbol} at {DateTime.Now}");
-                        }
-                    });
+            GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
+            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
 
-                    Task.Factory.StartNew(async () =>
-                    {
-                        try
-                        {
-                            while (true)
-                            {
-                                Refresh1MinData(companyRow);
-                                await Task.Delay(OneMinTimeInterval);
-                                //Thread.Sleep(OneMinTimeInterval);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.Out.WriteLine(
-                                $"1Mindata loop thread exception {companyRow.Symbol} at {DateTime.Now}");
-                        }
-                    });
-                }
-
-                foreach (var uiComapnyRow in Global.watchList)
-                {
-                    Task.Factory.StartNew(async () =>
-                    {
-                        while (true)
-                        {
-                            try
-                            {
-                                RefreshRealTImePrice(uiComapnyRow);
-                                //Thread.Sleep(RealTimeInterval);
-                                await Task.Delay(RealTimeInterval);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.Out.WriteLine(
-                                    $"Watchlist loop thread exception {uiComapnyRow.Symbol} at {DateTime.Now}");
-                            }
-                        }
-                    });
-                }
-            });
+            Task.Run(() => LoadAndRefreshWatchListManager(CurrentUserId));
+            Task.Run(() => LoadAndRefreshDefaultListManager());
         }
 
-        private async Task InitWatchListTaskList(List<Task<UIComapnyRow>> uiCompanyRowTaskList)
+        private async void LoadAndRefreshWatchListManager(int currentUserId)
         {
-            Global.watchList = new BlockingCollection<UIComapnyRow>();
-            foreach (Task<UIComapnyRow> task in uiCompanyRowTaskList)
+            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            List<Task<UIComapnyRow>> watchlistTasks = GUIDataHelper.GetWatchUICompanyRowTaskList(currentUserId);
+            foreach (var task in watchlistTasks)
             {
-                UIComapnyRow comapnyRow = await task;
-                Global.watchList.Add(comapnyRow);
+                UIComapnyRow oneRow = await task;
+                GlobalVariables.WatchListUICompanyRows.TryAdd(oneRow);
             }
 
-            lsvWatchList.ItemsSource = Global.watchList;
+            await Task.WhenAll(watchlistTasks.ToArray());
+
+            this.Dispatcher.Invoke(() =>
+            {
+                lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
+
+                Console.Out.WriteLine($"{lsvMarketPreview.Items.Count}:{GlobalVariables.DefaultUICompanyRows.Count}");
+            });
+
+            foreach (var watchUICompanyRow in GlobalVariables.WatchListUICompanyRows)
+            {
+                Task.Run( () => LoadAndRefreshWatchListRow(watchUICompanyRow));
+            }
+        }
+
+
+
+        private void LoadAndRefreshDefaultListManager()
+        {
+
+            foreach (string symbol in companyNames)
+            {
+                Task.Run(
+                    async () => await LoadAndRefreshDefaultRow(symbol), GlobalVariables.DefaultTaskTokenSource.Token);
+            }
+        }
+
+
+        private async Task LoadAndRefreshDefaultRow(string symbol)
+        {
+            try
+            {
+                UIComapnyRow companyRow = await GUIDataHelper.GetUICompanyRowTaskBySymbol(symbol);
+                GlobalVariables.DefaultUICompanyRows.TryAdd(companyRow);
+
+                Console.Out.WriteLine(
+                    $"\n%%%%% total:  {GlobalVariables.DefaultUICompanyRows.Count}, waited a task: " +
+                    companyRow.ToString());
+                this.Dispatcher.Invoke(() =>
+                {
+                    lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows.ToList();
+
+                    Console.Out.WriteLine($"{lsvMarketPreview.Items.Count}:{GlobalVariables.DefaultUICompanyRows.Count}");
+                });
+
+                await Task.Run(async () =>
+                {
+                    while (!GlobalVariables.DefaultTaskTokenSource.IsCancellationRequested)
+                    {
+                        RefreshRealTImePrice(companyRow);
+                        await Task.Delay(RealTimeInterval);
+                        Console.Out.WriteLine(
+                            $"\n%%%total:  {GlobalVariables.DefaultUICompanyRows.Count}, refresh real data with cancel {GlobalVariables.DefaultTaskTokenSource.IsCancellationRequested}, id:{Thread.CurrentThread.ManagedThreadId},: {companyRow.ToString()}");
+                    }
+                }, GlobalVariables.DefaultTaskTokenSource.Token);
+
+                await Task.Run(async () =>
+                {
+                    while (!GlobalVariables.DefaultTaskTokenSource.IsCancellationRequested)
+                    {
+                        Refresh1MinData(companyRow);
+                        await Task.Delay(OneMinTimeInterval);
+                        Console.Out.WriteLine(
+                            $"\n >>>>>>total:  {GlobalVariables.DefaultUICompanyRows.Count}, refresh 1Min with cancel {GlobalVariables.DefaultTaskTokenSource.IsCancellationRequested},id:{Thread.CurrentThread.ManagedThreadId},: {companyRow.ToString()}");
+                    }
+                }, GlobalVariables.DefaultTaskTokenSource.Token);
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: default task was cancelled! {ex.Message}");
+            }
+        }
+
+        private void LoadAndRefreshWatchListRow(UIComapnyRow companyRow)
+        {
+            try
+            {
+                Console.Out.WriteLine(
+                    $"\n%%%%% total:  {GlobalVariables.WatchListUICompanyRows.Count}, waited a task: " + companyRow.Symbol);
+
+
+                CancellationTokenSource watchListRowSource = new CancellationTokenSource();
+                GlobalVariables.WatchListTokenSourceDic.TryAdd(companyRow.Symbol, watchListRowSource);
+                Task.Run(async () =>
+                {
+                    int curThreadId = Thread.CurrentThread.ManagedThreadId;
+                   
+
+                    Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, REAL time: {curThreadId}:{companyRow.Symbol}");
+
+                    while (!watchListRowSource.IsCancellationRequested)
+                    {
+                        RefreshRealTImePrice(companyRow);
+                        Console.Out.WriteLine($"\n REFRESH WATCHLIST REAL TIME: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                        await Task.Delay(RealTimeInterval);
+                        Console.Out.WriteLine(
+                            $"\n%%%total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list real data with cancel {watchListRowSource.IsCancellationRequested}, id:{curThreadId},: {companyRow.ToString()}");
+                    }
+                }, watchListRowSource.Token);
+
+              
+                 Task.Run(async () =>
+                {
+                    int curThreadId = Thread.CurrentThread.ManagedThreadId;
+                 
+                    Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, One min: {curThreadId}:{companyRow.Symbol}");
+                    while (!(watchListRowSource.IsCancellationRequested))
+                    {
+                        Refresh1MinData(companyRow);
+                        Console.Out.WriteLine($"\n REFRESH WATCHLIST One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                        await Task.Delay(OneMinTimeInterval);
+                        Console.Out.WriteLine(
+                            $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list 1Min with cancel {watchListRowSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
+                    }
+                }, watchListRowSource.Token);
+
+               /* oneMinCancellationTokenSource.Dispose();
+                realTimeCancellationTokenSource.Dispose();*/
+            }
+            catch (SystemException ex)
+            {
+                Console.Out.WriteLine($"{Thread.CurrentThread.ManagedThreadId}: default task was cancelled! {ex.Message}");
+            }
         }
 
         private async void Refresh1MinData(UIComapnyRow comapnyRow)
@@ -194,7 +241,7 @@ namespace GUI
                 /**************************************************
                     following line simulate Volume change during close hours.
                 ****************************************************/
-                quote.Price += new Random().NextDouble() * quote.Price / 20;
+                quote.Price += new Random().NextDouble() * (new Random().Next(2) == 0 ? -1 : 1) * quote.Price / 20;
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
@@ -215,7 +262,7 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             notifier.ShowSuccess($"Higher price warning:\n{comapnyRow.CompanyName} : {comapnyRow.Symbol} \nNow: {comapnyRow.Price:N2} Target high: { comapnyRow.NotifyPriceHigh:N2}\nTime: { DateTime.Now:HH: mm: ss}");
-                            });
+                        });
                     }
 
                     if ((comapnyRow.NotifyPriceLow != 0 && comapnyRow.Price < comapnyRow.NotifyPriceLow))
@@ -235,33 +282,6 @@ namespace GUI
         }
 
 
-        private async Task InitListView()
-        {
-            companyDataRowList = new BlockingCollection<UIComapnyRow>();
-
-            foreach (Task<UIComapnyRow> task in taskList)
-            {
-                try
-                {
-                    UIComapnyRow company = await task;
-                    companyDataRowList.Add(company);
-                }
-                catch (ArgumentOutOfRangeException ex)
-                {
-                    Console.Out.WriteLine("!!!!! Failed: " + ex.Message);
-                }
-                catch (SystemException ex)
-                {
-                    Console.Out.WriteLine("!!!! system exception " + ex.Message);
-                }
-            }
-            lsvMarketPreview.ItemsSource = companyDataRowList;
-
-            end = DateTime.Now;
-            TimeSpan timeSpan = new TimeSpan();
-            timeSpan = end - start;
-            Console.WriteLine("##############Total time:{0} milli####################", timeSpan);
-        }
 
 
         private void LsvWatch_miAddToWatchList_OnClick(object sender, RoutedEventArgs e)
@@ -280,14 +300,14 @@ namespace GUI
                     Task t = GUIDataHelper.DeleteFromWatchListTask(CurrentUserId, companyRow.CompanyId);
                     Task.WhenAll(t).ContinueWith(p =>
                     {
-                        List<UIComapnyRow> tempList = Global.watchList.ToList();
+                        List<UIComapnyRow> tempList = GlobalVariables.WatchListUICompanyRows.ToList();
                         tempList.Remove(companyRow);
 
-                        Global.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+                        GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                         this.Dispatcher.Invoke(() =>
                         {
-                            lsvWatchList.ItemsSource = Global.watchList;
+                            lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
                         });
                         //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
@@ -307,7 +327,7 @@ namespace GUI
                 UIComapnyRow comapnyRow = item as UIComapnyRow;
                 try
                 {
-                    List<UIComapnyRow> tempList = Global.watchList.ToList();
+                    List<UIComapnyRow> tempList = GlobalVariables.WatchListUICompanyRows.ToList();
                     if (tempList.Find(row => row.Symbol == comapnyRow.Symbol) != null)
                     {
                         this.Dispatcher.Invoke(() =>
@@ -325,11 +345,11 @@ namespace GUI
                         Task.WhenAll(t).ContinueWith(p =>
                         {
                             tempList.Add(comapnyRow);
-                            Global.watchList = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+                            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
 
                             this.Dispatcher.Invoke(() =>
                             {
-                                lsvWatchList.ItemsSource = Global.watchList;
+                                lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
 
                             });
                             Task.Factory.StartNew(async () =>
@@ -349,8 +369,6 @@ namespace GUI
                                     }
                                 }
                             });
-
-                            // MessageBox.Show($"after add, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                         });
                     }
                 }
@@ -382,7 +400,7 @@ namespace GUI
                     List<Company> companyList = GUIDataHelper.GetSearchCompanyListTask(searchSymbol).Result;
                     foreach (Company comapny in companyList)
                     {
-                        Task<UIComapnyRow> subTask = GUIDataHelper.GetCompanyDataRowTask(comapny.Symbol);
+                        Task<UIComapnyRow> subTask = GUIDataHelper.GetUICompanyRowTaskBySymbol(comapny.Symbol);
                         searchComapnyRowList.Add(subTask.Result);
                     }
                 });
@@ -435,7 +453,7 @@ namespace GUI
         private void BtClearSearch_OnClick(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Text = "Search symbol here";
-            Task.Run(() => { this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = companyDataRowList; }); });
+            Task.Run(() => { this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows; }); });
         }
 
         private void LsvWatch_SetTargetPrice_OnClick(object sender, RoutedEventArgs e)
@@ -463,6 +481,23 @@ namespace GUI
             realTimeChart.ShowDialog();
         }
 
+        private void btCancelDefaultThreads_Click(object sender, RoutedEventArgs e)
+        {
+            GlobalVariables.DefaultTaskTokenSource.Cancel(true);
+        }
+
+        private void btCancelWatchlistThreads_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (KeyValuePair<string, CancellationTokenSource> keyValuePair in GlobalVariables.WatchListTokenSourceDic)
+            {
+                keyValuePair.Value.Cancel(true);
+            }
+        }
+
+        private void btRestartRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            InitListViewDataSource();
+        }
 
         private void LsvMkt_miSetTargetPrice_OnClick(object sender, RoutedEventArgs e)
         {
@@ -475,9 +510,6 @@ namespace GUI
                 priceDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 if (priceDialog.ShowDialog() == true)
                 {
-
-
-
 
                 }
             }

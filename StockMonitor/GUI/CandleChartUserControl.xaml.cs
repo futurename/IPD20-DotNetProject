@@ -1,5 +1,4 @@
 ﻿using LiveCharts;
-using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using LiveCharts.Events;
 using LiveCharts.Wpf;
@@ -33,35 +32,15 @@ namespace GUI
     /// </summary>
     public partial class CandleChartUserControl : UserControl
     {
-        public ChartValues<Fmg1MinQuote> ChartValues { get; set; }
-        public Func<double, string> DateTimeFormatter { get; set; }
+        public static readonly DependencyProperty SelectedSymbolProperty =
+        DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
 
-        public double AxisStep { get; set; }
-        public double AxisUnit { get; set; }
-
-        double _axisMax;
-        double _axisMin;
-
-        public double AxisMax
+        public string SelectedSymbol
         {
-            get { return _axisMax; }
-            set
-            {
-                _axisMax = value;
-                OnPropertyChanged("AxisMax");
-            }
-        }
-        public double AxisMin
-        {
-            get { return _axisMin; }
-            set
-            {
-                _axisMin = value;
-                OnPropertyChanged("AxisMin");
-            }
+            get { return (string)GetValue(SelectedSymbolProperty); }
+            set { SetValue(SelectedSymbolProperty, value); }
         }
 
-        private const int MaxValueToDraw = 100;
 
         private const double NumberOfValuesPerPixel = 0.40;
         public SeriesCollection SeriesCollection { get; set; }
@@ -71,6 +50,7 @@ namespace GUI
         {
             InitializeComponent();
 
+
             // In DesignMode, it avoid read app.config fail exception(in this case, cannot read "connectionString" from app.config)
             // DesignMode use compiled UserControl which doesn't include app.config file, so every behavior that read/connect
             // app.config file data throws exception
@@ -79,60 +59,9 @@ namespace GUI
             {
                 return;
             }
-
-            var mapper = Mappers.Financial<Fmg1MinQuote>()
-                .Open(model => model.Open)
-                .Close(model => model.Close)
-                .High(model => model.High)
-                .Low(model => model.Low)
-                .X(model => model.Date.Ticks);
-
-            Charting.For<Fmg1MinQuote>(mapper);
-
-            ChartValues = new ChartValues<Fmg1MinQuote>();
-
-            DateTimeFormatter = value => new DateTime((long) value).ToString("hh:mm");
-
-            AxisStep = TimeSpan.FromMinutes(20).Ticks;
-
-            AxisUnit = TimeSpan.TicksPerMinute;
-
-            SetAxisLimits(DateTime.Now);
-
-            this.DataContext = this;
         }
 
-        async void DrawInitialGraph()
-        {
-            if (!this.IsLoaded) { return; }
-            progressBarChart.Visibility = Visibility.Visible;
-
-            string symbol;
-
-            if(!Global.ConcurentDictionary.TryGetValue("symbol", out symbol)) { return; }
-
-            List<Fmg1MinQuote> minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol);
-            var valueList = minValueList.Take(MaxValueToDraw).ToList<Fmg1MinQuote>();
-            valueList.Sort((x, y) => x.Date.CompareTo(y.Date));
-            
-            ChartValues.Clear();
-            var last = valueList.Last<Fmg1MinQuote>();
-            var now = DateTime.Now;
-            var lastTime = last.Date;
-            SetAxisLimits(last.Date);
-            ChartValues.AddRange(valueList);
-
-            progressBarChart.Visibility = Visibility.Hidden;
-
-        }
-
-        void SetAxisLimits(DateTime lastTime)
-        {
-            AxisMax = lastTime.Ticks + TimeSpan.FromMinutes(1).Ticks;
-            AxisMin = lastTime.Ticks - TimeSpan.FromMinutes(MaxValueToDraw - 2).Ticks;
-        }
-
-        private async Task DrawCandleStick(CancellationToken ct)// need to be async because it has Task(thread)
+        private async void DrawCandleStick()// need to be async because it has Task(thread)
         {
             
             while (gridChartContainer.ActualWidth == 0) {
@@ -150,7 +79,7 @@ namespace GUI
                 using (DbStockMonitor ctx = new DbStockMonitor())
                 {
                     string symbol;
-                    while(!Global.ConcurentDictionary.TryGetValue("symbol",out symbol)) {
+                    while(!GlobalVariables.ConcurentDictionary.TryGetValue("symbol",out symbol)) {
                         ct.ThrowIfCancellationRequested();
                         await Task.Delay(200); 
                     }
@@ -185,8 +114,8 @@ namespace GUI
                         Values = new ChartValues<OhlcPoint>(valueList)
                     }
                 );
+                this.DataContext = this;
             });
-
         }
 
         private void ChartOnDataClick(object sender, ChartPoint p)
@@ -201,21 +130,32 @@ namespace GUI
             Console.WriteLine("[EVENT] you hovered over " + p.X + ", " + p.Y);
         }
 
+        bool isCrossLineSet = false;
         private void ChartMouseMove(object sender, MouseEventArgs e)
         {
-            if (!chartStockPrice.IsLoaded) { return; }
-
             var pointChartVal = chartStockPrice.ConvertToChartValues(e.GetPosition(chartStockPrice));
 
-            txt_X_Axis.Text = DateTimeFormatter(pointChartVal.X);
             txtPrice.Text = pointChartVal.Y.ToString("N");
 
+            if(Labels == null) { return; }//FIXME : Clean code
             if (!chartStockPrice.IsLoaded){ return; }// Check chart loaded
+            if (chartStockPrice.Series == null) { return; }// Check chart loaded
 
             var chartMargin = chartStockPrice.Series.Chart.DrawMargin;
             if (chartMargin == null) { return; }
+            if (!isCrossLineSet)
+            {
+                lbl_X_Axis.Height = chartMargin.Height;
+                lbl_Y_Axis.Width = chartMargin.Width;
+            }
+
+            if ((pointChartVal.X < Labels.Length - 1) && pointChartVal.X >= 0)//FIXME: exception when mouse already entered and move in chart loading
+            {
+                txt_X_Axis.Text = Labels[(int)Math.Round(pointChartVal.X)];
+            }
 
             var pointMouse = e.GetPosition(chartStockPrice);
+            var dfe = chartStockPrice.Model;
 
             lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top , 0, 0);
             txt_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
@@ -238,8 +178,6 @@ namespace GUI
 
         private void ChartMouseLeave(object sender, MouseEventArgs e)
         {
-            if (!this.IsLoaded) { return; }
-
             lbl_X_Axis.Visibility = Visibility.Hidden;
             lbl_Y_Axis.Visibility = Visibility.Hidden;
             txt_X_Axis.Visibility = Visibility.Hidden;
@@ -247,12 +185,9 @@ namespace GUI
 
         private void ChartMouseEnter(object sender, MouseEventArgs e)
         {
-            if (!this.IsLoaded) { return; }
-
             lbl_X_Axis.Visibility = Visibility.Visible;
             lbl_Y_Axis.Visibility = Visibility.Visible;
             txt_X_Axis.Visibility = Visibility.Visible;
-
         }
 
 
@@ -302,25 +237,23 @@ namespace GUI
 
 
         public CancellationTokenSource tokenSource;
-        private async void btReload_Click(object sender, RoutedEventArgs e)
+        public CancellationToken ct;
+        private void btReload_Click(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded) { return; }
-
-            if (tokenSource != null)
+            if(tokenSource != null)
             {
                 tokenSource.Cancel();
             }
 
-            CancellationTokenSource newTokenSource = new CancellationTokenSource();
-            tokenSource = newTokenSource;
             try
             {
-                await DrawCandleStick(newTokenSource.Token);
+                tokenSource = new CancellationTokenSource();
+                ct = tokenSource.Token;
+                Task.Factory.StartNew(DrawCandleStick,tokenSource.Token);
             }
             catch (OperationCanceledException)
             {
                 Console.WriteLine("Drawing canceled.\r\n");
-                newTokenSource.Dispose();
             }
             catch (Exception)
             {
@@ -328,43 +261,28 @@ namespace GUI
             }
         }
 
-        private void ChartLoaded(object sender, RoutedEventArgs e)
-        {
-
-            lbl_X_Axis.Height = chartStockPrice.ActualHeight - chartStockPrice.Margin.Top;
-            lbl_Y_Axis.Width = chartStockPrice.ActualWidth;
-
-            lbl_X_Axis.Margin = new Thickness(0, chartStockPrice.Margin.Top, 0, 0);
-            txt_X_Axis.Margin = new Thickness(0, lbl_X_Axis.Height - chartStockPrice.Margin.Top, 0, 0);
-            lbl_Y_Axis.Margin = new Thickness(chartStockPrice.Margin.Left, 0, 0, 0);
-        }
-
         private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            if (!this.IsLoaded) { return; }
-            DrawInitialGraph();
+            if (tokenSource != null)
+            {
+                tokenSource.Cancel();
+            }
+
+            try
+            {
+                tokenSource = new CancellationTokenSource();
+                ct = tokenSource.Token;
+                Task.Factory.StartNew(DrawCandleStick, tokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("Drawing canceled.\r\n");
+                
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Drawing failed.\r\n");
+            }
         }
-
-
-        public static readonly DependencyProperty SelectedSymbolProperty =
-        DependencyProperty.Register("SelectedSymbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
-
-        public string SelectedSymbol
-        {
-            get { return (string)GetValue(SelectedSymbolProperty); }
-            set { SetValue(SelectedSymbolProperty, value); }
-        }
-
-        #region INotifyPropertyChanged implementation
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName = null)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 }

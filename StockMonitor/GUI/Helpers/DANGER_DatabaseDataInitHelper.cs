@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using GUI;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
 

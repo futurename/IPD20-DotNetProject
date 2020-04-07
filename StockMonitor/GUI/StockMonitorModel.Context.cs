@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StockMonitor
+namespace GUI
 {
     using System;
     using System.Data.Entity;

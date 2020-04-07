@@ -9,7 +9,7 @@
         <EntityTypeShape EntityType="StockContext.HoldingShare" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="StockContext.Quote1Min" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="StockContext.QuoteDaily" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.TestQuoteDaily" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.TestQuoteDaily" Width="1.5" PointX="1.25" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="StockContext.User" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
         <AssociationConnector Association="StockContext.HoldingShares_ibfk_1" ManuallyRouted="false" />

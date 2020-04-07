@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StockMonitor
+namespace GUI
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +19,7 @@ namespace StockMonitor
         {
             this.WatchListItems = new HashSet<WatchListItem>();
         }
+    
         public int Id { get; set; }
         public string CompanyName { get; set; }
         public string Symbol { get; set; }

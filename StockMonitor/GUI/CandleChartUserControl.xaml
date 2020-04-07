@@ -5,25 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
              mc:Ignorable="d" 
-             xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf">
-    
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!-- you only need bring this resource in if you want to specify the circular style statically -->
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-            
-            <Style TargetType="{x:Type UserControl}">
-                <Style.Triggers>
-                    <Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
-                        <Setter Property="Background" Value="#FFFFFF" />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-        </ResourceDictionary>
+        <Style TargetType="{x:Type UserControl}">
+            <Style.Triggers>
+                <Trigger Property="componentModel:DesignerProperties.IsInDesignMode" Value="True">
+                    <Setter Property="Background" Value="#FFFFFF" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid Name="gridChartContainer">
@@ -40,35 +31,24 @@
             <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}" Margin="376,7,0,0" HorizontalAlignment="Left" TargetUpdated="txtSymbol_TargetUpdated"/>
             <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="464,0,0,0" VerticalAlignment="Top" Click="btReload_Click" FontSize="10" Width="100"/>
         </Grid>
-        <Grid Grid.Row="1">
-            <Wpf:CartesianChart x:Name="chartStockPrice"
-                        Zoom="X"
-                        Hoverable="False" 
-                        DataTooltip="{x:Null}"
-                        DataClick="ChartOnDataClick"
-                        DataHover="Chart_OnDataHover" 
-                        MouseMove="ChartMouseMove"
-                        MouseEnter="ChartMouseEnter" 
-                        MouseLeave="ChartMouseLeave"
-                        Loaded="ChartLoaded"
-                        ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,3,32,3.6">
-                <Wpf:CartesianChart.Series>
-                    <Wpf:CandleSeries Values="{Binding ChartValues}"/>
-                </Wpf:CartesianChart.Series>
 
-                <Wpf:CartesianChart.AxisX>
-                    <Wpf:Axis LabelFormatter="{Binding DateTimeFormatter}"
-                          MaxValue="{Binding AxisMax}"
-                          MinValue="{Binding AxisMin}"
-                          Unit="{Binding AxisUnit}">
-                        <Wpf:Axis.Separator>
-                            <Wpf:Separator Step="{Binding AxisStep}"/>
-                        </Wpf:Axis.Separator>
-                    </Wpf:Axis>
-                </Wpf:CartesianChart.AxisX>
-            </Wpf:CartesianChart>
-            <ProgressBar Name="progressBarChart" IsIndeterminate="True" VerticalAlignment="Bottom" VerticalContentAlignment="Bottom" Margin="0,0,32,0" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
-        </Grid>
+        <Wpf:CartesianChart x:Name="chartStockPrice"
+                    Zoom="X"
+                    Grid.Row="1" 
+                    Hoverable="False" 
+                    DataTooltip="{x:Null}"
+                    DataClick="ChartOnDataClick"
+                    DataHover="Chart_OnDataHover" 
+                    MouseMove="ChartMouseMove"
+                    MouseEnter="ChartMouseEnter" 
+                    MouseLeave="ChartMouseLeave"
+                    ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,1.8,31,16.8">
+            <Wpf:CartesianChart.AxisX>
+                <Wpf:Axis Labels="{Binding Labels}" 
+                            RangeChanged="Ax_RangeChanged"
+                            PreviewRangeChanged="Axis_OnPreviewRangeChanged" Foreground="#FF5F5F5F"/>
+            </Wpf:CartesianChart.AxisX>
+        </Wpf:CartesianChart>
         <Label Name="lbl_Y_Axis" Margin="35,205.8,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Width="500" Grid.Row="2" Visibility="Hidden" />
         <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,31.8,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Height="215" Grid.Row="2" Visibility="Hidden"/>
         <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,254.8,0,-0.2" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Foreground="Black" Width="62" Background="White" Opacity="0.8" Grid.Row="2" Visibility="Hidden" />

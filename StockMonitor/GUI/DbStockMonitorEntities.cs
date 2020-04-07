@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using GUI;
+
 namespace StockMonitor
 {
     using System;

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GUI;
 
 namespace StockMonitor.Models.UIClasses
 

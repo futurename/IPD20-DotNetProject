@@ -136,7 +136,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Global.cs" />
+    <Compile Include="GlobalVariables.cs" />
     <Compile Include="Helpers\DANGER_DatabaseDataInitHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\GUIDataHelper.cs" />
@@ -273,6 +273,7 @@
     <Resource Include="Resources\star.png" />
     <Resource Include="Resources\false.png" />
     <Resource Include="Resources\bell.png" />
+    <Resource Include="Resources\bell1.jpg" />
     <Content Include="StockMonitorModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>StockMonitorModel.edmx</DependentUpon>
@@ -284,7 +285,9 @@
       <LastGenOutput>StockMonitorModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
