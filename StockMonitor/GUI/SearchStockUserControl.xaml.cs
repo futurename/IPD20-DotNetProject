@@ -410,12 +410,12 @@ namespace GUI
 
         private void TbSearchBox_OnGotFocus(object sender, RoutedEventArgs e)
         {
-            if (tbSearchBox.Text == "Search symbol here")
-            {
-                tbSearchBox.Text = "";
-            }
+            tbSearchBox.Text = "";
         }
-
+        private void tbSearchBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Text = "Search symbol here";
+        }
 
         private void TbSearchBox_OnPreviewKeyUp(object sender, KeyEventArgs e)
         {
@@ -509,6 +509,7 @@ namespace GUI
 
             realTimeChart.ShowDialog();
         }
+
 
         private void LsvMkt_miSetTargetPrice_OnClick(object sender, RoutedEventArgs e)
         {

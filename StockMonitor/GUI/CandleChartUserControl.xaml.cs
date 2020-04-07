@@ -105,7 +105,7 @@ namespace GUI
 
                 if (chartStockPrice.Model != null)
                 {
-                    chartStockPrice.Model.ClearZoom();//FIXME
+                    //chartStockPrice.Model.ClearZoom();//FIXME
                 }
                 ct.ThrowIfCancellationRequested();
                 chartStockPrice.Series.Add(
@@ -263,8 +263,6 @@ namespace GUI
 
         private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
-            txtPrice.Text = "";
-
             if (tokenSource != null)
             {
                 tokenSource.Cancel();
@@ -279,6 +277,7 @@ namespace GUI
             catch (OperationCanceledException)
             {
                 Console.WriteLine("Drawing canceled.\r\n");
+                
             }
             catch (Exception)
             {

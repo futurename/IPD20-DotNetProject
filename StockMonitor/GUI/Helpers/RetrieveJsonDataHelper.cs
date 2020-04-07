@@ -249,14 +249,24 @@ namespace StockMonitor.Helpers
 
         public static async Task<List<Fmg1MinQuote>> RetrieveAllFmg1MinQuote(string symbol)
         {
-            string url = FmgBaseUrl + Fmg1MinQuoteUrl + symbol;
-            string response = await RetrieveFromUrl(url);
-            if (response == "{ }" || string.IsNullOrEmpty(response))
+            string response = "";
+            try
             {
-                throw new ArgumentException("AllFmgMinQuote null. " + symbol);
+                string url = FmgBaseUrl + Fmg1MinQuoteUrl + symbol;
+                response = await RetrieveFromUrl(url);
+                if (response == "{ }" || string.IsNullOrEmpty(response))
+                {
+                    throw new ArgumentException("AllFmgMinQuote null. " + symbol);
+                }
+                List<Fmg1MinQuote> fmg1MinQuoteList = ParseStringToFmg1MinQuoteList(response);
+                return fmg1MinQuoteList;
+            } catch (JsonSerializationException ex)
+            {
+                if(response != "") {
+                    File.WriteAllText(string.Format(@"../../JsonError{0}.txt", symbol), response);
+                }
+                throw new JsonSerializationException("From RetrieveAllFmg1MinQuote", ex);
             }
-            List<Fmg1MinQuote> fmg1MinQuoteList = ParseStringToFmg1MinQuoteList(response);
-            return fmg1MinQuoteList;
         }
 
         private static List<Fmg1MinQuote> ParseStringToFmg1MinQuoteList(string response)
