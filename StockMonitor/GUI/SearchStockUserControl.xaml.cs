@@ -50,12 +50,11 @@ namespace GUI
 
         public SearchStockUserControl()
         {
-           
+
             InitializeComponent();
 
 
-     
-
+            InitListViewDataSource();
 
 
 
@@ -96,7 +95,7 @@ namespace GUI
 
             foreach (var watchUICompanyRow in GlobalVariables.WatchListUICompanyRows)
             {
-                Task.Run( () => LoadAndRefreshWatchListRow(watchUICompanyRow));
+                Task.Run(() => LoadAndRefreshWatchListRow(watchUICompanyRow));
             }
         }
 
@@ -171,7 +170,7 @@ namespace GUI
                 Task.Run(async () =>
                 {
                     int curThreadId = Thread.CurrentThread.ManagedThreadId;
-                   
+
 
                     Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, REAL time: {curThreadId}:{companyRow.Symbol}");
 
@@ -185,24 +184,24 @@ namespace GUI
                     }
                 }, watchListRowSource.Token);
 
-              
-                 Task.Run(async () =>
-                {
-                    int curThreadId = Thread.CurrentThread.ManagedThreadId;
-                 
-                    Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, One min: {curThreadId}:{companyRow.Symbol}");
-                    while (!(watchListRowSource.IsCancellationRequested))
-                    {
-                        Refresh1MinData(companyRow);
-                        Console.Out.WriteLine($"\n REFRESH WATCHLIST One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
-                        await Task.Delay(OneMinTimeInterval);
-                        Console.Out.WriteLine(
-                            $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list 1Min with cancel {watchListRowSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
-                    }
-                }, watchListRowSource.Token);
 
-               /* oneMinCancellationTokenSource.Dispose();
-                realTimeCancellationTokenSource.Dispose();*/
+                Task.Run(async () =>
+               {
+                   int curThreadId = Thread.CurrentThread.ManagedThreadId;
+
+                   Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, One min: {curThreadId}:{companyRow.Symbol}");
+                   while (!(watchListRowSource.IsCancellationRequested))
+                   {
+                       Refresh1MinData(companyRow);
+                       Console.Out.WriteLine($"\n REFRESH WATCHLIST One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                       await Task.Delay(OneMinTimeInterval);
+                       Console.Out.WriteLine(
+                           $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list 1Min with cancel {watchListRowSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
+                   }
+               }, watchListRowSource.Token);
+
+                /* oneMinCancellationTokenSource.Dispose();
+                 realTimeCancellationTokenSource.Dispose();*/
             }
             catch (SystemException ex)
             {
@@ -214,8 +213,17 @@ namespace GUI
         {
             try
             {
-                List<Fmg1MinQuote> quote1MinList =
-                    await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
+                List<Fmg1MinQuote> quote1MinList;
+                if (GlobalVariables.IsPseudoDataSource)
+                {
+                    quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
+                }
+                else
+                {
+                    //Psudo datab                
+                    quote1MinList = await GUIDataHelper.GetPseudo1MinQuote(comapnyRow.Symbol);
+                }
+
                 if (quote1MinList.Count > 0)
                 {
                     comapnyRow.Volume = quote1MinList[0].Volume;
@@ -408,7 +416,7 @@ namespace GUI
                 {
                     this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = searchComapnyRowList; });
                 });
-                tbSearchBox.Text = "Search symbol here";
+                tbSearchBox.Text = "";
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
             else
