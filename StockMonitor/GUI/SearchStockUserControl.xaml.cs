@@ -37,7 +37,10 @@ namespace GUI
         List<Task<UIComapnyRow>> taskList;
 
 
-
+        public BlockingCollection<string> companyNames = new BlockingCollection<string>() {
+            "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
+            "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
+        };
 
         DateTime start, end;
 
@@ -47,23 +50,11 @@ namespace GUI
 
         public SearchStockUserControl()
         {
-            start = DateTime.Now;
-
-            BlockingCollection<string> companyNames = new BlockingCollection<string>()
-            {
-                "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
-                "T", "VZ", "GM", "OKE", "IRBT", "LULU", "NFLX"
-            };
-
-
+           
             InitializeComponent();
 
 
-            end = DateTime.Now;
-            TimeSpan timeSpan = new TimeSpan();
-            timeSpan = end - start;
-            Console.WriteLine("##############Total time:{0} milli####################", timeSpan);
-            InitListViewDataSource(companyNames);
+     
 
 
 
@@ -73,10 +64,15 @@ namespace GUI
 
 
 
-        private void InitListViewDataSource(BlockingCollection<string> companyNames)
+        private void InitListViewDataSource()
         {
+            GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
+            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
+
             Task.Run(() => LoadAndRefreshWatchListManager(CurrentUserId));
-            Task.Run(() => LoadAndRefreshDefaultListManager(companyNames));
+            Task.Run(() => LoadAndRefreshDefaultListManager());
         }
 
         private async void LoadAndRefreshWatchListManager(int currentUserId)
@@ -100,13 +96,13 @@ namespace GUI
 
             foreach (var watchUICompanyRow in GlobalVariables.WatchListUICompanyRows)
             {
-                Task.Run(async () => await LoadAndRefreshWatchListRow(watchUICompanyRow));
+                Task.Run( () => LoadAndRefreshWatchListRow(watchUICompanyRow));
             }
         }
 
 
 
-        private void LoadAndRefreshDefaultListManager(BlockingCollection<string> companyNames)
+        private void LoadAndRefreshDefaultListManager()
         {
 
             foreach (string symbol in companyNames)
@@ -162,47 +158,51 @@ namespace GUI
             }
         }
 
-        private async Task LoadAndRefreshWatchListRow(UIComapnyRow companyRow)
+        private void LoadAndRefreshWatchListRow(UIComapnyRow companyRow)
         {
             try
             {
-               /* UIComapnyRow companyRow = await GUIDataHelper.GetUICompanyRowTaskBySymbol(symbol);
-                GlobalVariables.WatchListUICompanyRows.TryAdd(companyRow);*/
-
                 Console.Out.WriteLine(
                     $"\n%%%%% total:  {GlobalVariables.WatchListUICompanyRows.Count}, waited a task: " + companyRow.Symbol);
-                
 
-                int curThreadId = Thread.CurrentThread.ManagedThreadId;
-                GlobalVariables.WatchListTokenSourceDic.TryAdd(curThreadId, new CancellationTokenSource());
 
-                Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist {curThreadId}:{companyRow.Symbol}");
-
-                GlobalVariables.WatchListTokenSourceDic.TryGetValue(curThreadId, out CancellationTokenSource curTokenSource);
-
-                await Task.Run(async () =>
+                CancellationTokenSource watchListRowSource = new CancellationTokenSource();
+                GlobalVariables.WatchListTokenSourceDic.TryAdd(companyRow.Symbol, watchListRowSource);
+                Task.Run(async () =>
                 {
+                    int curThreadId = Thread.CurrentThread.ManagedThreadId;
+                   
 
-                    while (!(curTokenSource.IsCancellationRequested))
+                    Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, REAL time: {curThreadId}:{companyRow.Symbol}");
+
+                    while (!watchListRowSource.IsCancellationRequested)
                     {
                         RefreshRealTImePrice(companyRow);
-                        Console.Out.WriteLine($"\n\n REFRESH WATCHLIST {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                        Console.Out.WriteLine($"\n REFRESH WATCHLIST REAL TIME: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
                         await Task.Delay(RealTimeInterval);
                         Console.Out.WriteLine(
-                            $"\n%%%total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh real data with cancel {curTokenSource.IsCancellationRequested}, id:{curThreadId},: {companyRow.ToString()}");
+                            $"\n%%%total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list real data with cancel {watchListRowSource.IsCancellationRequested}, id:{curThreadId},: {companyRow.ToString()}");
                     }
-                }, curTokenSource.Token);
+                }, watchListRowSource.Token);
 
-                await Task.Run(async () =>
+              
+                 Task.Run(async () =>
                 {
-                    while (!(curTokenSource.IsCancellationRequested))
+                    int curThreadId = Thread.CurrentThread.ManagedThreadId;
+                 
+                    Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, One min: {curThreadId}:{companyRow.Symbol}");
+                    while (!(watchListRowSource.IsCancellationRequested))
                     {
                         Refresh1MinData(companyRow);
+                        Console.Out.WriteLine($"\n REFRESH WATCHLIST One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
                         await Task.Delay(OneMinTimeInterval);
                         Console.Out.WriteLine(
-                            $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh 1Min with cancel {curTokenSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
+                            $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list 1Min with cancel {watchListRowSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
                     }
-                }, curTokenSource.Token);
+                }, watchListRowSource.Token);
+
+               /* oneMinCancellationTokenSource.Dispose();
+                realTimeCancellationTokenSource.Dispose();*/
             }
             catch (SystemException ex)
             {
@@ -488,10 +488,15 @@ namespace GUI
 
         private void btCancelWatchlistThreads_Click(object sender, RoutedEventArgs e)
         {
-            foreach (KeyValuePair<int, CancellationTokenSource> keyValuePair in GlobalVariables.WatchListTokenSourceDic)
+            foreach (KeyValuePair<string, CancellationTokenSource> keyValuePair in GlobalVariables.WatchListTokenSourceDic)
             {
                 keyValuePair.Value.Cancel(true);
             }
+        }
+
+        private void btRestartRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            InitListViewDataSource();
         }
 
         private void LsvMkt_miSetTargetPrice_OnClick(object sender, RoutedEventArgs e)

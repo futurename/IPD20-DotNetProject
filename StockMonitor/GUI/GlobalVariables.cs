@@ -12,11 +12,9 @@ namespace GUI
     class GlobalVariables
     {
         public static ConcurrentDictionary<string, string> ConcurentDictionary = new ConcurrentDictionary<string, string>();
-        public static BlockingCollection<UIComapnyRow> WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
-       
-       
-        public static ConcurrentDictionary<int, CancellationTokenSource> WatchListTokenSourceDic = new ConcurrentDictionary<int, CancellationTokenSource>();
-        public static CancellationTokenSource DefaultTaskTokenSource = new CancellationTokenSource();
-        public static BlockingCollection<UIComapnyRow> DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
+        public static BlockingCollection<UIComapnyRow> WatchListUICompanyRows ;
+        public static ConcurrentDictionary<string, CancellationTokenSource> WatchListTokenSourceDic;
+        public static CancellationTokenSource DefaultTaskTokenSource ;
+        public static BlockingCollection<UIComapnyRow> DefaultUICompanyRows;
     }
 }
