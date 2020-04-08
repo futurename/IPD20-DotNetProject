@@ -17,6 +17,6 @@ namespace GUI
         public static ConcurrentDictionary<string, CancellationTokenSource> WatchListTokenSourceDic;
         public static CancellationTokenSource DefaultTaskTokenSource ;
         public static BlockingCollection<UIComapnyRow> DefaultUICompanyRows;
-        public static bool IsPseudoDataSource = false;
+        public static bool IsPseudoDataSource = true;
     }
 }

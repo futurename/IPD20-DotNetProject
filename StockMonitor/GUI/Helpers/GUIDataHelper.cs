@@ -229,10 +229,7 @@ namespace StockMonitor.Helpers
         }
 
 
-        public static async Task<List<Fmg1MinQuote>> GetPseudo1MinQuote(string comapnyRowSymbol)
-        {
-            throw new NotImplementedException();
-        }
+     
 
     }
 }
