@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,5 +17,6 @@ namespace GUI
         public static ConcurrentDictionary<string, CancellationTokenSource> WatchListTokenSourceDic;
         public static CancellationTokenSource DefaultTaskTokenSource ;
         public static BlockingCollection<UIComapnyRow> DefaultUICompanyRows;
+        public static bool IsPseudoDataSource = true;
     }
 }

@@ -45,18 +45,16 @@ namespace GUI
         DateTime start, end;
 
         private const int RealTimeInterval = 3000;
-        private const int OneMinTimeInterval = 3000;
+        private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
 
         public SearchStockUserControl()
         {
-           
+
             InitializeComponent();
 
+
             InitListViewDataSource();
-
-
-
 
 
 
@@ -97,7 +95,7 @@ namespace GUI
 
             foreach (var watchUICompanyRow in GlobalVariables.WatchListUICompanyRows)
             {
-                Task.Run( () => LoadAndRefreshWatchListRow(watchUICompanyRow));
+                Task.Run(() => LoadAndRefreshWatchListRow(watchUICompanyRow));
             }
         }
 
@@ -113,8 +111,7 @@ namespace GUI
             }
         }
 
-
-        private async Task LoadAndRefreshDefaultRow(string symbol)
+        private  async Task LoadAndRefreshDefaultRow(string symbol)
         {
             try
             {
@@ -131,7 +128,7 @@ namespace GUI
                     Console.Out.WriteLine($"{lsvMarketPreview.Items.Count}:{GlobalVariables.DefaultUICompanyRows.Count}");
                 });
 
-                await Task.Run(async () =>
+                 Task.Run(async () =>
                 {
                     while (!GlobalVariables.DefaultTaskTokenSource.IsCancellationRequested)
                     {
@@ -142,7 +139,7 @@ namespace GUI
                     }
                 }, GlobalVariables.DefaultTaskTokenSource.Token);
 
-                await Task.Run(async () =>
+                 Task.Run(async () =>
                 {
                     while (!GlobalVariables.DefaultTaskTokenSource.IsCancellationRequested)
                     {
@@ -172,7 +169,7 @@ namespace GUI
                 Task.Run(async () =>
                 {
                     int curThreadId = Thread.CurrentThread.ManagedThreadId;
-                   
+
 
                     Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, REAL time: {curThreadId}:{companyRow.Symbol}");
 
@@ -186,24 +183,24 @@ namespace GUI
                     }
                 }, watchListRowSource.Token);
 
-              
-                 Task.Run(async () =>
-                {
-                    int curThreadId = Thread.CurrentThread.ManagedThreadId;
-                 
-                    Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, One min: {curThreadId}:{companyRow.Symbol}");
-                    while (!(watchListRowSource.IsCancellationRequested))
-                    {
-                        Refresh1MinData(companyRow);
-                        Console.Out.WriteLine($"\n REFRESH WATCHLIST One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
-                        await Task.Delay(OneMinTimeInterval);
-                        Console.Out.WriteLine(
-                            $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list 1Min with cancel {watchListRowSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
-                    }
-                }, watchListRowSource.Token);
 
-               /* oneMinCancellationTokenSource.Dispose();
-                realTimeCancellationTokenSource.Dispose();*/
+                Task.Run(async () =>
+               {
+                   int curThreadId = Thread.CurrentThread.ManagedThreadId;
+
+                   Console.Out.WriteLine($"\n&&&&&&&&&&&&&&&&&&&&& Add token source for watchlist, One min: {curThreadId}:{companyRow.Symbol}");
+                   while (!(watchListRowSource.IsCancellationRequested))
+                   {
+                       Refresh1MinData(companyRow);
+                       Console.Out.WriteLine($"\n REFRESH WATCHLIST One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                       await Task.Delay(OneMinTimeInterval);
+                       Console.Out.WriteLine(
+                           $"\n >>>>>>total:  {GlobalVariables.WatchListUICompanyRows.Count}, refresh Watch list 1Min with cancel {watchListRowSource.IsCancellationRequested},id:{curThreadId},: {companyRow.ToString()}");
+                   }
+               }, watchListRowSource.Token);
+
+                /* oneMinCancellationTokenSource.Dispose();
+                 realTimeCancellationTokenSource.Dispose();*/
             }
             catch (SystemException ex)
             {
@@ -215,17 +212,16 @@ namespace GUI
         {
             try
             {
-                List<Fmg1MinQuote> quote1MinList =
-                    await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
+                List<Fmg1MinQuote> quote1MinList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(comapnyRow.Symbol);
                 if (quote1MinList.Count > 0)
                 {
                     comapnyRow.Volume = quote1MinList[0].Volume;
-
-                    /**************************************************
-                    following line simulate Volume change during close hours.
-                    ****************************************************/
-                    comapnyRow.Volume += new Random().Next(1000) * 10000;
                 }
+
+                /**************************************************
+                       following line simulate Volume change during close hours.
+                       ****************************************************/
+                comapnyRow.Volume += new Random().Next(50) * 1000;
             }
             catch (SystemException ex)
             {
@@ -237,12 +233,22 @@ namespace GUI
         {
             try
             {
-                FmgQuoteOnlyPrice quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
+                FmgQuoteOnlyPrice quote;
+                if (!GlobalVariables.IsPseudoDataSource)
+                {
+                    quote = await RetrieveJsonDataHelper.RetrieveFmgQuoteOnlyPrice(comapnyRow.Symbol);
+                }
+                else
+                {
+                    quote = new FmgQuoteOnlyPrice() { Symbol = comapnyRow.Symbol, Price = comapnyRow.Price };
+                }
 
                 /**************************************************
-                    following line simulate Volume change during close hours.
+                    following line simulate Price change during close hours.
                 ****************************************************/
-                quote.Price += new Random().NextDouble() * (new Random().Next(2) == 0 ? -1 : 1) * quote.Price / 20;
+                Random rand = new Random();
+                int randDirection = rand.Next(2) == 1 ? -1 : 1;
+                quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
@@ -409,7 +415,7 @@ namespace GUI
                 {
                     this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = searchComapnyRowList; });
                 });
-                tbSearchBox.Text = "Search symbol here";
+                tbSearchBox.Text = "";
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
             else
