@@ -6,17 +6,17 @@
         xmlns:local="clr-namespace:GUI"
         xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
         mc:Ignorable="d"
-        Title="Set price notification" Height="300" Width="300" ResizeMode="NoResize">
+        Title="Set price notification" Height="350" Width="360" ResizeMode="NoResize">
     <StackPanel Name="spDialogPanel" Orientation="Vertical" DataContext="{Binding UICompanyRow}">
         <StackPanel.Resources>
             <uiClasses:PriceColorValueConverter x:Key="ValueConverter"></uiClasses:PriceColorValueConverter>
         </StackPanel.Resources>
         <StackPanel Orientation="Horizontal" Height="30">
             <Image Source="{Binding Logo}" Name="imgLogo" Height="25" Width="100"  Margin="40,0,0,0"/>
-            <TextBlock Name="tbSymbol" Text="{Binding Symbol}" Margin="20,0,0,0" Width="100" VerticalAlignment="Center" FontSize="18" FontWeight="Bold"></TextBlock>
+            <TextBlock Name="tbSymbol" Text="{Binding Symbol}" Margin="20,0,0,0" Width="100" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"></TextBlock>
         </StackPanel>
-        <TextBlock Name="tbCompanyName" TextAlignment="Center" Height="20" Text="{Binding CompanyName}" FontSize="16" FontStyle="Italic" Margin="30,5,0,0" Width="200" VerticalAlignment="Center"></TextBlock>
-        <TextBlock Name="tbPrice" FontSize="20" Margin="0,5,0,5" FontWeight="Bold" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" VerticalAlignment="Center" Width="80" >
+        <TextBlock Name="tbCompanyName" TextAlignment="Center" Height="20" Text="{Binding CompanyName}" FontSize="14" FontStyle="Italic" Margin="30,5,0,0" Width="200" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Name="tbPrice" FontSize="14" Margin="0,5,0,5" FontWeight="Bold" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" VerticalAlignment="Center" Width="80" >
             <TextBlock.Style>
                 <Style>
                     <Style.Triggers>
@@ -36,18 +36,18 @@
         <StackPanel Orientation="Horizontal">
             <Label Content="Target high:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
             <TextBox Name="tbTargetHigh"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
-            <Button Name="btHighRoundDown" Click="BtHighRoundDown_OnClick" Content="Down" FontSize="9" Margin="10,5,0,5" Width="30" Background="Red" Foreground="White" FontWeight="Bold"></Button>
-            <Button Name="btHighRoundup" Click="BtHighRoundup_OnClick" Content="Up" FontSize="9" Margin="10,5,0,5" Width="30" Background="Green" Foreground="White" FontWeight="Bold" ></Button>
-            
+            <Button Name="btHighRoundDown" Click="BtHighRoundDown_OnClick" Content="Down" FontSize="10" Margin="10,5,0,5" Width="60" Background="Red" Foreground="White" FontWeight="Bold"></Button>
+            <Button x:Name="btHighRoundup" Click="BtHighRoundup_OnClick" Content="Up" FontSize="10" Margin="10,5,0,5" Width="60" Background="Green" Foreground="White" FontWeight="Bold" />
+
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
             <Label Content="Target low:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
             <TextBox Name="tbTargetLow"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
-            <Button Name="btLowRoundUp" Click="BtLowRoundUp_OnClick" Content="Up" FontSize="9" Margin="10,5,0,5" Width="30" Foreground="White" FontWeight="Bold" Background="Green"/>
-            <Button Name="btLowRoundDown" Click="BtLowRoundDown_OnClick" Content="Down" FontSize="9" Margin="10,5,0,5" Width="30" Foreground="White" FontWeight="Bold" Background="Red"/>
-           
+            <Button Name="btLowRoundUp" Click="BtLowRoundUp_OnClick" Content="Up" FontSize="10" Margin="10,5,0,5" Width="60" Foreground="White" FontWeight="Bold" Background="Green"/>
+            <Button Name="btLowRoundDown" Click="BtLowRoundDown_OnClick" Content="Down" FontSize="10" Margin="10,5,0,5" Width="60" Foreground="White" FontWeight="Bold" Background="Red"/>
+
         </StackPanel>
-        <Button  Name="btClearSetting" Content="Clear setting" Width="80" Margin="15" Click="BtClearSetting_OnClick"/>
-        <Button Name="btSaveSetting" Content="Save setting" Width="80" Margin="0" Click="btSaveSetting_Click"/>
+        <Button  x:Name="btClearSetting" Content="Clear setting" Width="120" HorizontalAlignment="Center" Margin="0,20,0,0" Click="BtClearSetting_OnClick"/>
+        <Button Name="btSaveSetting" Content="Save setting" Width="120" Margin="0,20,0,0" Click="btSaveSetting_Click"/>
     </StackPanel>
 </Window>

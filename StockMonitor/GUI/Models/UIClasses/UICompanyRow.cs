@@ -202,13 +202,13 @@ namespace StockMonitor.Models.UIClasses
             {
                 if (double.Parse(value.ToString()) < 0)
                 {
-                    return 1;
+                    return "RED";
                 }
 
-                return 2;
+                return "GREEN";
             }
 
-            return 3;
+            return "BLACK";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
