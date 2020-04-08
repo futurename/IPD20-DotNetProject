@@ -56,14 +56,31 @@
                 <local:CandleChartUserControl SelectedSymbol="{Binding Symbol, ElementName=watchList}" />
             </Grid>
             <Grid Grid.Row="1">
-                <Label Content="Open Price:" HorizontalAlignment="Left" Height="25" Margin="12,10,0,0" VerticalAlignment="Top"/>
-                <Label Content="Market Capital:" HorizontalAlignment="Left" Margin="12,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.125,-0.026"/>
-                <TextBlock Name="txtOpenPrice" HorizontalAlignment="Left" Margin="89,15,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" RenderTransformOrigin="0.349,0.542"/>
-                <TextBlock Name="txtMarketCapital" HorizontalAlignment="Left" Margin="107,53,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
-                <Label Content="Price To Earning Ratio:" HorizontalAlignment="Left" Margin="358,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.236,0.255"/>
-                <TextBlock Name="txtEarningRatio" HorizontalAlignment="Left" Margin="491,15,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
-                <Label Content="Price To Sales Ratio:" HorizontalAlignment="Left" Margin="358,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.236,0.255"/>
-                <TextBlock Name="txtSalesRatio" HorizontalAlignment="Left" Margin="491,53,0,0" TextWrapping="Wrap" Text="-" VerticalAlignment="Top"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="Open Price:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="txtOpenPrice" HorizontalAlignment="Left" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                    <Label Content="Market Capital:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="txtMarketCapital" HorizontalAlignment="Left" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                    <Label Content="Price To Earning Ratio:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="txtEarningRatio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                    <Label Content="Price To Sales Ratio:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="txtSalesRatio" HorizontalAlignment="Left" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" Margin="0,5,0,0"/>
+                </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Column="2">

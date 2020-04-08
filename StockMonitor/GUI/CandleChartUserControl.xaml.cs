@@ -61,9 +61,8 @@ namespace GUI
             }
         }
 
-        private async void DrawCandleStick()// need to be async because it has Task(thread)
+        private async Task DrawCandleStick(CancellationToken ct)// need to be async because it has Task(thread)
         {
-            
             while (gridChartContainer.ActualWidth == 0) {
                 ct.ThrowIfCancellationRequested();
                 await Task.Delay(200);  
@@ -237,23 +236,26 @@ namespace GUI
 
 
         public CancellationTokenSource tokenSource;
-        public CancellationToken ct;
-        private void btReload_Click(object sender, RoutedEventArgs e)
+        private async void btReload_Click(object sender, RoutedEventArgs e)
         {
             if(tokenSource != null)
             {
                 tokenSource.Cancel();
             }
 
+            CancellationTokenSource newTokenSource = new CancellationTokenSource();
+            tokenSource = newTokenSource;
             try
             {
-                tokenSource = new CancellationTokenSource();
-                ct = tokenSource.Token;
-                Task.Factory.StartNew(DrawCandleStick,tokenSource.Token);
+                progBarChart.Visibility = Visibility.Visible;
+                await DrawCandleStick(tokenSource.Token);
+                progBarChart.Visibility = Visibility.Hidden;
+
             }
             catch (OperationCanceledException)
             {
                 Console.WriteLine("Drawing canceled.\r\n");
+                newTokenSource.Dispose();
             }
             catch (Exception)
             {
@@ -261,28 +263,32 @@ namespace GUI
             }
         }
 
-        private void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
+        private async void txtSymbol_TargetUpdated(object sender, DataTransferEventArgs e)
         {
             if (tokenSource != null)
             {
                 tokenSource.Cancel();
             }
 
+            CancellationTokenSource newTokenSource = new CancellationTokenSource();
+            tokenSource = newTokenSource;
             try
             {
-                tokenSource = new CancellationTokenSource();
-                ct = tokenSource.Token;
-                Task.Factory.StartNew(DrawCandleStick, tokenSource.Token);
+                progBarChart.Visibility = Visibility.Visible;
+                await DrawCandleStick(tokenSource.Token);
+                progBarChart.Visibility = Visibility.Hidden;
             }
             catch (OperationCanceledException)
             {
                 Console.WriteLine("Drawing canceled.\r\n");
-                
+                newTokenSource.Dispose();
             }
             catch (Exception)
             {
                 Console.WriteLine("Drawing failed.\r\n");
             }
         }
+
+        //TODO: Change Code , zoom-in out on mouse wheel
     }
 }
