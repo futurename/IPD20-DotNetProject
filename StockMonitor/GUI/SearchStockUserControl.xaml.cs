@@ -48,6 +48,7 @@ namespace GUI
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
 
+        StockTrader stockTrader;
         public SearchStockUserControl()
         {
 
@@ -57,7 +58,7 @@ namespace GUI
             InitListViewDataSource();
 
 
-
+            stockTrader = new StockTrader(CurrentUserId);
         }
 
 

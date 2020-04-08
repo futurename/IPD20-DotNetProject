@@ -57,16 +57,20 @@
             </materialDesign:Card>
 
             <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal">
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}"
+                <RadioButton Name="rbBuy" 
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
                             Margin="4"
                             IsChecked="True"
                             Content="BUY" />
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}"
+                <RadioButton Name="rbSell"
+                            Style="{StaticResource MaterialDesignTabRadioButton}"
                             Margin="4"
                             IsChecked="False"
                             Content="SELL" />
             </StackPanel>
-            <ComboBox Grid.Row="2" Grid.Column="0" materialDesign:HintAssist.Hint="Order Type">
+            <ComboBox Grid.Row="2" Grid.Column="0" 
+                      Name="comboOrderType" 
+                      materialDesign:HintAssist.Hint="Order Type" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="0,12.4" Width="97">
                 <ComboBoxItem>
                     Limit Order
                 </ComboBoxItem>
@@ -74,42 +78,44 @@
                     Stop Order
                 </ComboBoxItem>
             </ComboBox>
-            <TextBox Grid.Row="2" Grid.Column="2"   
+            <TextBox Grid.Row="2" Grid.Column="2"
+                     Name="tbQuantity"
                      materialDesign:HintAssist.Hint="Quantity"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      VerticalAlignment="Center" Height="44" Margin="0,3.6,0,18.8" />
             
-            <TextBlock Text="Target Price" Grid.Row="3" Grid.ColumnSpan="3"
-                       Style="{StaticResource MaterialDesignTextBlock}"/>
             <TextBox Grid.Row="3" Grid.Column="0"   
-                     materialDesign:HintAssist.Hint="Limit Price"
+                     Name="tbMixPrice"
+                     materialDesign:HintAssist.Hint="Min Price"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      VerticalAlignment="Center" />
             <TextBox Grid.Row="3" Grid.Column="2" 
-                     materialDesign:HintAssist.Hint="Stop Price"
+                     Name="tbMaxPrice"
+                     materialDesign:HintAssist.Hint="Max Price"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      VerticalAlignment="Center" />
             
-            <TextBlock Text="Time in force (Until)" Grid.Row="4" Grid.ColumnSpan="3"
-                       Style="{StaticResource MaterialDesignTextBlock}"/>
             <DatePicker Grid.Row="4" Grid.Column="0"
+                     Name="dpDueDateTime"
                      materialDesign:HintAssist.Hint="Pick Date"
                      DisplayDateStart="{x:Static sys:DateTime.Today}"
                      Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
             <materialDesign:TimePicker Grid.Row="4" Grid.Column="2"
+                      Name="tpDueDateTime"
                       Is24Hours="True"
-                      x:Name="PresetTimePicker"
                       Margin="0,18.4,0,6.2" />
             <Button Grid.Row="5" Grid.Column="0"
+                    Name="btTrade"
                       Style="{StaticResource MaterialDesignRaisedButton}"
                       Width="100"
                       ToolTip="Resource name: MaterialDesignRaisedButton"
-                      Content="Trade" />
+                      Content="Trade" Click="btTrade_Click" />
             <Button Grid.Row="5" Grid.Column="2"
+                    Name="btCancel"
                       Style="{StaticResource MaterialDesignRaisedLightButton}"
                       Width="100"
                       ToolTip="Resource name: MaterialDesignRaisedLightButton"
-                      Content="Cancel" />
+                      Content="Cancel" Click="btCancel_Click" />
         </Grid>
 
         <Grid Grid.Column="1" Margin="10">

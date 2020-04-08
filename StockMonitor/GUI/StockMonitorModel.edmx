@@ -61,16 +61,19 @@
           <Property Name="Vwap" Type="double" Nullable="false" />
           <Property Name="ChangeOverTime" Type="double" Nullable="false" />
         </EntityType>
-        <EntityType Name="TestQuoteDaily">
+        <EntityType Name="ReservedTradings">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="Open" Type="double" Nullable="false" />
-          <Property Name="High" Type="double" Nullable="false" />
-          <Property Name="Low" Type="double" Nullable="false" />
-          <Property Name="Close" Type="double" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="MinPrice" Type="double" Nullable="false" />
+          <Property Name="MaxPrice" Type="double" Nullable="false" />
+          <Property Name="Volume" Type="bigint" Nullable="false" />
+          <Property Name="TradeType" Type="enum" Nullable="false" />
+          <Property Name="DueDateTime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="TradingRecord">
           <Key>
@@ -79,10 +82,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="DateTime" Type="date" Nullable="false" />
-          <Property Name="Symbol" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="Price" Type="double" Nullable="false" />
           <Property Name="Volume" Type="bigint" Nullable="false" />
           <Property Name="TradeType" Type="enum" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -105,6 +108,60 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="CompanyId" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="fk_Company_ReservedTradings">
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ReservedTradings" Type="Self.ReservedTradings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReservedTradings">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Company_TradingRecord">
+          <End Role="Company" Type="Self.Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_ReservedTradings">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ReservedTradings" Type="Self.ReservedTradings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReservedTradings">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_TradingRecord">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="HoldingShares_ibfk_1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="HoldingShares" Type="Self.HoldingShares" Multiplicity="*" />
@@ -113,18 +170,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="HoldingShares">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="TradingRecord_ibfk_1">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TradingRecord">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -158,17 +203,29 @@
           <EntitySet Name="HoldingShares" EntityType="Self.HoldingShares" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="Quote1Min" EntityType="Self.Quote1Min" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="QuoteDaily" EntityType="Self.QuoteDaily" Schema="StockMonitor" store:Type="Tables" />
-          <EntitySet Name="TestQuoteDaily" EntityType="Self.TestQuoteDaily" Schema="StockMonitor" store:Type="Tables" />
+          <EntitySet Name="ReservedTradings" EntityType="Self.ReservedTradings" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="TradingRecord" EntityType="Self.TradingRecord" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="StockMonitor" store:Type="Tables" />
           <EntitySet Name="WatchListItem" EntityType="Self.WatchListItem" Schema="StockMonitor" store:Type="Tables" />
+          <AssociationSet Name="fk_Company_ReservedTradings" Association="Self.fk_Company_ReservedTradings">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="ReservedTradings" EntitySet="ReservedTradings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Company_TradingRecord" Association="Self.fk_Company_TradingRecord">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="TradingRecord" EntitySet="TradingRecord" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_ReservedTradings" Association="Self.fk_User_ReservedTradings">
+            <End Role="User" EntitySet="User" />
+            <End Role="ReservedTradings" EntitySet="ReservedTradings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_TradingRecord" Association="Self.fk_User_TradingRecord">
+            <End Role="User" EntitySet="User" />
+            <End Role="TradingRecord" EntitySet="TradingRecord" />
+          </AssociationSet>
           <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
             <End Role="User" EntitySet="User" />
             <End Role="HoldingShares" EntitySet="HoldingShares" />
-          </AssociationSet>
-          <AssociationSet Name="TradingRecord_ibfk_1" Association="Self.TradingRecord_ibfk_1">
-            <End Role="User" EntitySet="User" />
-            <End Role="TradingRecord" EntitySet="TradingRecord" />
           </AssociationSet>
           <AssociationSet Name="WatchListItem_ibfk_1" Association="Self.WatchListItem_ibfk_1">
             <End Role="User" EntitySet="User" />
@@ -201,6 +258,8 @@
           <Property Name="CEO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_2" FromRole="Company" ToRole="WatchListItem" />
+          <NavigationProperty Name="TradingRecords" Relationship="StockContext.fk_Company_TradingRecord" FromRole="Company" ToRole="TradingRecord" />
+          <NavigationProperty Name="ReservedTradings" Relationship="StockContext.fk_Company_ReservedTradings" FromRole="Company" ToRole="ReservedTrading" />
         </EntityType>
         <EntityType Name="HoldingShare">
           <Key>
@@ -241,30 +300,6 @@
           <Property Name="Vwap" Type="Double" Nullable="false" />
           <Property Name="ChangeOverTime" Type="Double" Nullable="false" />
         </EntityType>
-        <EntityType Name="TestQuoteDaily">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Nullable="false" />
-          <Property Name="Open" Type="Double" Nullable="false" />
-          <Property Name="High" Type="Double" Nullable="false" />
-          <Property Name="Low" Type="Double" Nullable="false" />
-          <Property Name="Close" Type="Double" Nullable="false" />
-        </EntityType>
-        <EntityType Name="TradingRecord">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="DateTime" Type="DateTime" Nullable="false" />
-          <Property Name="Symbol" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Volume" Type="Int64" Nullable="false" />
-          <Property Name="TradeType" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.TradingRecord_ibfk_1" FromRole="TradingRecord" ToRole="User" />
-        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
@@ -278,8 +313,9 @@
           <Property Name="Balance" Type="Double" Nullable="false" />
           <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="HoldingShares" Relationship="Self.HoldingShares_ibfk_1" FromRole="User" ToRole="HoldingShares" />
-          <NavigationProperty Name="TradingRecords" Relationship="Self.TradingRecord_ibfk_1" FromRole="User" ToRole="TradingRecord" />
           <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_1" FromRole="User" ToRole="WatchListItem" />
+          <NavigationProperty Name="ReservedTradings" Relationship="StockContext.fk_User_TradingRecord" FromRole="User" ToRole="ReservedTrading" />
+          <NavigationProperty Name="TradingRecords" Relationship="StockContext.fk_User_TradingRecord1" FromRole="User" ToRole="TradingRecord" />
         </EntityType>
         <Association Name="HoldingShares_ibfk_1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -293,33 +329,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="TradingRecord_ibfk_1">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="TradingRecord" Type="Self.TradingRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TradingRecord">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="StockMonitorEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Companies" EntityType="Self.Company" />
           <EntitySet Name="HoldingShares" EntityType="Self.HoldingShare" />
           <EntitySet Name="Quote1Min" EntityType="Self.Quote1Min" />
           <EntitySet Name="QuoteDailies" EntityType="Self.QuoteDaily" />
-          <EntitySet Name="TestQuoteDailies" EntityType="Self.TestQuoteDaily" />
-          <EntitySet Name="TradingRecords" EntityType="Self.TradingRecord" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <AssociationSet Name="HoldingShares_ibfk_1" Association="Self.HoldingShares_ibfk_1">
             <End Role="User" EntitySet="Users" />
             <End Role="HoldingShares" EntitySet="HoldingShares" />
-          </AssociationSet>
-          <AssociationSet Name="TradingRecord_ibfk_1" Association="Self.TradingRecord_ibfk_1">
-            <End Role="User" EntitySet="Users" />
-            <End Role="TradingRecord" EntitySet="TradingRecords" />
           </AssociationSet>
           <EntitySet Name="WatchListItems" EntityType="StockContext.WatchListItem" />
           <AssociationSet Name="WatchListItem_ibfk_2" Association="StockContext.WatchListItem_ibfk_2">
@@ -330,7 +348,25 @@
             <End Role="User" EntitySet="Users" />
             <End Role="WatchListItem" EntitySet="WatchListItems" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="TradingRecords" EntityType="StockContext.TradingRecord" />
+          <AssociationSet Name="fk_Company_TradingRecord" Association="StockContext.fk_Company_TradingRecord">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="TradingRecord" EntitySet="TradingRecords" />
+          </AssociationSet>
+          <EntitySet Name="ReservedTradings" EntityType="StockContext.ReservedTrading" />
+          <AssociationSet Name="fk_Company_ReservedTradings" Association="StockContext.fk_Company_ReservedTradings">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="ReservedTrading" EntitySet="ReservedTradings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_TradingRecord" Association="StockContext.fk_User_TradingRecord">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ReservedTrading" EntitySet="ReservedTradings" />
+          </AssociationSet>
+          <AssociationSet Name="fk_User_TradingRecord1" Association="StockContext.fk_User_TradingRecord1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TradingRecord" EntitySet="TradingRecords" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="WatchListItem">
           <Key>
             <PropertyRef Name="Id" />
@@ -365,7 +401,91 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="TradingRecord">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Volume" Type="Int64" Nullable="false" />
+          <Property Name="TradeType" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="StockContext.fk_Company_TradingRecord" FromRole="TradingRecord" ToRole="Company" />
+          <NavigationProperty Name="User" Relationship="StockContext.fk_User_TradingRecord1" FromRole="TradingRecord" ToRole="User" />
+        </EntityType>
+        <Association Name="fk_Company_TradingRecord">
+          <End Type="StockContext.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="StockContext.TradingRecord" Role="TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ReservedTrading">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" />
+          <Property Name="MinPrice" Type="Double" Nullable="false" />
+          <Property Name="MaxPrice" Type="Double" Nullable="false" />
+          <Property Name="Volume" Type="Int64" Nullable="false" />
+          <Property Name="TradeType" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
+          <Property Name="DueDateTime" Type="DateTime" Nullable="false" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="StockContext.fk_Company_ReservedTradings" FromRole="ReservedTrading" ToRole="Company" />
+          <NavigationProperty Name="User" Relationship="StockContext.fk_User_TradingRecord" FromRole="ReservedTrading" ToRole="User" />
+        </EntityType>
+        <Association Name="fk_Company_ReservedTradings">
+          <End Type="StockContext.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="StockContext.ReservedTrading" Role="ReservedTrading" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReservedTrading">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_TradingRecord">
+          <End Type="StockContext.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="StockContext.ReservedTrading" Role="ReservedTrading" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ReservedTrading">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_User_TradingRecord1">
+          <End Type="StockContext.User" Role="User" Multiplicity="1" />
+          <End Type="StockContext.TradingRecord" Role="TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -431,31 +551,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TestQuoteDailies">
-            <EntityTypeMapping TypeName="StockContext.TestQuoteDaily">
-              <MappingFragment StoreEntitySet="TestQuoteDaily">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Open" ColumnName="Open" />
-                <ScalarProperty Name="High" ColumnName="High" />
-                <ScalarProperty Name="Low" ColumnName="Low" />
-                <ScalarProperty Name="Close" ColumnName="Close" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TradingRecords">
-            <EntityTypeMapping TypeName="StockContext.TradingRecord">
-              <MappingFragment StoreEntitySet="TradingRecord">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
-                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Volume" ColumnName="Volume" />
-                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="StockContext.User">
               <MappingFragment StoreEntitySet="User">
@@ -474,6 +569,34 @@
             <EntityTypeMapping TypeName="StockContext.WatchListItem">
               <MappingFragment StoreEntitySet="WatchListItem">
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TradingRecords">
+            <EntityTypeMapping TypeName="StockContext.TradingRecord">
+              <MappingFragment StoreEntitySet="TradingRecord">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReservedTradings">
+            <EntityTypeMapping TypeName="StockContext.ReservedTrading">
+              <MappingFragment StoreEntitySet="ReservedTradings">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="DueDateTime" ColumnName="DueDateTime" />
+                <ScalarProperty Name="TradeType" ColumnName="TradeType" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="MaxPrice" ColumnName="MaxPrice" />
+                <ScalarProperty Name="MinPrice" ColumnName="MinPrice" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

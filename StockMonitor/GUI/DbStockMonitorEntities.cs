@@ -32,9 +32,9 @@ namespace StockMonitor
         public virtual DbSet<HoldingShare> HoldingShares { get; set; }
         public virtual DbSet<Quote1Min> Quote1Min { get; set; }
         public virtual DbSet<QuoteDaily> QuoteDailies { get; set; }
-        public virtual DbSet<TestQuoteDaily> TestQuoteDailies { get; set; }
         public virtual DbSet<TradingRecord> TradingRecords { get; set; }
         public virtual DbSet<WatchListItem> WatchListItems { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<ReservedTrading> ReservedTradings { get; set; }
     }
 }

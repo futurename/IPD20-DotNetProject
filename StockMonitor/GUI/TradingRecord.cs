@@ -14,14 +14,26 @@ namespace GUI
     
     public partial class TradingRecord
     {
+        public TradingRecord() { }
+        public TradingRecord(ReservedTrading reservedTrading,double price)
+        {
+            UserId = reservedTrading.UserId;
+            CompanyId = reservedTrading.CompanyId;
+            DateTime = DateTime.Now;
+            Price = price;
+            TradeType = reservedTrading.TradeType.ToString();
+            Volume = reservedTrading.Volume;
+        }
+
         public int Id { get; set; }
         public int UserId { get; set; }
         public System.DateTime DateTime { get; set; }
-        public string Symbol { get; set; }
         public double Price { get; set; }
         public long Volume { get; set; }
         public string TradeType { get; set; }
+        public int CompanyId { get; set; }
     
+        public virtual Company Company { get; set; }
         public virtual User User { get; set; }
     }
 }

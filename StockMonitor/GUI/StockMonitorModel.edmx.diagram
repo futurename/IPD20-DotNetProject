@@ -5,19 +5,25 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="2cd2fa8f75834edc8a206c466a58f4b3" Name="Diagram1">
-        <EntityTypeShape EntityType="StockContext.Company" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.HoldingShare" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.Quote1Min" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.QuoteDaily" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.TestQuoteDaily" Width="1.5" PointX="1.25" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.User" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.Company" Width="1.5" PointX="4.125" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.HoldingShare" Width="1.5" PointX="10.625" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.Quote1Min" Width="1.5" PointX="2.375" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.QuoteDaily" Width="1.5" PointX="0.5" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.User" Width="1.5" PointX="9.375" PointY="1.75" IsExpanded="true" />
         <AssociationConnector Association="StockContext.HoldingShares_ibfk_1" ManuallyRouted="false" />
-        <AssociationConnector Association="StockContext.TradingRecord_ibfk_1" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="StockContext.WatchListItem" Width="1.5" PointX="8" PointY="5.25" />
+        <EntityTypeShape EntityType="StockContext.WatchListItem" Width="1.5" PointX="6.75" PointY="6.625" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_2" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_1" />
-      </Diagram>
+        <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="6.625" PointY="3.625" />
+        <AssociationConnector Association="StockContext.fk_Company_TradingRecord" ManuallyRouted="true" >
+          <ConnectorPoint PointX="5.625" PointY="4.0594208791755477" />
+          <ConnectorPoint PointX="6.625" PointY="4.9321070917015284" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="StockContext.ReservedTrading" Width="1.5" PointX="6.625" PointY="0.5" />
+        <AssociationConnector Association="StockContext.fk_Company_ReservedTradings" />
+        <AssociationConnector Association="StockContext.fk_User_TradingRecord" />
+        <AssociationConnector Association="StockContext.fk_User_TradingRecord1" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
