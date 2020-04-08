@@ -6,13 +6,12 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        Title="RealTimePriceChart" Height="569.432" Width="1100.711">
+        Title="RealTimePriceChart" Height="371.185" Width="552.369">
     <Grid>
-        <Button Name="btToggleReading" Content="Start" HorizontalAlignment="Left" Height="32" Margin="1015,13,0,0" VerticalAlignment="Top" Width="69" Click="btToggleReading_Click"/>
         <Wpf:CartesianChart
             AnimationsSpeed="0:0:0.5"
             Hoverable="False"
-            DataTooltip="{x:Null}" Margin="0,64,0.4,0">
+            DataTooltip="{x:Null}" Margin="0,64,0.4,0" Loaded="CartesianChart_Loaded">
             <Wpf:CartesianChart.Series>
                 <Wpf:LineSeries Values="{Binding ChartValues}"
                                 StrokeThickness="6" 

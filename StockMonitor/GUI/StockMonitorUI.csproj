@@ -187,6 +187,9 @@
     <Compile Include="TestQuoteDaily.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="TradeDialog.xaml.cs">
+      <DependentUpon>TradeDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TradingRecord.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
@@ -227,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SetTargetPriceNotificationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TradeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

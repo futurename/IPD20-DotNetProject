@@ -53,8 +53,7 @@ namespace GUI
                 OnPropertyChanged("AxisMin");
             }
         }
-        public bool IsReading { get; set; }
-        public RealTimePriceChart(UIComapnyRow selCompany)
+        public RealTimePriceChart(UIComapnyRow selCompany,CancellationToken ct)
         {
             InitializeComponent();
 
@@ -78,12 +77,12 @@ namespace GUI
 
             SetAxisLimits(DateTime.Now);
 
-            IsReading = false;
-
             DataContext = this;
+
+            Read(ct);
         }
 
-        async Task Read(CancellationToken ct)
+        async void Read(CancellationToken ct)
         {
             while (true)
             {
@@ -126,32 +125,10 @@ namespace GUI
         #endregion
 
         CancellationTokenSource tokenSource;
-        private async void btToggleReading_Click(object sender, RoutedEventArgs e)
+
+        private async void CartesianChart_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                IsReading = !IsReading;
-                if (IsReading)
-                {
-                    tokenSource = new CancellationTokenSource();
-                    btToggleReading.Content = "Stop";
-                    await Read(tokenSource.Token);
-                }
-                else
-                {
-                    btToggleReading.Content = "Start";
-                    tokenSource.Cancel();
-                    tokenSource.Dispose();
-                }
-            }
-            catch (OperationCanceledException)
-            {
-                Console.WriteLine("Drawing canceled.\r\n");
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Drawing failed.\r\n");
-            }
+            await Read(tokenSource.Token);
         }
     }
     public class FmgQuoteOnlyPriceWrapper

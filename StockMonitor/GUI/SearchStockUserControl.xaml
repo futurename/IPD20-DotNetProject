@@ -27,7 +27,7 @@
         <Grid Margin="0,55,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250" />
+                <ColumnDefinition Width="270" />
             </Grid.ColumnDefinitions>
             <ListView x:Name="lsvMarketPreview" Grid.Column="0" FontSize="12" MouseDoubleClick="lsvMarketPreview_MouseDoubleClick">
                 <ListView.Resources>
