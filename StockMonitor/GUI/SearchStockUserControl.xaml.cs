@@ -477,6 +477,7 @@ namespace GUI
             }
         }
 
+
         CancellationTokenSource chartTokenSource;
         private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -490,7 +491,7 @@ namespace GUI
             {
                 RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany, chartTokenSource.Token);
 
-                realTimeChart.ShowDialog();
+                realTimeChart.Show();
             } catch (OperationCanceledException)
             {
                 Console.WriteLine("RealTime Chart canceled");
@@ -498,6 +499,7 @@ namespace GUI
 
             }
         }
+
 
         private void btCancelDefaultThreads_Click(object sender, RoutedEventArgs e)
         {

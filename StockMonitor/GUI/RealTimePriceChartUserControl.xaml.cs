@@ -1,7 +1,5 @@
 ﻿using LiveCharts;
 using LiveCharts.Configurations;
-using StockMonitor.Helpers;
-using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
@@ -17,16 +15,34 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace GUI
 {
     /// <summary>
-    /// Interaction logic for RealTimePriceChart.xaml
+    /// Interaction logic for RealTimePriceChartUserControl.xaml
     /// </summary>
-    public partial class RealTimePriceChart : Window, INotifyPropertyChanged
+    public partial class RealTimePriceChartUserControl : UserControl, INotifyPropertyChanged
     {
-        public string Symbol { get; set; }
+        private string _symbol;
+        public string Symbol
+        {
+            get { return _symbol; }
+            set
+            {
+                _symbol = value;
+                if (value.Length == 0)
+                {
+                    IsReading = false;
+                }
+                else
+                {
+                    IsReading = true;
+                    Task.Factory.StartNew(Read);
+                }
+            }
+        }
         public ChartValues<FmgQuoteOnlyPriceWrapper> ChartValues { get; set; }
         public Func<double, string> DateTimeFormatter { get; set; }
         public double AxisStep { get; set; }
@@ -53,11 +69,14 @@ namespace GUI
                 OnPropertyChanged("AxisMin");
             }
         }
-        public RealTimePriceChart(UIComapnyRow selCompany,CancellationToken ct)
+
+        public CancellationToken ct { get; set; }
+
+        bool IsReading{ get; set; }
+
+        public RealTimePriceChartUserControl()
         {
             InitializeComponent();
-
-            Symbol = selCompany.Symbol;
 
             txtSymbol.Text = Symbol;
 
@@ -69,7 +88,7 @@ namespace GUI
 
             ChartValues = new ChartValues<FmgQuoteOnlyPriceWrapper>();
 
-            DateTimeFormatter = value => new DateTime((long) value).ToString("mm:ss");
+            DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
 
             AxisStep = TimeSpan.FromSeconds(3).Ticks;
 
@@ -79,14 +98,13 @@ namespace GUI
 
             DataContext = this;
 
-            Read(ct);
+            IsReading = false;
         }
 
-        async void Read(CancellationToken ct)
+        async void Read()
         {
-            while (true)
+            while (IsReading)
             {
-                ct.ThrowIfCancellationRequested();
                 await Task.Delay(500);
 
                 var realTimePrice = (from companyRow in GlobalVariables.DefaultUICompanyRows
@@ -122,10 +140,5 @@ namespace GUI
 
         #endregion
 
-    }
-    public class FmgQuoteOnlyPriceWrapper
-    {
-        public double Price { get; set; }
-        public DateTime Time { get; set; }
     }
 }

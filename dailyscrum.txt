@@ -331,3 +331,27 @@
 
 3. Need assistance / figure things out
 
+*****************************************************
+
+2020/04/08 Wang Wei
+1. Done since last scrum:
+- Refactor threads management part, add cancellation when refreshing threads are invalid.
+- adjust market windows datasource to pseudo methods for better demostration
+
+2. To do until next Scrum:
+- Implement search stocks by company name or related infomation
+- add user balance to right bottom part of market window.
+
+3. Need assistance / figure things out
+
+2020/04/08 Donghyeok Seo
+1. Done since last scrum
+- refactorying code
+- Add Progressbar
+- Trading window GUI
+
+2. To do until next Scrum:
+- Trading(Sell/Buy) feature
+- Add Transactions/PendingTransactions Tables in Database
+
+3. Need assistance / figure things out
