@@ -24,7 +24,7 @@
                 <local:WatchListUserControl Margin="-11,0,-5,0"/>
             </TabItem>
         </TabControl>
-        <TextBlock Name="tbStatusBar" Margin="10,629,29.2,9.6" TextWrapping="Wrap" Text="Status bar"/>
+        
 
     </Grid>
 

@@ -202,7 +202,7 @@ namespace StockMonitor.Helpers
             {
                 using (DbStockMonitor _dbContext = new DbStockMonitor())
                 {
-                    var searchItems = _dbContext.Companies.AsNoTracking().Where(c => c.Symbol.Contains(searchString))
+                    var searchItems = _dbContext.Companies.AsNoTracking().Where(c => c.Symbol.Contains(searchString) || c.CompanyName.Contains(searchString) || c.Industry.Contains(searchString))
                         .OrderBy(c => c.Symbol).Take(10).ToList();
                     if (searchItems.Count != 0)
                     {
