@@ -284,3 +284,50 @@
 -Study how to manage multithreading 
 
 3. Need assistance / figure things out
+
+***********************************************************
+2020/04/06 Wang Wei
+1. Done since last scrum:
+- Implement setting target high/low price dialog
+- Testing major functions which have been implemented for market tab
+2. To do until next Scrum:
+- modify database for storing target high/low price for user
+- begin implementing trading dialog
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+2020/04/06 Donghyeok Seo
+1. Done since last scrum
+-Drawing real time price Chart when user double click company on the list
+-prepare demo
+-Study how to manage multithreading
+
+2. To do until next Scrum:
+- refactorying code
+- Add labrary MaterialDesign
+- Add Progress dialog
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/07 Wang Wei
+1. Done since last scrum:
+- Testing multithreads functions
+
+2. To do until next Scrum:
+- Implement multithread management
+
+3. Need assistance / figure things out
+
+2020/04/07 Donghyeok Seo
+1. Done since last scrum
+- Add labrary MaterialDesign
+- Fallow tutorial
+
+2. To do until next Scrum:
+- refactorying code
+- Add Progress dialog
+
+3. Need assistance / figure things out
+
