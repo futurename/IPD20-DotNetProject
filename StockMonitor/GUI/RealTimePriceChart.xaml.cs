@@ -124,12 +124,6 @@ namespace GUI
 
         #endregion
 
-        CancellationTokenSource tokenSource;
-
-        private async void CartesianChart_Loaded(object sender, RoutedEventArgs e)
-        {
-            await Read(tokenSource.Token);
-        }
     }
     public class FmgQuoteOnlyPriceWrapper
     {

@@ -11,7 +11,7 @@
         <Wpf:CartesianChart
             AnimationsSpeed="0:0:0.5"
             Hoverable="False"
-            DataTooltip="{x:Null}" Margin="0,64,0.4,0" Loaded="CartesianChart_Loaded">
+            DataTooltip="{x:Null}" Margin="0,64,0.4,0">
             <Wpf:CartesianChart.Series>
                 <Wpf:LineSeries Values="{Binding ChartValues}"
                                 StrokeThickness="6" 

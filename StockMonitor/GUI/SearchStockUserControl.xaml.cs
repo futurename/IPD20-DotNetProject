@@ -477,15 +477,26 @@ namespace GUI
             }
         }
 
+        CancellationTokenSource chartTokenSource;
         private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
 
             if (selCompany == null) { return; }
 
-            RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany);
+            chartTokenSource = new CancellationTokenSource();
 
-            realTimeChart.ShowDialog();
+            try
+            {
+                RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany, chartTokenSource.Token);
+
+                realTimeChart.ShowDialog();
+            } catch (OperationCanceledException)
+            {
+                Console.WriteLine("RealTime Chart canceled");
+                chartTokenSource.Dispose();
+
+            }
         }
 
         private void btCancelDefaultThreads_Click(object sender, RoutedEventArgs e)
