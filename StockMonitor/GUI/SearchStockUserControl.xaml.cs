@@ -57,8 +57,6 @@ namespace GUI
 
             InitListViewDataSource();
 
-
-            stockTrader = new StockTrader(CurrentUserId);
         }
 
 

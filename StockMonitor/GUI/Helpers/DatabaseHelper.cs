@@ -244,9 +244,9 @@ namespace StockMonitor.Helpers
             {
                 User tradingUser = (from user in _dbContext.Users.Include("ReservedTradings")
                                     where user.Id == userId
-                                    select user).First();
+                                    select user).FirstOrDefault();
 
-                if (tradingUser == null || tradingUser.TradingRecords == null)
+                if (tradingUser == null)
                 {
                     throw new InvalidOperationException($"There is no User id[{userId}]");
                 }
@@ -271,7 +271,9 @@ namespace StockMonitor.Helpers
         {
             using (StockMonitorEntities _dbContext = new StockMonitorEntities())
             {
-                _dbContext.ReservedTradings.Remove(reservedTrading);
+                ReservedTrading trading =  _dbContext.ReservedTradings.Find(reservedTrading.Id);
+                if(trading == null) { throw new SystemException($"Cannot find reservedTrading[{reservedTrading.Id}]"); }
+                _dbContext.ReservedTradings.Remove(trading);
                 _dbContext.SaveChanges();
             }
         }

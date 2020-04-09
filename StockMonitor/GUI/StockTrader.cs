@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace GUI
 {
-    class StockTrader
+    public class StockTrader
     {
         public CancellationTokenSource TokenSource { set; get; }
 
@@ -17,8 +19,12 @@ namespace GUI
         public bool IsUpdated { set; get; }
         public int UserId { set; get; }
 
-        public StockTrader(int userId)
+        UserControl UserControl { get; set; }
+
+        public StockTrader(UserControl userControl,int userId)
         {
+            UserControl = userControl;
+
             TokenSource = new CancellationTokenSource();
 
             _ct = TokenSource.Token;
@@ -26,7 +32,9 @@ namespace GUI
             IsUpdated = false;
 
             UserId = userId;
-
+            while (GlobalVariables.WatchListUICompanyRows.Count == 0) {
+                Thread.Sleep(1000);
+            }
             Task.Factory.StartNew(TradeTask);
         }
 
@@ -36,7 +44,16 @@ namespace GUI
             {
                 if (_ct.IsCancellationRequested) { return; }
 
-                ReservedTrading reservedTrading = DatabaseHelper.GetReservedTradingList(UserId)[0];//MAYBE : Fatch only one from database is better?
+                var reservedTradingList = DatabaseHelper.GetReservedTradingList(UserId);
+                
+                if(reservedTradingList.Count == 0)
+                {
+                    while (!IsUpdated) { Thread.Sleep(3000); }
+                    continue;
+                }
+
+                ReservedTrading reservedTrading = reservedTradingList[0];//MAYBE : Fatch only one from database is better?
+                long tickDiff = reservedTrading.DueDateTime.Ticks - DateTime.Now.Ticks;
 
                 UIComapnyRow company = (from companyInWatchList in GlobalVariables.WatchListUICompanyRows
                                         where companyInWatchList.CompanyId == reservedTrading.CompanyId
@@ -44,26 +61,24 @@ namespace GUI
 
                 if (company == null)
                 {
-                    throw new InvalidOperationException("Reserved Trading is avaliable to companies in the WatchList");
+                    throw new InvalidOperationException("[Internel Error]Reserved Trading is avaliable to companies in the WatchList");
                 }
 
-                long tickDiff = reservedTrading.DueDateTime.Ticks - DateTime.Now.Ticks;
 
-                while (tickDiff > 0 && !IsUpdated)
+                while (tickDiff > -1000)//Take care of the case tickDiff is a little delayed(database response)
                 {
                     if (_ct.IsCancellationRequested) { return; }
 
                     //Check Price is in the range
                     if (reservedTrading.MinPrice < company.Price && company.Price < reservedTrading.MaxPrice)
                     {
-                        GUIDataHelper.AddTradingRecord(new TradingRecord(reservedTrading, company.Price));
+                        TradeStock(reservedTrading, company);
                         break;
                     }
 
                     if (IsUpdated)
                     {
-                        reservedTrading = DatabaseHelper.GetReservedTradingList(UserId)[0];//MAYBE : Fatch only one from database is better?
-                        IsUpdated = false;
+                        break;
                     }
                     else
                     {
@@ -76,9 +91,23 @@ namespace GUI
                 if (_ct.IsCancellationRequested) { return; }
 
                 //Time Over
-                GUIDataHelper.DeleteReservedTrading(reservedTrading);
+                if(!IsUpdated) {
+                    GUIDataHelper.DeleteReservedTrading(reservedTrading);
+                }
+
+                IsUpdated = false;
             }
         }
 
+        void TradeStock(ReservedTrading reservedTrading, UIComapnyRow company)
+        {
+            TradingRecord tradingRecord = new TradingRecord(reservedTrading, company.Price);
+            GUIDataHelper.AddTradingRecord(tradingRecord);
+            //TODO: Alert trade information
+            if(UserControl != null) {
+                //FIXME: Open Dialog with message
+                MessageBox.Show(Application.Current.MainWindow, tradingRecord.ToString());
+            }
+        }
     }
 }

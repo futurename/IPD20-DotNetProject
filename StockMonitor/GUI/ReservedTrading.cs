@@ -13,7 +13,7 @@ namespace GUI
     using System.Collections.Generic;
     
     public partial class ReservedTrading
-    {
+    {   
         public ReservedTrading() { }
         public ReservedTrading(int companyId,int userId, TradeEnum trade, string quantityStr,
               string minPriceStr, string maxPriceStr,
@@ -56,7 +56,7 @@ namespace GUI
         {
             const int closingHour = 16;
             if (pickDate == null) { throw new ArgumentException("Choose Date"); }
-            if (pickDate.CompareTo(DateTime.Now.Date) < 0) { throw new ArgumentException("Choose Date(today or later)"); }
+            //if (pickDate.CompareTo(DateTime.Now.Date) < 0) { throw new ArgumentException("Choose Date(today or later)"); }
 
             if (pickTime == null)
             {

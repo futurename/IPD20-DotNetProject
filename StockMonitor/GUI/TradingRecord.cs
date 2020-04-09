@@ -15,16 +15,15 @@ namespace GUI
     public partial class TradingRecord
     {
         public TradingRecord() { }
-        public TradingRecord(ReservedTrading reservedTrading,double price)
+        public TradingRecord(ReservedTrading reservedTrading, double price)
         {
             UserId = reservedTrading.UserId;
-            CompanyId = reservedTrading.CompanyId;
             DateTime = DateTime.Now;
             Price = price;
-            TradeType = reservedTrading.TradeType.ToString();
             Volume = reservedTrading.Volume;
+            TradeType = reservedTrading.TradeType.ToString();
+            CompanyId = reservedTrading.CompanyId;
         }
-
         public int Id { get; set; }
         public int UserId { get; set; }
         public System.DateTime DateTime { get; set; }

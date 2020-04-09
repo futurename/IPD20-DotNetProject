@@ -314,8 +314,8 @@
           <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="HoldingShares" Relationship="Self.HoldingShares_ibfk_1" FromRole="User" ToRole="HoldingShares" />
           <NavigationProperty Name="WatchListItems" Relationship="StockContext.WatchListItem_ibfk_1" FromRole="User" ToRole="WatchListItem" />
-          <NavigationProperty Name="ReservedTradings" Relationship="StockContext.fk_User_TradingRecord" FromRole="User" ToRole="ReservedTrading" />
           <NavigationProperty Name="TradingRecords" Relationship="StockContext.fk_User_TradingRecord1" FromRole="User" ToRole="TradingRecord" />
+          <NavigationProperty Name="ReservedTradings" Relationship="StockContext.fk_User_ReservedTradings" FromRole="User" ToRole="ReservedTrading" />
         </EntityType>
         <Association Name="HoldingShares_ibfk_1">
           <End Role="User" Type="Self.User" Multiplicity="1" />
@@ -353,18 +353,18 @@
             <End Role="Company" EntitySet="Companies" />
             <End Role="TradingRecord" EntitySet="TradingRecords" />
           </AssociationSet>
+          <AssociationSet Name="fk_User_TradingRecord1" Association="StockContext.fk_User_TradingRecord1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TradingRecord" EntitySet="TradingRecords" />
+          </AssociationSet>
           <EntitySet Name="ReservedTradings" EntityType="StockContext.ReservedTrading" />
           <AssociationSet Name="fk_Company_ReservedTradings" Association="StockContext.fk_Company_ReservedTradings">
             <End Role="Company" EntitySet="Companies" />
             <End Role="ReservedTrading" EntitySet="ReservedTradings" />
           </AssociationSet>
-          <AssociationSet Name="fk_User_TradingRecord" Association="StockContext.fk_User_TradingRecord">
+          <AssociationSet Name="fk_User_ReservedTradings" Association="StockContext.fk_User_ReservedTradings">
             <End Role="User" EntitySet="Users" />
             <End Role="ReservedTrading" EntitySet="ReservedTradings" />
-          </AssociationSet>
-          <AssociationSet Name="fk_User_TradingRecord1" Association="StockContext.fk_User_TradingRecord1">
-            <End Role="User" EntitySet="Users" />
-            <End Role="TradingRecord" EntitySet="TradingRecords" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="WatchListItem">
@@ -429,6 +429,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_User_TradingRecord1">
+          <End Type="StockContext.User" Role="User" Multiplicity="1" />
+          <End Type="StockContext.TradingRecord" Role="TradingRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TradingRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="ReservedTrading">
           <Key>
             <PropertyRef Name="Id" />
@@ -443,7 +455,7 @@
           <Property Name="DueDateTime" Type="DateTime" Nullable="false" />
           <Property Name="CompanyId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="StockContext.fk_Company_ReservedTradings" FromRole="ReservedTrading" ToRole="Company" />
-          <NavigationProperty Name="User" Relationship="StockContext.fk_User_TradingRecord" FromRole="ReservedTrading" ToRole="User" />
+          <NavigationProperty Name="User" Relationship="StockContext.fk_User_ReservedTradings" FromRole="ReservedTrading" ToRole="User" />
         </EntityType>
         <Association Name="fk_Company_ReservedTradings">
           <End Type="StockContext.Company" Role="Company" Multiplicity="1">
@@ -459,7 +471,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_User_TradingRecord">
+        <Association Name="fk_User_ReservedTradings">
           <End Type="StockContext.User" Role="User" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -469,18 +481,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="ReservedTrading">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_User_TradingRecord1">
-          <End Type="StockContext.User" Role="User" Multiplicity="1" />
-          <End Type="StockContext.TradingRecord" Role="TradingRecord" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TradingRecord">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>

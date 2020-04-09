@@ -14,15 +14,13 @@
         <EntityTypeShape EntityType="StockContext.WatchListItem" Width="1.5" PointX="6.75" PointY="6.625" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_2" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_1" />
-        <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="6.625" PointY="3.625" />
-        <AssociationConnector Association="StockContext.fk_Company_TradingRecord" ManuallyRouted="true" >
-          <ConnectorPoint PointX="5.625" PointY="4.0594208791755477" />
-          <ConnectorPoint PointX="6.625" PointY="4.9321070917015284" />
+        <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="6.625" PointY="3.875" />
+        <AssociationConnector Association="StockContext.fk_Company_TradingRecord" ManuallyRouted="false" >
         </AssociationConnector>
+        <AssociationConnector Association="StockContext.fk_User_TradingRecord1" />
         <EntityTypeShape EntityType="StockContext.ReservedTrading" Width="1.5" PointX="6.625" PointY="0.5" />
         <AssociationConnector Association="StockContext.fk_Company_ReservedTradings" />
-        <AssociationConnector Association="StockContext.fk_User_TradingRecord" />
-        <AssociationConnector Association="StockContext.fk_User_TradingRecord1" />
+        <AssociationConnector Association="StockContext.fk_User_ReservedTradings" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

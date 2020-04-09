@@ -19,8 +19,8 @@ namespace GUI
         {
             this.HoldingShares = new HashSet<HoldingShare>();
             this.WatchListItems = new HashSet<WatchListItem>();
-            this.ReservedTradings = new HashSet<ReservedTrading>();
             this.TradingRecords = new HashSet<TradingRecord>();
+            this.ReservedTradings = new HashSet<ReservedTrading>();
         }
     
         public int Id { get; set; }
@@ -37,8 +37,8 @@ namespace GUI
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WatchListItem> WatchListItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReservedTrading> ReservedTradings { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TradingRecord> TradingRecords { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReservedTrading> ReservedTradings { get; set; }
     }
 }
