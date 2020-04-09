@@ -1,4 +1,5 @@
 ﻿using StockMonitor.Helpers;
+using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,22 @@ namespace GUI
 
     public partial class TradeDialog : Window
     {
-        
-        public TradeDialog()
+        public UIComapnyRow Company { get; set; }
+        private int UserId { get; set; }
+        public ReservedTrading NewReservedTrading { get; set; }
+        public TradeDialog(int userId, UIComapnyRow company)
         {
+            UserId = userId;
+            Company = company;
+
             InitializeComponent();
+
+            lvReservedTrading.ItemsSource = GUIDataHelper.GetReservedList(UserId);
+
+            this.DataContext = this;
         }
 
-        private async void btTrade_Click(object sender, RoutedEventArgs e)
+        private void btTrade_Click(object sender, RoutedEventArgs e)
         {
             try {
             //TODO: validations
@@ -46,15 +56,14 @@ namespace GUI
                 DateTime pickDate = dpDueDateTime.SelectedDate.GetValueOrDefault();
                 DateTime pickTime = tpDueDateTime.SelectedTime.GetValueOrDefault();
 
-                int companyId = 1;
-                int userId = 3;
-
                 ReservedTrading newReservedTrading = new ReservedTrading(
-                    companyId, userId, trade, quantityStr, minPriceStr, maxPriceStr, pickDate, pickTime
+                    Company.CompanyId, UserId, trade, quantityStr, minPriceStr, maxPriceStr, pickDate, pickTime
                 );
 
                 GUIDataHelper.InsertReservedTrading(newReservedTrading);
                 //ex IOException, InvalidOperationException
+
+                this.DialogResult = true;
             }
             catch (ArgumentException ex)
             {

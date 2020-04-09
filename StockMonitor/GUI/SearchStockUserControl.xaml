@@ -322,7 +322,6 @@
                     <MenuItem x:Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"/>
                     <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details"/>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"/>
-
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
@@ -421,6 +420,7 @@
                         <MenuItem x:Name="lsvWatch_miAddToWatchList" Header="Add to watch list" Click="LsvWatch_miAddToWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_SetTargetPrice" Header="Set price notification" Click="LsvWatch_SetTargetPrice_OnClick"/>
+                        <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Click="LsvWatch_miTradeStock_OnClick" />
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
@@ -446,10 +446,5 @@
                 </Button.RenderTransform>
             </Button>
         </Grid>
-
-
-
-
-
     </Grid>
 </UserControl>

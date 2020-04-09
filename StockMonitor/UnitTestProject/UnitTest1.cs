@@ -27,7 +27,7 @@ namespace UnitTestProject
             DateTime time = date.AddHours(9.5);
 
             int[] companyIdArr = { 7, 1376,190,3486 };
-            ctx.ReservedTradings.Add(
+            GUIDataHelper.InsertReservedTrading(
                 new ReservedTrading(companyIdArr[0], userId , TradeEnum.Buy, "100",
                         "10", "100", DateTime.Now.AddDays(-1), DateTime.Now)
             );
@@ -45,12 +45,12 @@ namespace UnitTestProject
             );
             ctx.SaveChanges();
 
-            GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
-            GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
-            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
-            GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
+            //GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            //GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
+            //GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            //GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
 
-            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            //GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
 
             Init();
         }
@@ -61,12 +61,12 @@ namespace UnitTestProject
             foreach (var task in watchlistTasks)
             {
                 UIComapnyRow oneRow = await task;
-                GlobalVariables.WatchListUICompanyRows.TryAdd(oneRow);
+                //GlobalVariables.WatchListUICompanyRows.TryAdd(oneRow);
             }
 
             await Task.WhenAll(watchlistTasks.ToArray());
 
-            StockTrader stockTrader = new StockTrader(null, userId);
+            StockTrader stockTrader = new StockTrader(userId);
 
         }
 
