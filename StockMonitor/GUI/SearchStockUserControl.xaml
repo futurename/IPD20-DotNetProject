@@ -19,7 +19,7 @@
 
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Width="1218">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
@@ -50,7 +50,7 @@
 
         <materialDesign:ColorZone Grid.Row="0" Grid.ColumnSpan="3"
                 Mode="PrimaryMid"
-                Padding="16" VerticalAlignment="Stretch" Margin="0,0,0.5,10">
+                Padding="16" VerticalAlignment="Stretch" Margin="1,0,0,10">
             <DockPanel>
                 <ToggleButton
                         Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
@@ -126,7 +126,7 @@
         </materialDesign:ColorZone>
 
 
-        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,-58,0" Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="1057">
+        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,0,0" Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="961">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -326,8 +326,8 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Grid Grid.Row="1" Grid.Column="2" Margin="98.5,0,10.5,0">
-            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="10,10,0,0" Height="277" HorizontalAlignment="Left" Width="212" >
+        <Grid Grid.Row="1" Grid.Column="2" Margin="247,0,10,0">
+            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="-242,-2,0,0" Height="277" HorizontalAlignment="Left" Width="212" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
