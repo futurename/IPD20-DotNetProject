@@ -220,7 +220,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                return await Task.Run(() => DatabaseHelper.GetCompanyListBySearch(searchString));
+                return await Task.Run(() => DatabaseHelper.SearchCompanyListBySymbol(searchString));
             }
             catch (SystemException ex)
             {

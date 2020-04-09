@@ -20,5 +20,7 @@ namespace GUI
         public static bool IsPseudoDataSource = true;
         public static BlockingCollection<UIComapnyRow> SearchResultUICompanyRows;
         public static CancellationTokenSource SearchResultCancellationTokenSource;
+
+        
     }
 }
