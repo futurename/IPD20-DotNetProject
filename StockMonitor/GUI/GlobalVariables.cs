@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using StockMonitor.Models.UIClasses;
+using ToastNotifications;
 
 namespace GUI
 {
@@ -21,6 +22,6 @@ namespace GUI
         public static BlockingCollection<UIComapnyRow> SearchResultUICompanyRows;
         public static CancellationTokenSource SearchResultCancellationTokenSource;
 
-        
+        public static Notifier notifier;
     }
 }
