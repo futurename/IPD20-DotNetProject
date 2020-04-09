@@ -339,7 +339,6 @@
                     <MenuItem x:Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"/>
                     <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details"/>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"/>
-
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
@@ -438,6 +437,7 @@
                         <MenuItem x:Name="lsvWatch_miAddToWatchList" Header="Add to watch list" Click="LsvWatch_miAddToWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_SetTargetPrice" Header="Set price notification" Click="LsvWatch_SetTargetPrice_OnClick"/>
+                        <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Click="LsvWatch_miTradeStock_OnClick"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
@@ -446,10 +446,5 @@
             <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="0,406,46,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Right" Width="137"/>
             <Button x:Name="btRestartRefresh" Content="Restart All" Margin="0,454,46,0" VerticalAlignment="Top" Click="btRestartRefresh_Click" HorizontalAlignment="Right" Width="137"/>
         </Grid>
-
-
-
-
-
     </Grid>
 </UserControl>

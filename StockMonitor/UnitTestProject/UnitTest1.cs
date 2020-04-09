@@ -27,7 +27,7 @@ namespace UnitTestProject
             DateTime time = date.AddHours(9.5);
 
             int[] companyIdArr = { 7, 1376,190,3486 };
-            ctx.ReservedTradings.Add(
+            GUIDataHelper.InsertReservedTrading(
                 new ReservedTrading(companyIdArr[0], userId , TradeEnum.Buy, "100",
                         "10", "100", DateTime.Now.AddDays(-1), DateTime.Now)
             );
@@ -66,7 +66,7 @@ namespace UnitTestProject
 
             await Task.WhenAll(watchlistTasks.ToArray());
 
-            StockTrader stockTrader = new StockTrader(null, userId);
+            StockTrader stockTrader = new StockTrader(userId);
 
         }
 

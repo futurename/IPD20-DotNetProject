@@ -9,22 +9,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ToastNotifications.Messages;
 
 namespace GUI
 {
     public class StockTrader
     {
-        public CancellationTokenSource TokenSource { set; get; }
+        public CancellationTokenSource TokenSource { get; set; }
 
         private CancellationToken _ct;
-        public bool IsUpdated { set; get; }
-        public int UserId { set; get; }
-
-        UserControl UserControl { get; set; }
-
-        public StockTrader(UserControl userControl,int userId)
+        public bool IsUpdated { get; set; }
+        public int UserId { get; set; }
+        private bool IsTest { get; set; } 
+        public StockTrader(int userId, bool isTest = false)
         {
-            UserControl = userControl;
+            IsTest = isTest;
 
             TokenSource = new CancellationTokenSource();
 
@@ -33,7 +32,12 @@ namespace GUI
             IsUpdated = false;
 
             UserId = userId;
-            while (GlobalVariables.WatchListUICompanyRows.Count == 0) {
+        }
+
+        public void StartTrade()
+        {
+            while (GlobalVariables.WatchListUICompanyRows.Count == 0)
+            {
                 Thread.Sleep(1000);
             }
             Task.Factory.StartNew(TradeTask);
@@ -50,6 +54,7 @@ namespace GUI
                 if(reservedTradingList.Count == 0)
                 {
                     while (!IsUpdated) { Thread.Sleep(3000); }
+                    IsUpdated = false;
                     continue;
                 }
 
@@ -66,7 +71,7 @@ namespace GUI
                 }
 
 
-                while (tickDiff > -1000)//Take care of the case tickDiff is a little delayed(database response)
+                while (tickDiff > -2000)//Take care of the case tickDiff is a little delayed(database response)
                 {
                     if (_ct.IsCancellationRequested) { return; }
 
@@ -104,11 +109,12 @@ namespace GUI
         {
             TradingRecord tradingRecord = new TradingRecord(reservedTrading, company.Price);
             GUIDataHelper.AddTradingRecord(tradingRecord);
+
             //TODO: Alert trade information
-            if(UserControl != null) {
-                //FIXME: Open Dialog with message
-                MessageBox.Show(Application.Current.MainWindow, tradingRecord.ToString());
-            }
+
+            Console.WriteLine(tradingRecord);
+            //if (IsTest) { Console.WriteLine(tradingRecord); }
+            //else { GlobalVariables.notifier.ShowSuccess(tradingRecord.ToString()); }
         }
     }
 }

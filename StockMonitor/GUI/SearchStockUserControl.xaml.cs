@@ -50,6 +50,23 @@ namespace GUI
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
 
+        StockTrader StockTrader { get; set; }
+
+        Notifier notifier = new Notifier(cfg =>
+        {
+            cfg.PositionProvider = new WindowPositionProvider(
+                parentWindow: Application.Current.MainWindow,
+                corner: Corner.BottomRight,
+                offsetX: 5,
+                offsetY: 5);
+
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                notificationLifetime: TimeSpan.FromSeconds(3),
+                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+            cfg.Dispatcher = Application.Current.Dispatcher;
+        });
+
         public SearchStockUserControl()
         {
             InitListViewDataSource();
@@ -57,10 +74,9 @@ namespace GUI
             InitializeComponent();
 
 
-
-
+            StockTrader = new StockTrader(CurrentUserId);// Trading start
+            StockTrader.StartTrade();
         }
-
 
 
 
@@ -436,22 +452,8 @@ namespace GUI
             }
         }
 
-      
 
-        private Notifier notifier = new Notifier(cfg =>
-        {
-            cfg.PositionProvider = new WindowPositionProvider(
-                parentWindow: Application.Current.MainWindow,
-                corner: Corner.BottomRight,
-                offsetX: 5,
-                offsetY: 5);
-
-            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                notificationLifetime: TimeSpan.FromSeconds(3),
-                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-            cfg.Dispatcher = Application.Current.Dispatcher;
-        });
+        
 
 
         private void BtClearSearch_OnClick(object sender, RoutedEventArgs e)
@@ -601,6 +603,18 @@ namespace GUI
                         this.Dispatcher.Invoke(() => { lbSearchResult.Visibility = Visibility.Hidden; });
                     }
                 });
+            }
+        }
+
+        private void LsvWatch_miTradeStock_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = (UIComapnyRow)lsvWatchList.SelectedItem;
+            if (item == null) { return; }
+
+            TradeDialog tradeDialog = new TradeDialog(CurrentUserId, item);
+            if(tradeDialog.ShowDialog() == true)
+            {
+                StockTrader.IsUpdated = true;
             }
         }
     }

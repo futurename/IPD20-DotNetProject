@@ -45,14 +45,16 @@
                     Grid.ColumnSpan="3"
                     Background="{DynamicResource PrimaryHueLightBrush}"
                     Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                    Padding="8"
+                    Padding="4"
                     UniformCornerRadius="6">
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,-5.8">
-                    <Label Content="Symbol:" HorizontalAlignment="Left" Margin="0,0,0,0.2"/>
-                    <TextBlock Name="txtSymbol" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Symbol" VerticalAlignment="Top" Margin="0,4,0,0"/>
-                    <TextBlock Name="txtPrice" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Price" VerticalAlignment="Top" Margin="20,4,0,0"/>
-                    <TextBlock Name="txtPriceChange" HorizontalAlignment="Left" TextWrapping="Wrap" Text="PriceChange" VerticalAlignment="Top" Margin="10,4,0,0"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,-5.8" DataContext="{Binding Company}">
+                    <Label Content="Symbol:" HorizontalAlignment="Left" Margin="0,0,0,10.2" VerticalAlignment="Bottom"/>
+                    <TextBlock Name="txtSymbol" Text="{Binding Symbol}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,0,14.2"/>
+                    <TextBlock Text="$" Margin="10,0,0,14.2" VerticalAlignment="Bottom" />
+                    <TextBlock FontSize="10" Name="txtPrice" Text="{Binding Price , StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,0,15.7"/>
+                    <TextBlock FontSize="10" Name="txtChangePercentage" Text="{Binding ChangePercentage , StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="10,0,0,15.7"/>
+                    <TextBlock Text="%" Margin="0,0,5,14.2" VerticalAlignment="Bottom"/>
                 </StackPanel>
             </materialDesign:Card>
 
@@ -119,14 +121,14 @@
         </Grid>
 
         <Grid Grid.Column="1" Margin="10">
-            <ListView>
+            <ListView Name="lvReservedTrading">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Symbol"  />
-                        <GridViewColumn Header="Trade"  />
-                        <GridViewColumn Header="Limit"  />
-                        <GridViewColumn Header="Stop"  />
-                        <GridViewColumn Header="Time"  />
+                        <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
+                        <GridViewColumn Header="Trade" DisplayMemberBinding="{Binding TradeType}"/>
+                        <GridViewColumn Header="Min" DisplayMemberBinding="{Binding MinPrice, StringFormat=N2}"/>
+                        <GridViewColumn Header="Max" DisplayMemberBinding="{Binding MaxPrice, StringFormat=N2}"/>
+                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime}"/>
                     </GridView>
                 </ListView.View>
             </ListView>

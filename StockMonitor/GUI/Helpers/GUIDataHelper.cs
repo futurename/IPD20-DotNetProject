@@ -232,7 +232,7 @@ namespace StockMonitor.Helpers
         public static void InsertReservedTrading(ReservedTrading reservedTrading)//ex
         {
             TradeDatabaseHelper.InsertReservedTrading(reservedTrading);//ex IOException, InvalidOperationException
-        }
+            }
 
         public static List<ReservedTrading> GetReservedList(int userId)
         {
