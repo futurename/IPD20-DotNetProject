@@ -50,23 +50,6 @@ namespace GUI
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
 
-        StockTrader StockTrader { get; set; }
-
-        Notifier notifier = new Notifier(cfg =>
-        {
-            cfg.PositionProvider = new WindowPositionProvider(
-                parentWindow: Application.Current.MainWindow,
-                corner: Corner.BottomRight,
-                offsetX: 5,
-                offsetY: 5);
-
-            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                notificationLifetime: TimeSpan.FromSeconds(3),
-                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-            cfg.Dispatcher = Application.Current.Dispatcher;
-        });
-
         public SearchStockUserControl()
         {
             InitListViewDataSource();
@@ -74,9 +57,10 @@ namespace GUI
             InitializeComponent();
 
 
-            StockTrader = new StockTrader(CurrentUserId);// Trading start
-            StockTrader.StartTrade();
+
+
         }
+
 
 
 
@@ -358,7 +342,7 @@ namespace GUI
 
         private void LsvWatch_miAddToWatchList_OnClick(object sender, RoutedEventArgs e)
         {
-            tbSearchBar.Focus();
+            tbSearchBox.Focus();
         }
 
         private void LsvWatch_miDeleteFromWatchList_OnClick(object sender, RoutedEventArgs e)
@@ -453,18 +437,24 @@ namespace GUI
         }
 
 
-        
 
-
-        private void BtClearSearch_OnClick(object sender, RoutedEventArgs e)
+        private Notifier notifier = new Notifier(cfg =>
         {
-            tbSearchBar.Text = "Search symbol here";
-            Task.Run(() =>
-            {
-                this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows; });
-               // GlobalVariables.SearchResultCancellationTokenSource.Cancel(true);
-            });
-        }
+            cfg.PositionProvider = new WindowPositionProvider(
+                parentWindow: Application.Current.MainWindow,
+                corner: Corner.BottomRight,
+                offsetX: 5,
+                offsetY: 5);
+
+            cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                notificationLifetime: TimeSpan.FromSeconds(3),
+                maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+            cfg.Dispatcher = Application.Current.Dispatcher;
+        });
+
+
+       
 
         private void LsvWatch_SetTargetPrice_OnClick(object sender, RoutedEventArgs e)
         {
@@ -541,25 +531,14 @@ namespace GUI
             }
         }
 
-        private void TbSearchBar_OnGotFocus(object sender, RoutedEventArgs e)
+        private void TbSearchBox_OnPreviewKeyUp(object sender, KeyEventArgs e)
         {
-            tbSearchBar.Text = "";
-        }
-
-        private void TbSearchBar_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            tbSearchBar.Text = "Search here...";
-            lbSearchResult.Visibility = Visibility.Hidden;
-        }
-
-        private void TbSearchBar_OnPreviewKeyUp(object sender, KeyEventArgs e)
-        {
-            string searchString = tbSearchBar.Text;
+            string searchString = tbSearchBox.Text;
 
             if (e.Key == Key.Enter)
             {
                 GlobalVariables.SearchResultUICompanyRows = new BlockingCollection<UIComapnyRow>();
-                tbSearchBar.Text = "";
+                tbSearchBox.Text = "";
                 lbSearchResult.Visibility = Visibility.Hidden;
                 Task t = Task.Run(async () =>
                 {
@@ -585,16 +564,18 @@ namespace GUI
             {
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
-            else if(Regex.IsMatch(searchString, @"^[A-Z]{1,6}$") || Regex.IsMatch(searchString, @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+            else if (Regex.IsMatch(searchString, @"^[A-Z]{1,6}$") || Regex.IsMatch(searchString,
+                @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
             {
                 Task.Run(async () =>
-                { List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
+                {
+                    List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
                     if (companyList != null)
                     {
                         this.Dispatcher.Invoke(() =>
                         {
                             lbSearchResult.ItemsSource = companyList;
-                            lbSearchResult.Height = companyList.Count * 25;
+                            lbSearchResult.Height = companyList.Count * 39;
                             lbSearchResult.Visibility = Visibility.Visible;
                         });
                     }
@@ -604,20 +585,36 @@ namespace GUI
                     }
                 });
             }
-        }
-
-        private void LsvWatch_miTradeStock_OnClick(object sender, RoutedEventArgs e)
-        {
-            var item = (UIComapnyRow)lsvWatchList.SelectedItem;
-            if (item == null) { return; }
-
-            TradeDialog tradeDialog = new TradeDialog(CurrentUserId, item);
-            if(tradeDialog.ShowDialog() == true)
+            else
             {
-                StockTrader.IsUpdated = true;
+                lbSearchResult.Visibility = Visibility.Hidden;
             }
         }
+
+
+        private void BrClearSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Text = "Search here...";
+            Task.Run(() =>
+            {
+                this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows; });
+            });
+        }
+
+        private void TbSearchBox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Text = "";
+        }
+
+        private void TbSearchBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Text = "Search here...";
+        }
+
+     
     }
+
+
 
 
 

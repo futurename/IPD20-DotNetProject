@@ -7,7 +7,7 @@
              xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
              mc:Ignorable="d" 
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" Height="611.807">
     <UserControl.Resources>
         <Style TargetType="{x:Type UserControl}">
             <Style.Triggers>
@@ -25,7 +25,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1200*"/>
+            <ColumnDefinition Width="194*"/>
             <ColumnDefinition Width="240"/>
         </Grid.ColumnDefinitions>
         <Grid.Resources>
@@ -33,41 +34,23 @@
             <uiClasses:NotifySettingValueConverter x:Key="NotifySettingValueConverter"/>
         </Grid.Resources>
 
-
-        <TextBox x:Name="tbSearchBar"
-            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-            Text="Search here..."
-            VerticalAlignment="Center"
-            materialDesign:TextFieldAssist.HasClearButton="True"
-            materialDesign:TextFieldAssist.SuffixText="" Margin="70,202,0,321.8" GotFocus="TbSearchBar_OnGotFocus" LostFocus="TbSearchBar_OnLostFocus"
-            PreviewKeyUp="TbSearchBar_OnPreviewKeyUp" RenderTransformOrigin="0.514,0.681" HorizontalAlignment="Left" Width="120" Height="45" Grid.Row="1" Panel.ZIndex="1">
-            <materialDesign:HintAssist.Hint>
-                <StackPanel
-                    Orientation="Horizontal"
-                    Margin="-2 0 0 0">
-                    <materialDesign:PackIcon
-                        Kind="Search" />
-                    <TextBlock><Run Text="@(CN:|CEO:|DS:)value;"/></TextBlock>
-                </StackPanel>
-            </materialDesign:HintAssist.Hint>
-        </TextBox>
-
-        <ListBox x:Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="70,11,0,0" VerticalAlignment="Top" Width="187" Foreground="Gray" Background="White" Panel.ZIndex="1" Grid.RowSpan="2">
+        <ListBox x:Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="140,58,0,0" VerticalAlignment="Top" Width="345" Foreground="Gray" Background="White" Panel.ZIndex="1" Grid.RowSpan="2">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock x:Name="rtbSymbolResult" Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="70" VerticalAlignment="Center"/>
-                            <Image Source="{Binding Logo}" Height="20"/>
+                            <TextBlock x:Name="rtbSymbolResult" Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="60" VerticalAlignment="Center"/>
+                            <Image Source="{Binding Logo}" Height="22"/>
+                            <TextBlock Text="{Binding CompanyName}" FontSize="12" Foreground="DarkBlue" FontWeight="Bold" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <materialDesign:ColorZone Grid.Row="0" Grid.ColumnSpan="2"
+        <materialDesign:ColorZone Grid.Row="0" Grid.ColumnSpan="3"
                 Mode="PrimaryMid"
-                Padding="16" VerticalAlignment="Stretch" Height="80" Margin="0,0,0.4,0">
+                Padding="16" VerticalAlignment="Stretch" Margin="0,0,0.5,10">
             <DockPanel>
                 <ToggleButton
                         Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
@@ -80,15 +63,15 @@
                             Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
                     <ComboBox
                             SelectedIndex="0"
-                            Margin="8 0 0 0"
+                            Margin="8,2,0,10"
                             BorderThickness="0"
                             materialDesign:ColorZoneAssist.Mode="Standard"
                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
                             BorderBrush="{DynamicResource MaterialDesignPaper}">
-                        <ComboBoxItem Content="Android"/>
-                        <ComboBoxItem Content="iOS"/>
-                        <ComboBoxItem Content="Linux"/>
-                        <ComboBoxItem Content="Windows"/>
+                        <ComboBoxItem Content="Symbol"/>
+                        <ComboBoxItem Content="Company Name"/>
+                        <ComboBoxItem Content="CEO"/>
+                        <ComboBoxItem Content="Description"/>
                     </ComboBox>
                     <materialDesign:ColorZone
                             Mode="Standard"
@@ -96,7 +79,7 @@
                             CornerRadius="2"
                             Panel.ZIndex="1"
                             Margin="16 0 0 0"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                            materialDesign:ShadowAssist.ShadowDepth="Depth1" Width="344">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
@@ -107,46 +90,46 @@
                                         Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Button
-                                    Style="{DynamicResource MaterialDesignToolButton}">
+                                    Style="{DynamicResource MaterialDesignToolButton}" Margin="-5,0,105,0">
                                 <materialDesign:PackIcon
                                         Kind="Magnify"
                                         Opacity=".56" />
                             </Button>
-                            <TextBox
-                                    Grid.Column="1"
-                                    Margin="8 0 0 0"
-                                    materialDesign:HintAssist.Hint="Build a search bar"
+                            <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" GotFocus="TbSearchBox_OnGotFocus" LostFocus="TbSearchBox_OnLostFocus"
+                                    Margin="24,4,-4,4"
+                                    materialDesign:TextFieldAssist.HasClearButton="True" 
+                                    materialDesign:HintAssist.Hint="@(CN|CEO|DS):{value};"
                                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                                     BorderThickness="0"
                                     MinWidth="200"
-                                    VerticalAlignment="Center" />
-                            <Button
-                                    Style="{DynamicResource MaterialDesignToolButton}"
-                                    Grid.Column="2">
-                                <materialDesign:PackIcon
-                                        Kind="CloseThick"
-                                        Opacity=".56"
-                                        Margin="8 0 0 0" />
-                            </Button>
+                                    VerticalAlignment="Center" Grid.ColumnSpan="3" />
+                            <Grid Margin="0,0,100,0"/>
                         </Grid>
                     </materialDesign:ColorZone>
-                    <Button
-                            Style="{DynamicResource MaterialDesignToolForegroundButton}"
-                            Margin="8 0 0 0"
-                            Panel.ZIndex="0">
-                        <materialDesign:PackIcon
-                                Kind="Send" />
-                    </Button>
+                    <Grid
+                        Width="124">
+                        <Button
+                            Style="{StaticResource MaterialDesignOutlinedButton}" Name="brClearSearch" Click="BrClearSearch_OnClick"
+                            Foreground="White"
+                            BorderBrush="White"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            
+                            Margin="22,4,41,2" >
+                            <materialDesign:PackIcon Kind="Restart" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Button>
+
+                    </Grid>
                 </StackPanel>
             </DockPanel>
         </materialDesign:ColorZone>
 
 
-        <ListView Grid.Row="1" Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick">
+        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,-58,0" Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="1057">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="FontSize" Value="16"/>
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="Height" Value="50"/>
                 </Style>
@@ -331,7 +314,7 @@
                     <GridViewColumn Header="MktCap" Width="90" DisplayMemberBinding="{Binding MarketCapital, StringFormat=\{0:#\,##0\,\,M\}}"/>
                     <GridViewColumn Header="P/E" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat=\{0:0.00\}}"/>
                     <GridViewColumn Header="CEO" DisplayMemberBinding="{Binding CEO}"/>
-                    <GridViewColumn Header="Industry"   DisplayMemberBinding="{Binding Industry}"/>
+                    <GridViewColumn Header="Industry"   DisplayMemberBinding="{Binding Industry}" Width="180"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>
@@ -342,8 +325,8 @@
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="10,23,10,0" Height="255">
+        <Grid Grid.Row="1" Grid.Column="2" Margin="98.5,0,10.5,0">
+            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="10,10,0,0" Height="277" HorizontalAlignment="Left" Width="212" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -368,13 +351,13 @@
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
                                                         <Setter Property="TextBlock.Foreground" Value="Red"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
                                                         <Setter Property="TextBlock.Foreground" Value="Green"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -391,13 +374,13 @@
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
                                                         <Setter Property="TextBlock.Foreground" Value="Red"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
                                                         <Setter Property="TextBlock.Foreground" Value="Green"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -414,13 +397,13 @@
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="1">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
                                                         <Setter Property="TextBlock.Foreground" Value="Red"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="2">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
                                                         <Setter Property="TextBlock.Foreground" Value="Green"/>
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="3">
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -441,10 +424,27 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Button x:Name="btClearSearch" FontSize="14" FontWeight="Bold" Content="Clear" Click="BtClearSearch_OnClick" Margin="0,285,46,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
-            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="0,336,83,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Right" Width="137"/>
-            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="0,406,46,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Right" Width="137"/>
-            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="0,454,46,0" VerticalAlignment="Top" Click="btRestartRefresh_Click" HorizontalAlignment="Right" Width="137"/>
+            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="57,336,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
+            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="56,394,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.627"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
+            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="57,446,0,0" Click="btRestartRefresh_Click" Height="27" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.325"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

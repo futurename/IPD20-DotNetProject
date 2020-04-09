@@ -6,15 +6,12 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using StockMonitor.Models.UIClasses;
 using ToastNotifications;
-using ToastNotifications.Lifetime;
-using ToastNotifications.Position;
 
 namespace GUI
 {
-    public class GlobalVariables
+    class GlobalVariables
     {
         public static ConcurrentDictionary<string, string> ConcurentDictionary = new ConcurrentDictionary<string, string>();
         public static BlockingCollection<UIComapnyRow> WatchListUICompanyRows ;
@@ -25,5 +22,6 @@ namespace GUI
         public static BlockingCollection<UIComapnyRow> SearchResultUICompanyRows;
         public static CancellationTokenSource SearchResultCancellationTokenSource;
 
+        public static Notifier notifier;
     }
 }
