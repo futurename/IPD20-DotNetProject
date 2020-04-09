@@ -420,7 +420,7 @@
                         <MenuItem x:Name="lsvWatch_miAddToWatchList" Header="Add to watch list" Click="LsvWatch_miAddToWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_SetTargetPrice" Header="Set price notification" Click="LsvWatch_SetTargetPrice_OnClick"/>
-                        <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Click="LsvWatch_miTradeStock_OnClick"/>
+                        <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Click="LsvWatch_miTradeStock_OnClick" />
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>

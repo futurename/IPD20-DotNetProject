@@ -50,14 +50,15 @@ namespace GUI
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
 
+        StockTrader StockTrader { get; set; }
         public SearchStockUserControl()
         {
             InitListViewDataSource();
 
             InitializeComponent();
 
-
-
+            StockTrader = new StockTrader(CurrentUserId);
+            StockTrader.StartTrade();
 
         }
 
@@ -611,7 +612,18 @@ namespace GUI
             tbSearchBox.Text = "Search here...";
         }
 
-     
+        private void LsvWatch_miTradeStock_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = (UIComapnyRow)lsvWatchList.SelectedItem;
+            if (item == null) { return; }
+
+            TradeDialog tradeDialog = new TradeDialog(CurrentUserId, item);
+            if (tradeDialog.ShowDialog() == true)
+            {
+                StockTrader.IsUpdated = true;
+            }
+        }
+
     }
 
 

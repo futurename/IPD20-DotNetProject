@@ -45,12 +45,12 @@ namespace UnitTestProject
             );
             ctx.SaveChanges();
 
-            GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
-            GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
-            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
-            GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
+            //GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            //GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
+            //GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            //GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
 
-            GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            //GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
 
             Init();
         }
@@ -61,7 +61,7 @@ namespace UnitTestProject
             foreach (var task in watchlistTasks)
             {
                 UIComapnyRow oneRow = await task;
-                GlobalVariables.WatchListUICompanyRows.TryAdd(oneRow);
+                //GlobalVariables.WatchListUICompanyRows.TryAdd(oneRow);
             }
 
             await Task.WhenAll(watchlistTasks.ToArray());
