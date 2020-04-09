@@ -147,6 +147,7 @@
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\GUIDataHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
+    <Compile Include="Helpers\TradeDatabaseHelper.cs" />
     <Compile Include="HoldingShare.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>

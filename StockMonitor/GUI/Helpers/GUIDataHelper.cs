@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using GUI;
+using GUI.Helpers;
 using StockMonitor.Models.ApiModels;
 using StockMonitor.Models.JSONModels;
 using StockMonitor.Models.UIClasses;
@@ -230,21 +231,21 @@ namespace StockMonitor.Helpers
 
         public static void InsertReservedTrading(ReservedTrading reservedTrading)//ex
         {
-            DatabaseHelper.InsertReservedTrading(reservedTrading);//ex IOException, InvalidOperationException
+            TradeDatabaseHelper.InsertReservedTrading(reservedTrading);//ex IOException, InvalidOperationException
         }
 
         public static List<ReservedTrading> GetReservedList(int userId)
         {
-            return DatabaseHelper.GetReservedTradingList(userId);
+            return TradeDatabaseHelper.GetReservedTradingList(userId);
         }
 
         public static void AddTradingRecord(TradingRecord tradingRecord)
         {
-            DatabaseHelper.AddTradingRecord(tradingRecord);
+            TradeDatabaseHelper.AddTradingRecord(tradingRecord);
         }
         public static void DeleteReservedTrading(ReservedTrading reservedTrading)
         {
-            DatabaseHelper.DeleteReservedTrading(reservedTrading);
+            TradeDatabaseHelper.DeleteReservedTrading(reservedTrading);
         }
 
 

@@ -355,3 +355,28 @@
 - Add Transactions/PendingTransactions Tables in Database
 
 3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/09 Wang Wei
+1. Done since last scrum:
+- Add multiple search type such as company name, ceo and description
+- layout adjustment
+2. To do until next Scrum:
+- Active threads cancellation when switch tabs
+- Test buffering stocks at backend for display
+3. Need assistance / figure things out
+
+
+2020/04/09 Donghyeok Seo
+1. Done since last scrum
+- Trading(Sell/Buy) feature
+- Add Transactions/PendingTransactions Tables in Database
+- Create Unit test project
+
+2. To do until next Scrum:
+- Set actions when Reserved trading list updates
+- Test Trading feature.
+
+3. Need assistance / figure things out
+- In Memory database
