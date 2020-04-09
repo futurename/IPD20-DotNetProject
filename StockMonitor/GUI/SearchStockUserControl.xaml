@@ -382,7 +382,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        
+
         <materialDesign:ColorZone
   Mode="PrimaryMid"
   Padding="16">
@@ -424,6 +424,10 @@
         Margin="16 0 0 0"
         materialDesign:ShadowAssist.ShadowDepth="Depth1">
                         <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="11*"/>
+                                <RowDefinition Height="21*"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
               Width="Auto" />
@@ -433,30 +437,23 @@
               Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Button
-            Style="{DynamicResource MaterialDesignToolButton}">
+            Style="{DynamicResource MaterialDesignToolButton}" Grid.RowSpan="2">
                                 <materialDesign:PackIcon
               Kind="Magnify"
               Opacity=".56" />
                             </Button>
-                            <TextBox
+                            <TextBox Name="tbSearchBox"
+                                     materialDesign:TextFieldAssist.HasClearButton="True" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp"
             Grid.Column="1"
-            Margin="8 0 0 0"
+            Margin="0,4"
             materialDesign:HintAssist.Hint="Build a search bar"
             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
             BorderThickness="0"
             MinWidth="200"
-            VerticalAlignment="Center" />
-                            <Button
-            Style="{DynamicResource MaterialDesignToolButton}"
-            Grid.Column="2">
-                                <materialDesign:PackIcon
-              Kind="CloseThick"
-              Opacity=".56"
-              Margin="8 0 0 0" />
-                            </Button>
+            VerticalAlignment="Center" Grid.RowSpan="2" HorizontalAlignment="Right" Width="200" />
                         </Grid>
                     </materialDesign:ColorZone>
-                    <Button
+                    <Button  
         Style="{DynamicResource MaterialDesignToolForegroundButton}"
         Margin="8 0 0 0"
         Panel.ZIndex="0">

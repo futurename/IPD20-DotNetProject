@@ -583,10 +583,66 @@ namespace GUI
             {
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
-            else if(Regex.IsMatch(searchString, @"^[A-Z]{1,6}$") || Regex.IsMatch(searchString, @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+            else if (Regex.IsMatch(searchString, @"^[A-Z]{1,6}$") || Regex.IsMatch(searchString, @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
             {
                 Task.Run(async () =>
-                { List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
+                {
+                    List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
+                    if (companyList != null)
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            lbSearchResult.ItemsSource = companyList;
+                            lbSearchResult.Height = companyList.Count * 25;
+                            lbSearchResult.Visibility = Visibility.Visible;
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke(() => { lbSearchResult.Visibility = Visibility.Hidden; });
+                    }
+                });
+            }
+        }
+
+        private void TbSearchBox_OnPreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            string searchString = tbSearchBox.Text;
+
+            if (e.Key == Key.Enter)
+            {
+                GlobalVariables.SearchResultUICompanyRows = new BlockingCollection<UIComapnyRow>();
+                tbSearchBar.Text = "";
+                lbSearchResult.Visibility = Visibility.Hidden;
+                Task t = Task.Run(async () =>
+                {
+                    List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString);
+                    foreach (Company comapny in companyList)
+                    {
+                        Task<UIComapnyRow> subTask = GUIDataHelper.GetUICompanyRowTaskBySymbol(comapny.Symbol);
+                        UIComapnyRow companyRow = await subTask;
+                        GlobalVariables.SearchResultUICompanyRows.Add(companyRow);
+                    }
+
+                });
+                Task.WhenAll(t).ContinueWith(p =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
+                    });
+                    LoadAndRefreshSearchResultRows();
+                });
+            }
+            else if (string.IsNullOrWhiteSpace(searchString))
+            {
+                lbSearchResult.Visibility = Visibility.Hidden;
+            }
+            else if (Regex.IsMatch(searchString, @"^[A-Z]{1,6}$") || Regex.IsMatch(searchString, @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+            {
+                Task.Run(async () =>
+                {
+                    List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
                     if (companyList != null)
                     {
                         this.Dispatcher.Invoke(() =>
