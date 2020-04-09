@@ -32,7 +32,8 @@ namespace StockMonitor.Models.UIClasses
             string industry,
             byte[] logo,
             string description,
-            int companyId)
+            int companyId,
+            string ceo)
         {
             Symbol = symbol;
             Price = price;
@@ -47,6 +48,7 @@ namespace StockMonitor.Models.UIClasses
             Logo = logo;
             Description = description;
             CompanyId = companyId;
+            CEO = ceo;
         }
 
         public UIComapnyRow( //FormatException
@@ -68,6 +70,7 @@ namespace StockMonitor.Models.UIClasses
             Description = company.Description;
             CompanyId = company.Id;
             CompanyName = company.CompanyName;
+            CEO = company.CEO;
         }
 
         public int Id { get; set; }
@@ -180,6 +183,7 @@ namespace StockMonitor.Models.UIClasses
         public byte[] Logo { get; set; }
         public string Description { get; set; }
         public string CompanyName { get; set; }
+        public string CEO { get; set; }
 
         public override string ToString()
         {
@@ -202,13 +206,13 @@ namespace StockMonitor.Models.UIClasses
             {
                 if (double.Parse(value.ToString()) < 0)
                 {
-                    return 1;
+                    return "RED";
                 }
 
-                return 2;
+                return "GREEN";
             }
 
-            return 3;
+            return "BLACK";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

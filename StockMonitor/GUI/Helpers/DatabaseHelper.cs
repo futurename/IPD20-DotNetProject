@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using GUI;
 using StockMonitor.Models.UIClasses;
 
@@ -196,21 +199,32 @@ namespace StockMonitor.Helpers
         }
 
 
-        public static List<Company> GetCompanyListBySearch(string searchString)
+        public static List<Company> SearchCompanyListBySymbol(string searchString)
         {
             try
             {
                 using (DbStockMonitor _dbContext = new DbStockMonitor())
                 {
-                    var searchItems = _dbContext.Companies.AsNoTracking().Where(c => c.Symbol.Contains(searchString) || c.CompanyName.Contains(searchString) || c.Industry.Contains(searchString))
-                        .OrderBy(c => c.Symbol).Take(10).ToList();
-                    if (searchItems.Count != 0)
+                    string[] splitStrings;
+                    string titleString, contentString;
+                    if (searchString.Trim().StartsWith("@"))
                     {
-                        return searchItems.Select(item => item as Company).ToList();
+                        splitStrings = Regex.Split(searchString,@"[\:\;]");
+                        titleString = splitStrings[0].Substring(1, splitStrings[0].Length - 1);
+                        contentString = splitStrings[1];
                     }
                     else
                     {
-                        return null;
+                        titleString = "Symbol";
+                        contentString = searchString;
+                    }
+
+                    string searchCondition = "c=>"+ GetSearchConditionString(titleString, contentString);
+
+                    var searchItems = _dbContext.Companies.AsNoTracking().Where(searchCondition).OrderBy(c => c.Symbol).Take(10).ToList();
+                    if (searchItems.Count != 0)
+                    {
+                        return searchItems.Select(item => item as Company).ToList();
                     }
                 }
             }
@@ -218,7 +232,30 @@ namespace StockMonitor.Helpers
             {
                 throw new SystemException($"Get company list by search failed: {searchString} " + ex.Message);
             }
+
+            return null;
         }
+
+
+        private static string GetSearchConditionString(string titleString, string contentString) { 
+        
+            switch (titleString)
+            {
+                case "CN":
+                    return $"c.CompanyName.Contains(\"{contentString}\")";
+                case "CEO": 
+                    return $"c.CEO.Contains(\"{contentString}\")";
+                case "DS": 
+                    return $"c.Description.Contains(\"{contentString}\")";
+                case "Symbol":
+                    return $"c.Symbol.Contains(\"{contentString}\")";
+                default:
+                    throw new SystemException("No such title string for search : " + contentString);
+            }
+        }
+
+
+
 
     }
 }

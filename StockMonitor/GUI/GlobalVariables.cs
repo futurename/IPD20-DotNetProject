@@ -10,7 +10,7 @@ using StockMonitor.Models.UIClasses;
 
 namespace GUI
 {
-    public class GlobalVariables
+    class GlobalVariables
     {
         public static ConcurrentDictionary<string, string> ConcurentDictionary = new ConcurrentDictionary<string, string>();
         public static BlockingCollection<UIComapnyRow> WatchListUICompanyRows ;
@@ -21,5 +21,6 @@ namespace GUI
         public static BlockingCollection<UIComapnyRow> SearchResultUICompanyRows;
         public static CancellationTokenSource SearchResultCancellationTokenSource;
 
-    }   
+        
+    }
 }
