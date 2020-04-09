@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:GUI"
              xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
              mc:Ignorable="d" 
-             d:DesignHeight="526" d:DesignWidth="1229" 
+             d:DesignHeight="640" d:DesignWidth="1229" 
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <UserControl.Resources>
@@ -345,13 +345,13 @@
                 </ListView>
             </Grid>
         </Grid>
-        <TextBox Name="tbSearchBar" Width="120"
+        <TextBox Name="tbSearchBar"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
             Text="Search here..."
             VerticalAlignment="Center"
             materialDesign:TextFieldAssist.HasClearButton="True"
-            materialDesign:TextFieldAssist.SuffixText="" Margin="60,232,1049.2,252" GotFocus="TbSearchBar_OnGotFocus" LostFocus="TbSearchBar_OnLostFocus"
-            PreviewKeyUp="TbSearchBar_OnPreviewKeyUp">
+            materialDesign:TextFieldAssist.SuffixText="" Margin="60,294,0,314" GotFocus="TbSearchBar_OnGotFocus" LostFocus="TbSearchBar_OnLostFocus"
+            PreviewKeyUp="TbSearchBar_OnPreviewKeyUp" RenderTransformOrigin="0.514,0.681" HorizontalAlignment="Left" Width="120">
             <materialDesign:HintAssist.Hint>
                 <StackPanel
                     Orientation="Horizontal"
@@ -364,7 +364,12 @@
                 </StackPanel>
             </materialDesign:HintAssist.Hint>
         </TextBox>
-        <Button x:Name="btClearSearch" FontSize="14" FontWeight="Bold" Content="Clear" Click="BtClearSearch_OnClick" HorizontalAlignment="Left" Margin="1118,368,0,0" VerticalAlignment="Top" Width="75"/>
+
+        <Button x:Name="btClearSearch" FontSize="14" FontWeight="Bold" Content="Clear" Click="BtClearSearch_OnClick" Margin="0,368,36.2,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="75"/>
+        <Button Name="btCancelDefaultThreads" Content="Cancel Default" Margin="0,419,73.2,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Right" Width="137"/>
+        <Button Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="0,489,36.2,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Right" Width="137"/>
+        <Button Name="btRestartRefresh" Content="Restart All" Margin="0,537,36.2,0" VerticalAlignment="Top" Click="btRestartRefresh_Click" HorizontalAlignment="Right" Width="137"/>
+
         <ListBox x:Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="80,41,0,0" VerticalAlignment="Top" Width="187" Foreground="Gray" Background="White">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -377,10 +382,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Name="btCancelDefaultThreads" Content="Cancel Default" HorizontalAlignment="Left" Margin="1019,419,0,0" VerticalAlignment="Top" Width="137" Click="btCancelDefaultThreads_Click"/>
-        <Button Name="btCancelWatchlistThreads" Content="Cancel Watchlist" HorizontalAlignment="Left" Margin="1056,489,0,0" VerticalAlignment="Top" Width="137" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585"/>
-        <Button Name="btRestartRefresh" Content="Restart All" HorizontalAlignment="Left" Margin="1056,579,0,0" VerticalAlignment="Top" Width="137" Click="btRestartRefresh_Click"/>
-
+        
         <materialDesign:ColorZone
   Mode="PrimaryMid"
   Padding="16">
