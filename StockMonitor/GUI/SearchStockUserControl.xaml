@@ -19,7 +19,10 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid Margin="0,0,-0.2,0" Height="526">
+
+
+
+    <Grid Margin="0,0,-0.2,0" Height="650">
         <Grid.Resources>
             <uiClasses:PriceColorValueConverter x:Key="PriceColorValueConverter"/>
             <uiClasses:NotifySettingValueConverter x:Key="NotifySettingValueConverter"/>
@@ -27,12 +30,21 @@
         </Grid.Resources>
 
         <Grid Margin="10,55,-9.8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="262*"/>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="119*"/>
+                <RowDefinition Height="205*"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="53*"/>
+                <ColumnDefinition Width="67*"/>
+                <ColumnDefinition Width="214*"/>
+                <ColumnDefinition Width="26*"/>
+                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition Width="572*"/>
                 <ColumnDefinition Width="270" />
             </Grid.ColumnDefinitions>
-            <ListView SelectionMode="Single" x:Name="lsvMarketPreview" Grid.Column="0" FontSize="14" VerticalAlignment="Center"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Height="471" Margin="0,0,5,0" Grid.ColumnSpan="2">
+            <ListView SelectionMode="Single" x:Name="lsvMarketPreview" Grid.Column="0" FontSize="14" VerticalAlignment="Center"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Height="563" Margin="-5,22,10,10" Grid.ColumnSpan="5" Grid.RowSpan="4">
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -233,8 +245,8 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Grid Grid.Column="2">
-                <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="10,0,10.2,0" Height="227">
+            <Grid Grid.Column="5" Margin="0,0,10,0" Grid.RowSpan="4">
+                <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="10,23,10,0" Height="255">
                     <ListView.Resources>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -331,7 +343,6 @@
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>
-                <ListBox Margin="10,232,10,4.6"/>
             </Grid>
         </Grid>
         <TextBox Name="tbSearchBar" Width="120"
@@ -339,7 +350,7 @@
             Text="Search here..."
             VerticalAlignment="Center"
             materialDesign:TextFieldAssist.HasClearButton="True"
-            materialDesign:TextFieldAssist.SuffixText="" Margin="0,0,1079.2,484" GotFocus="TbSearchBar_OnGotFocus" LostFocus="TbSearchBar_OnLostFocus"
+            materialDesign:TextFieldAssist.SuffixText="" Margin="60,232,1049.2,252" GotFocus="TbSearchBar_OnGotFocus" LostFocus="TbSearchBar_OnLostFocus"
             PreviewKeyUp="TbSearchBar_OnPreviewKeyUp">
             <materialDesign:HintAssist.Hint>
                 <StackPanel
@@ -353,7 +364,7 @@
                 </StackPanel>
             </materialDesign:HintAssist.Hint>
         </TextBox>
-        <Button x:Name="btClearSearch" FontSize="14" FontWeight="Bold" Content="Clear" Click="BtClearSearch_OnClick" HorizontalAlignment="Left" Margin="233,9,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btClearSearch" FontSize="14" FontWeight="Bold" Content="Clear" Click="BtClearSearch_OnClick" HorizontalAlignment="Left" Margin="1118,368,0,0" VerticalAlignment="Top" Width="75"/>
         <ListBox x:Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="80,41,0,0" VerticalAlignment="Top" Width="187" Foreground="Gray" Background="White">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -366,9 +377,95 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Name="btCancelDefaultThreads" Content="Cancel Default Threads" HorizontalAlignment="Left" Margin="401,6,0,0" VerticalAlignment="Top" Width="183" Click="btCancelDefaultThreads_Click"/>
-        <Button Name="btCancelWatchlistThreads" Content="Cancel Watchlist Threads" HorizontalAlignment="Left" Margin="602,6,0,0" VerticalAlignment="Top" Width="201" Click="btCancelWatchlistThreads_Click"/>
-        <Button Name="btRestartRefresh" Content="Restart Refresh" HorizontalAlignment="Left" Margin="819,6,0,0" VerticalAlignment="Top" Width="127" Click="btRestartRefresh_Click"/>
+        <Button Name="btCancelDefaultThreads" Content="Cancel Default" HorizontalAlignment="Left" Margin="1019,419,0,0" VerticalAlignment="Top" Width="137" Click="btCancelDefaultThreads_Click"/>
+        <Button Name="btCancelWatchlistThreads" Content="Cancel Watchlist" HorizontalAlignment="Left" Margin="1056,489,0,0" VerticalAlignment="Top" Width="137" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585"/>
+        <Button Name="btRestartRefresh" Content="Restart All" HorizontalAlignment="Left" Margin="1056,579,0,0" VerticalAlignment="Top" Width="137" Click="btRestartRefresh_Click"/>
+
+        <materialDesign:ColorZone
+  Mode="PrimaryMid"
+  Padding="16">
+            <DockPanel>
+                <ToggleButton
+      Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+      VerticalAlignment="Center"
+      DockPanel.Dock="Right" />
+                <StackPanel
+      Orientation="Horizontal"
+      materialDesign:RippleAssist.IsCentered="True">
+                    <ToggleButton
+        Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
+                    <ComboBox
+        SelectedIndex="0"
+        Margin="8 0 0 0"
+        BorderThickness="0"
+        materialDesign:ColorZoneAssist.Mode="Standard"
+        materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
+        BorderBrush="{DynamicResource MaterialDesignPaper}">
+                        <ComboBoxItem>
+                            Android
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            iOS
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            Linux
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            Windows
+                        </ComboBoxItem>
+                    </ComboBox>
+                    <materialDesign:ColorZone
+        Mode="Standard"
+        Padding="8 4 8 4"
+        CornerRadius="2"
+        Panel.ZIndex="1"
+        Margin="16 0 0 0"
+        materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+              Width="Auto" />
+                                <ColumnDefinition
+              Width="*" />
+                                <ColumnDefinition
+              Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+            Style="{DynamicResource MaterialDesignToolButton}">
+                                <materialDesign:PackIcon
+              Kind="Magnify"
+              Opacity=".56" />
+                            </Button>
+                            <TextBox
+            Grid.Column="1"
+            Margin="8 0 0 0"
+            materialDesign:HintAssist.Hint="Build a search bar"
+            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+            BorderThickness="0"
+            MinWidth="200"
+            VerticalAlignment="Center" />
+                            <Button
+            Style="{DynamicResource MaterialDesignToolButton}"
+            Grid.Column="2">
+                                <materialDesign:PackIcon
+              Kind="CloseThick"
+              Opacity=".56"
+              Margin="8 0 0 0" />
+                            </Button>
+                        </Grid>
+                    </materialDesign:ColorZone>
+                    <Button
+        Style="{DynamicResource MaterialDesignToolForegroundButton}"
+        Margin="8 0 0 0"
+        Panel.ZIndex="0">
+                        <materialDesign:PackIcon
+                                    Kind="Send" />
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </materialDesign:ColorZone>
+
+
 
 
     </Grid>

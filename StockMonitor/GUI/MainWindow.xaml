@@ -11,14 +11,14 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-        Title="MainWindow" d:DesignHeight="699.299" d:DesignWidth="1245.4">
+        Title="MainWindow" d:DesignHeight="800" d:DesignWidth="1245.4">
 
     <Grid>
         <Label Content="Market" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="50" Width="102" FontSize="20"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102"/>
         <TabControl Margin="10,10,0,44" >
             <TabItem Header="Stock Market" Height="65" Width="200" Margin="150,-1,-150,0.8">
-                <local:SearchStockUserControl Margin="-11,0,-5,-3" Height="546" VerticalAlignment="Top" />
+                <local:SearchStockUserControl Margin="-11,0,-5,-4" Height="648" VerticalAlignment="Top" />
             </TabItem>
             <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2">
                 <local:WatchListUserControl Margin="-11,0,-5,-13"/>
