@@ -1,4 +1,5 @@
-﻿using StockMonitor.Helpers;
+﻿using GUI.Helpers;
+using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace GUI
             {
                 if (_ct.IsCancellationRequested) { return; }
 
-                var reservedTradingList = DatabaseHelper.GetReservedTradingList(UserId);
+                var reservedTradingList = TradeDatabaseHelper.GetReservedTradingList(UserId);
                 
                 if(reservedTradingList.Count == 0)
                 {
