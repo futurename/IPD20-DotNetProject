@@ -153,7 +153,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel  Orientation="Horizontal"  >
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230" Name="stkSymbolField" MouseMove="StkSymbolField_OnMouseMove">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230" Name="stkSymbolField">
                                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                             <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
                                             <TextBlock Text="{Binding CompanyName}" TextDecorations="underline" FontStyle="Italic" Foreground="DarkBlue" TextWrapping="Wrap" FontSize="12" Width="170"
@@ -338,9 +338,9 @@
                             <materialDesign:PackIcon Kind="Favorite" Foreground="#673ab7" Height="18" Width="17"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Company detail" Foreground="#673ab7" Click="LsvMkt_miShowStockDetails_OnClick">
+                    <MenuItem x:Name="lsvMkt_miRealTimeGraph" Header="Real-time graph" Foreground="#673ab7" Click="LsvMkt_miRealTimeGraph_OnClick">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="Show" Foreground="#673ab7" Height="18" Width="17"/>
+                            <materialDesign:PackIcon Kind="TrendingUp" Foreground="#673ab7" Height="18" Width="17"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Price notification" Foreground="#673ab7" Click="LsvMkt_miSetTargetPrice_OnClick">
