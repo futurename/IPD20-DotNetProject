@@ -245,7 +245,7 @@ namespace StockMonitor.Helpers
                     return $"c.CompanyName.Contains(\"{contentString}\")";
                 case "CEO": 
                     return $"c.CEO.Contains(\"{contentString}\")";
-                case "DS": 
+                case "DS":
                     return $"c.Description.Contains(\"{contentString}\")";
                 case "Symbol":
                     return $"c.Symbol.Contains(\"{contentString}\")";

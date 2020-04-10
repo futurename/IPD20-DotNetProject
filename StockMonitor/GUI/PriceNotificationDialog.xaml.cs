@@ -19,10 +19,10 @@ namespace GUI
     /// <summary>
     /// Interaction logic for SetTargetPriceNotificationDialog.xaml
     /// </summary>
-    public partial class SetTargetPriceNotificationDialog : Window
+    public partial class PriceNotificationDialog : Window
     {
         private StockMonitor.Models.UIClasses.UIComapnyRow _curCompanyRow;
-        public SetTargetPriceNotificationDialog(StockMonitor.Models.UIClasses.UIComapnyRow companyRow)
+        public PriceNotificationDialog(StockMonitor.Models.UIClasses.UIComapnyRow companyRow)
         {
             InitializeComponent();
             spDialogPanel.DataContext = companyRow;
