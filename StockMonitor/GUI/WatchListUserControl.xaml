@@ -9,8 +9,7 @@
              d:DesignHeight="604" d:DesignWidth="1229"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
-             x:Name="watchList"
-             >
+             x:Name="watchList">
     <UserControl.Resources>
         <Style TargetType="{x:Type UserControl}">
             <Style.Triggers>
@@ -50,7 +49,7 @@
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
+                <RowDefinition Height="5*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Grid Name="gridCandleChart" Grid.Row="0" >
@@ -92,7 +91,9 @@
             <StackPanel Grid.Row="0">
                 <TextBlock x:Name="txtCompanyName" Margin="10" TextWrapping="Wrap" Text="Company Name" FontSize="30"/>
                 <TextBlock x:Name="txtIndustry" Margin="10" TextWrapping="Wrap" Text="Industry" FontSize="16" Foreground="Gray"/>
-                <TextBlock x:Name="txtDescription" Margin="10" TextWrapping="WrapWithOverflow"  Text="Description"/>
+                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="10" >
+                    <TextBlock x:Name="txtDescription" TextWrapping="WrapWithOverflow" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Text="Description"/>
+                </ScrollViewer>
             </StackPanel>
             <StackPanel Grid.Row="1">
                 <TextBlock Text="Trading Frequancy" Margin="10" FontSize="20" />

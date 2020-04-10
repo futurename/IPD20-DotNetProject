@@ -26,10 +26,12 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" >
-            <TextBlock Text="Stock Price: $" HorizontalAlignment="Left" Width="70" Margin="0,7,0,0"/>
-            <TextBlock Name="txtPrice" Margin="82,7,0,0" HorizontalAlignment="Left"/>
-            <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}" Margin="376,7,0,0" HorizontalAlignment="Left" TargetUpdated="txtSymbol_TargetUpdated"/>
-            <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="464,0,0,0" VerticalAlignment="Top" Click="btReload_Click" FontSize="10" Width="100"/>
+            <StackPanel  HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Text="Stock Price: $"/>
+                <TextBlock Name="txtPrice"/>
+            </StackPanel>
+            <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}" Margin="0,0,150,0" VerticalAlignment="Center" HorizontalAlignment="Right" TargetUpdated="txtSymbol_TargetUpdated"/>
+            <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="464,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btReload_Click" FontSize="10" Width="100"/>
         </Grid>
 
         <Wpf:CartesianChart x:Name="chartStockPrice"
