@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -290,7 +291,7 @@ namespace GUI
                 }
                 else
                 {
-                    quote = new FmgQuoteOnlyPrice() {Symbol = comapnyRow.Symbol, Price = comapnyRow.Price};
+                    quote = new FmgQuoteOnlyPrice() { Symbol = comapnyRow.Symbol, Price = comapnyRow.Price };
                 }
 
                 /**************************************************
@@ -339,7 +340,6 @@ namespace GUI
                     $"\n!!! RefreshRealtimePrice exception for {comapnyRow.Symbol} at {DateTime.Now} for {ex.Message}");
             }
         }
-
 
         private void LsvWatch_miAddToWatchList_OnClick(object sender, RoutedEventArgs e)
         {
@@ -393,7 +393,6 @@ namespace GUI
                             MessageBox.Show($"{comapnyRow.Symbol} EXISTS in the watchlist", "Duplicate company",
                                 MessageBoxButton.OK, MessageBoxImage.Error);
                         });
-                        return;
                     }
                     else
                     {
@@ -410,7 +409,7 @@ namespace GUI
                             {
                                 lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
                             });
-                            Task.Factory.StartNew(async () =>
+                            Task.Run(async () =>
                             {
                                 while (true)
                                 {
@@ -422,8 +421,7 @@ namespace GUI
                                     }
                                     catch (Exception ex)
                                     {
-                                        Console.Out.WriteLine(
-                                            $"Watchlist loop thread exception {comapnyRow.Symbol} at {DateTime.Now}");
+                                        Console.Out.WriteLine($"Watchlist loop thread exception {comapnyRow.Symbol} at {DateTime.Now}");
                                     }
                                 }
                             });
@@ -436,7 +434,6 @@ namespace GUI
                 }
             }
         }
-
 
 
         private Notifier notifier = new Notifier(cfg =>
@@ -455,8 +452,6 @@ namespace GUI
         });
 
 
-       
-
         private void LsvWatch_SetTargetPrice_OnClick(object sender, RoutedEventArgs e)
         {
             var item = lsvMarketPreview.SelectedItem;
@@ -472,10 +467,9 @@ namespace GUI
         }
 
         CancellationTokenSource chartTokenSource;
-
         private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            UIComapnyRow selCompany = (UIComapnyRow) lsvMarketPreview.SelectedItem;
+            UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
 
             if (selCompany == null)
             {
@@ -538,45 +532,73 @@ namespace GUI
 
             if (e.Key == Key.Enter)
             {
-                GlobalVariables.SearchResultUICompanyRows = new BlockingCollection<UIComapnyRow>();
-                tbSearchBox.Text = "";
-                lbSearchResult.Visibility = Visibility.Hidden;
-                Task t = Task.Run(async () =>
+                if (searchString.StartsWith("@") && !searchString.EndsWith(";"))
                 {
-                    List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString);
-                    foreach (Company comapny in companyList)
+                    MessageBoxResult selResult = MessageBox.Show("Did you forget colon?", "@ query format error", MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+                    if (selResult == MessageBoxResult.Yes)
                     {
-                        Task<UIComapnyRow> subTask = GUIDataHelper.GetUICompanyRowTaskBySymbol(comapny.Symbol);
-                        UIComapnyRow companyRow = await subTask;
-                        GlobalVariables.SearchResultUICompanyRows.Add(companyRow);
+                        tbSearchBox.Text = searchString + ";";
+                        tbSearchBox.Select(tbSearchBox.Text.Length, 0);
                     }
-
-                });
-                Task.WhenAll(t).ContinueWith(p =>
+                }
+                else
                 {
-                    this.Dispatcher.Invoke(() =>
+                    tbSearchBox.Text = "Search here...";
+                    cbSearchType.Text = "Symbol";
+                    BlockingCollection<UIComapnyRow> searchUIcompanyRows = new BlockingCollection<UIComapnyRow>();
+                    tbSearchBox.Text = "";
+                    lbSearchResult.Visibility = Visibility.Hidden;
+
+                    if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
+                        @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
                     {
-                        lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
-                    });
-                    LoadAndRefreshSearchResultRows();
-                });
+                        Task t = Task.Run(async () =>
+                        {
+                            //  GlobalVariables.SearchResultCompanies = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
+                            foreach (Company comapny in GlobalVariables.SearchResultCompanies)
+                            {
+                                Task<UIComapnyRow> subTask = GUIDataHelper.GetUICompanyRowTaskBySymbol(comapny.Symbol);
+                                UIComapnyRow companyRow = await subTask;
+                                searchUIcompanyRows.Add(companyRow);
+                            }
+                        });
+                        Task.WhenAll(t).ContinueWith(p =>
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                GlobalVariables.SearchResultUICompanyRows = searchUIcompanyRows;
+                                lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
+                            });
+                            LoadAndRefreshSearchResultRows();
+                        });
+                    }
+                    else
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            MessageBox.Show("Search string format error\n" + searchString, "No search result",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+                        });
+                    }
+                }
             }
             else if (string.IsNullOrWhiteSpace(searchString))
             {
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
-            else if (Regex.IsMatch(searchString, @"^[A-Z]{1,6}$") || Regex.IsMatch(searchString,
+            else if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
                 @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
             {
                 Task.Run(async () =>
                 {
-                    List<Company> companyList = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
-                    if (companyList != null)
+                    GlobalVariables.SearchResultCompanies = await GUIDataHelper.GetSearchCompanyListTask(searchString.Trim());
+                    if (GlobalVariables.SearchResultCompanies != null)
                     {
                         this.Dispatcher.Invoke(() =>
                         {
-                            lbSearchResult.ItemsSource = companyList;
-                            lbSearchResult.Height = companyList.Count * 39;
+                            lbSearchResult.ItemsSource = GlobalVariables.SearchResultCompanies;
+                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 39;
                             lbSearchResult.Visibility = Visibility.Visible;
                         });
                     }
@@ -596,6 +618,7 @@ namespace GUI
         private void BrClearSearch_OnClick(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Text = "Search here...";
+            cbSearchType.Text = "Symbol";
             Task.Run(() =>
             {
                 this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows; });
@@ -624,7 +647,75 @@ namespace GUI
             }
         }
 
+
+        private void CbSearchType_cbCompanyName_OnSelected(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Focus();
+            tbSearchBox.Text = "@CN:";
+            tbSearchBox.Select(tbSearchBox.Text.Length, 0);
+        }
+
+        private void CbSearchType_cbCEO_OnSelected(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Focus();
+            tbSearchBox.Text = "@CEO:";
+            tbSearchBox.Select(tbSearchBox.Text.Length, 0);
+        }
+
+        private void CbSearchType_cbDescription_OnSelected(object sender, RoutedEventArgs e)
+        {
+            tbSearchBox.Focus();
+            tbSearchBox.Text = "@DS:";
+            tbSearchBox.Select(tbSearchBox.Text.Length, 0);
+        }
+
+        private void LsvMkt_miShowStockDetails_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = lsvMarketPreview.SelectedItem;
+            if (item != null)
+            {
+                UIComapnyRow companyRow = item as UIComapnyRow;
+                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
+                detailDialog.Owner = Application.Current.MainWindow;
+                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (detailDialog.ShowDialog() == true)
+                {
+
+                }
+            }
+        }
+
+      
+
+        private void StkSymbolField_OnMouseMove(object sender, MouseEventArgs e)
+        {
+            var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
+
+            // find ListViewItem (or null)
+            while (item != null && !(item is ListBoxItem))
+                item = VisualTreeHelper.GetParent(item);
+
+            if (item != null)
+            {
+                int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
+
+                UIComapnyRow companyRow = GlobalVariables.DefaultUICompanyRows.ToList()[i];
+                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
+                detailDialog.Owner = Application.Current.MainWindow;
+                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (detailDialog.ShowDialog() == true)
+                {
+
+                }
+            }
+        }
+
+      
+
+
     }
+
+
 
 
 

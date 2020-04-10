@@ -19,7 +19,7 @@
 
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Width="1440">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
@@ -50,7 +50,7 @@
 
         <materialDesign:ColorZone Grid.Row="0" Grid.ColumnSpan="3"
                 Mode="PrimaryMid"
-                Padding="16" VerticalAlignment="Stretch" Margin="0,0,0.5,10">
+                Padding="16" VerticalAlignment="Stretch" Margin="1,0,0,10">
             <DockPanel>
                 <ToggleButton
                         Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
@@ -61,17 +61,17 @@
                         materialDesign:RippleAssist.IsCentered="True">
                     <ToggleButton
                             Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
-                    <ComboBox
+                    <ComboBox Name="cbSearchType"
                             SelectedIndex="0"
                             Margin="8,2,0,10"
                             BorderThickness="0"
                             materialDesign:ColorZoneAssist.Mode="Standard"
                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
                             BorderBrush="{DynamicResource MaterialDesignPaper}">
-                        <ComboBoxItem Content="Symbol"/>
-                        <ComboBoxItem Content="Company Name"/>
-                        <ComboBoxItem Content="CEO"/>
-                        <ComboBoxItem Content="Description"/>
+                        <ComboBoxItem Content="Symbol" Name="cbSearchType_cbiSymbol"/>
+                        <ComboBoxItem Content="Company Name" Name="cbSearchType_cbCompanyName" Selected="CbSearchType_cbCompanyName_OnSelected"/>
+                        <ComboBoxItem Content="CEO" Name="cbSearchType_cbCEO" Selected="CbSearchType_cbCEO_OnSelected"/>
+                        <ComboBoxItem Content="Description" Name="cbSearchType_cbDescription" Selected="CbSearchType_cbDescription_OnSelected" />
                     </ComboBox>
                     <materialDesign:ColorZone
                             Mode="Standard"
@@ -96,14 +96,14 @@
                                         Opacity=".56" />
                             </Button>
                             <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" GotFocus="TbSearchBox_OnGotFocus" LostFocus="TbSearchBox_OnLostFocus"
-                                    Margin="24,4,-4,4"
+                                    Margin="24,4,-4,-4"
                                     materialDesign:TextFieldAssist.HasClearButton="True" 
                                     materialDesign:HintAssist.Hint="@(CN|CEO|DS):{value};"
                                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                                     BorderThickness="0"
                                     MinWidth="200"
-                                    VerticalAlignment="Center" Grid.ColumnSpan="3" />
-                            <Grid Margin="0,0,100,0"/>
+                                    VerticalAlignment="Center" Grid.ColumnSpan="3" Height="30" />
+                            <Grid Margin="0,-2,100,2"/>
                         </Grid>
                     </materialDesign:ColorZone>
                     <Grid
@@ -126,7 +126,7 @@
         </materialDesign:ColorZone>
 
 
-        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,-58,0" Grid.RowSpan="2" Grid.ColumnSpan="3" HorizontalAlignment="Left" Width="1057">
+        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1190">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="ItemContainerStyle">
@@ -142,7 +142,6 @@
                 </Style>
             </ListView.Resources>
             <ListView.View>
-                
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
                         <Style>
@@ -150,19 +149,21 @@
                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
                         </Style>
                     </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Header="Symbol" Width="260">
+                    <GridViewColumn Header="Symbol" Width="280">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="190">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="140"/>
-                                            <TextBlock Text="{Binding Symbol}" FontSize="16" HorizontalAlignment="Center" Width="50" FontWeight="Bold"/>
+                                <StackPanel Name="stkSymbolField" Orientation="Horizontal"  MouseMove="StkSymbolField_OnMouseMove">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230">
+                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
+                                            <TextBlock Text="{Binding CompanyName}" TextDecorations="underline" FontStyle="Italic" Foreground="DarkBlue" TextWrapping="Wrap" FontSize="12" Width="170"
+                                                       HorizontalAlignment="Center" Margin="0,5,0,0" />
                                         </StackPanel>
-                                        <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" Foreground="DarkBlue" FontSize="13" Width="190"
-                                                HorizontalAlignment="Center" Height="20"/>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Symbol}"  FontSize="18" Width="50" FontWeight="Bold" TextAlignment="Center"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" Height="40" Width="70" Margin="0,0,5,2">
+                                    <StackPanel Width="40">
                                         <Image   Height="12" Source="pack://application:,,,/Resources/bell.png" HorizontalAlignment="Center">
                                             <Image.Style>
                                                 <Style>
@@ -215,57 +216,59 @@
                     <GridViewColumn Header="Price" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                        <TextBlock x:Name="tbPrice" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold">
-                                            <TextBlock.Style>
-                                                <Style>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
-                                                            <DataTrigger.EnterActions>
-                                                                <BeginStoryboard>
-                                                                    <Storyboard >
-                                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3">
-                                                                            <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
-                                                                            <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
-                                                                            <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
-                                                                        </DoubleAnimationUsingKeyFrames>
-                                                                    </Storyboard>
-                                                                </BeginStoryboard>
-                                                            </DataTrigger.EnterActions>
-                                                            <Setter Property="TextBlock.Foreground" Value="Red"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
-                                                            <DataTrigger.EnterActions>
-                                                                <BeginStoryboard>
-                                                                    <Storyboard >
-                                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
-                                                                            <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
-                                                                            <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
-                                                                            <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
-                                                                        </DoubleAnimationUsingKeyFrames>
-                                                                    </Storyboard>
-                                                                </BeginStoryboard>
-                                                            </DataTrigger.EnterActions>
-                                                            <Setter Property="TextBlock.Foreground" Value="Green"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
-                                                            <DataTrigger.EnterActions>
-                                                                <BeginStoryboard>
-                                                                    <Storyboard >
-                                                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
-                                                                            <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
-                                                                            <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
-                                                                            <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
-                                                                        </DoubleAnimationUsingKeyFrames>
-                                                                    </Storyboard>
-                                                                </BeginStoryboard>
-                                                            </DataTrigger.EnterActions>
-                                                            <Setter Property="TextBlock.Foreground" Value="Black"/>
-                                                        </DataTrigger>
 
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                <TextBlock x:Name="tbPrice"  TextAlignment="Center" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold">
+                                    <TextBlock.Style>
+                                        <Style>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard >
+                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3">
+                                                                    <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
+                                                                    <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
+                                                                    <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <Setter Property="TextBlock.Foreground" Value="Red"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard >
+                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
+                                                                    <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
+                                                                    <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
+                                                                    <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <Setter Property="TextBlock.Foreground" Value="Green"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
+                                                    <DataTrigger.EnterActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard >
+                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
+                                                                    <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
+                                                                    <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
+                                                                    <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
+                                                                </DoubleAnimationUsingKeyFrames>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <Setter Property="TextBlock.Foreground" Value="Black"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+
                             </DataTemplate>
 
                         </GridViewColumn.CellTemplate>
@@ -322,19 +325,19 @@
                     <GridViewColumn Header="MktCap" Width="90" DisplayMemberBinding="{Binding MarketCapital, StringFormat=\{0:#\,##0\,\,M\}}"/>
                     <GridViewColumn Header="P/E" DisplayMemberBinding="{Binding PriceToEarningRatio, StringFormat=\{0:0.00\}}"/>
                     <GridViewColumn Header="CEO" DisplayMemberBinding="{Binding CEO}"/>
-                    <GridViewColumn Header="Industry"   DisplayMemberBinding="{Binding Industry}" Width="180"/>
+                    <GridViewColumn Header="Industry"   DisplayMemberBinding="{Binding Industry}" Width="200"/>
                 </GridView>
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"/>
-                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details"/>
+                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details" Click="LsvMkt_miShowStockDetails_OnClick"/>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
-        <Grid Grid.Row="1" Grid.Column="2" Margin="98.5,0,10.5,0">
-            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="10,10,0,0" Height="277" HorizontalAlignment="Left" Width="212" >
+        <Grid Grid.Row="1" Grid.Column="2" Margin="247,0,10,0">
+            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="-248,-2,0,0" Height="316" HorizontalAlignment="Left" Width="233" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -432,8 +435,8 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="57,336,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
-            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="56,394,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="-208,335,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
+            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="-208,395,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -443,7 +446,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="57,446,0,0" Click="btRestartRefresh_Click" Height="27" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-211,454,0,0" Click="btRestartRefresh_Click" Height="27" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
