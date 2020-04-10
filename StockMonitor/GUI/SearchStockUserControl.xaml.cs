@@ -405,7 +405,7 @@ namespace GUI
                             LoadAndRefreshWatchListRow(comapnyRow); 
                             Dispatcher.Invoke(() =>
                                 {
-                                    lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+                                    lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
                                 });
                         });
                     }
