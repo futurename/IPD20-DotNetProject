@@ -530,7 +530,7 @@ namespace GUI
                     lbSearchResult.Visibility = Visibility.Hidden;
 
                     if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
-                        @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+                        @"^@(CN|CEO|DS):[A-Za-z][A-Za-z ]{1,20};$"))
                     {
                         Task t = Task.Run(async () =>
                         {
@@ -567,7 +567,7 @@ namespace GUI
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
             else if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
-                @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+                @"^@(CN|CEO|DS):[A-Za-z][A-Za-z ]{1,20};$"))
             {
                 Task.Run(async () =>
                 {
