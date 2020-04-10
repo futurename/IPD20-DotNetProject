@@ -60,7 +60,8 @@ namespace GUI
 
             StockTrader = new StockTrader(CurrentUserId);
             StockTrader.StartTrade();
-
+            GlobalVariables.Notifier = notifier;
+            GlobalVariables.SearchStockUserControl = this; 
         }
 
 

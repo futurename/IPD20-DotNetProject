@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using ToastNotifications.Messages;
 
 namespace GUI
@@ -129,8 +130,18 @@ namespace GUI
 
             //TODO: Alert trade information
 
-            //if (IsTest) { Console.WriteLine(tradingRecord); }
-            //else { GlobalVariables.notifier.ShowSuccess(tradingRecord.ToString()); }
+            if (IsTest) { Console.WriteLine(tradingRecord); }
+            else {
+                GlobalVariables.MainWindow.Dispatcher.Invoke(() =>
+                {
+                    GlobalVariables.MainWindow.SnackbarMessage($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
+                });
+                
+                //GlobalVariables.SearchStockUserControl.Dispatcher.Invoke(() =>
+                //{
+                //    GlobalVariables.Notifier.ShowSuccess($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
+                //});
+            }
         }
     }
 }

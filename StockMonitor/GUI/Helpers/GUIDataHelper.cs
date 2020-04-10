@@ -248,6 +248,12 @@ namespace StockMonitor.Helpers
             TradeDatabaseHelper.DeleteReservedTrading(reservedTrading);//ex DataException,InvalidOperationException
         }
 
+        public static Dictionary<string, int> GetTradingRecourdList(int userId)//ex DataException,InvalidOperationException
+        {
+            return TradeDatabaseHelper.GetTradingRecordList(userId);//ex DataException,InvalidOperationException
+        }
+        
+
 
 
     }

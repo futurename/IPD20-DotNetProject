@@ -84,10 +84,23 @@
             </Grid>
         </Grid>
         <Grid Grid.Column="2">
-            <StackPanel Margin="10,32,4.6,95" Orientation="Vertical">
-                <TextBlock x:Name="txtCompanyName" Margin="0,0,19.6,0" TextWrapping="Wrap" Text="Company Name" VerticalAlignment="Top" FontSize="30"/>
-                <TextBlock x:Name="txtIndustry" Margin="0,0,9.8,0" TextWrapping="Wrap" Text="Industry" VerticalAlignment="Top" FontSize="16" Foreground="Gray" Height="24"/>
-                <TextBlock x:Name="txtDescription" Margin="0,0,14.6,0" TextWrapping="Wrap" Text="Description" VerticalAlignment="Top" Height="200"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Row="0">
+                <TextBlock x:Name="txtCompanyName" Margin="10" TextWrapping="Wrap" Text="Company Name" VerticalAlignment="Top" FontSize="30"/>
+                <TextBlock x:Name="txtIndustry" Margin="10" TextWrapping="Wrap" Text="Industry" VerticalAlignment="Top" FontSize="16" Foreground="Gray"/>
+                <TextBlock x:Name="txtDescription" Margin="10" TextWrapping="Wrap" Text="Description" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="Trading Frequancy" Margin="10" FontSize="20" />
+                <Wpf:PieChart
+                    Name="pieChartTrading" 
+                    LegendLocation="Bottom"
+                    AnimationsSpeed="0:0:0.5"
+                    Hoverable="False"
+                    DataTooltip="{x:Null}" Height="250"/>
             </StackPanel>
         </Grid>
     </Grid>

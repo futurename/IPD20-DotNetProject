@@ -1,4 +1,6 @@
-﻿using StockMonitor.Helpers;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
@@ -33,13 +35,53 @@ namespace GUI
             set { SetValue(SymbolProperty, value); }
         }
 
+        public Func<ChartPoint, string> PointLabel { get; set; }
+
+        private int UserId { get; set; }
         public WatchListUserControl()
         {
+            UserId = 3;//For Test
+
             InitializeComponent();
 
-            Task.Factory.StartNew(LoadWatchList);
+            //Task.Factory.StartNew(LoadWatchList); //For Test
 
+            lstWatch.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+
+            lstWatch.SelectedIndex = 0;
+
+            Symbol = ((UIComapnyRow)lstWatch.Items[0]).Symbol;
+
+            DrawPieChart();
+            
             this.DataContext = this;
+        }
+
+        private void DrawPieChart()
+        {
+            PointLabel = chartPoint =>
+                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            var tradingDictionary = GUIDataHelper.GetTradingRecourdList(UserId);
+
+            foreach(var trading in tradingDictionary)
+            {
+                var value = new ChartValues<int>();
+                value.Add(trading.Value);
+
+                pieChartTrading.Series.Add(
+                    new PieSeries()
+                    {
+                        Title = trading.Key,
+                        Values = value,
+                        DataLabels = true,
+                        LabelPoint = PointLabel,
+                        ToolTip = null,
+                        Foreground = new SolidColorBrush(Color.FromRgb(0, 0, 0))
+                    }
+                );
+            }
+
         }
 
         private async void LoadWatchList()// TODO: sync -> async

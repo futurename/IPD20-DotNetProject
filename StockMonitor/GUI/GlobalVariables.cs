@@ -23,6 +23,8 @@ namespace GUI
         public static List<Company> SearchResultCompanies;
         public static CancellationTokenSource SearchResultCancellationTokenSource;
 
-        public static Notifier notifier;
+        public static Notifier Notifier { get; set; }
+        public static SearchStockUserControl SearchStockUserControl { get; set; }
+        public static MainWindow MainWindow { get; set; }
     }
 }

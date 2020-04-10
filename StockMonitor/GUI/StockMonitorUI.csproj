@@ -236,9 +236,6 @@
     <Compile Include="RealTimePriceChart.xaml.cs">
       <DependentUpon>RealTimePriceChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RealTimePriceChartUserControl.xaml.cs">
-      <DependentUpon>RealTimePriceChartUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ReservedTrading.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
@@ -303,10 +300,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="RealTimePriceChart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RealTimePriceChartUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -380,6 +373,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

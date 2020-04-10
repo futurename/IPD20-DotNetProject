@@ -24,6 +24,10 @@ namespace GUI
             TradeType = reservedTrading.TradeType.ToString();
             CompanyId = reservedTrading.CompanyId;
         }
+        public override string ToString()
+        {
+            return $"{TradeType}  Price: ${Price.ToString("N2")}, Valume: {Volume}";
+        }
         public int Id { get; set; }
         public int UserId { get; set; }
         public System.DateTime DateTime { get; set; }
