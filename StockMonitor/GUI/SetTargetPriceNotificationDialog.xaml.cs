@@ -83,9 +83,7 @@ namespace GUI
             _curCompanyRow.NotifyPriceLow = double.Parse(tbTargetLow.Text);
             this.DialogResult = true;
         }
-
-   
-
+        
         private void BtHighRoundDown_OnClick(object sender, RoutedEventArgs e)
         {
             double price = double.Parse(tbTargetHigh.Text);

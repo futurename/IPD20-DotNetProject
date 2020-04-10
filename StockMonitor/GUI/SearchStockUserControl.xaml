@@ -152,7 +152,7 @@
                     <GridViewColumn Header="Symbol" Width="280">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Name="stkSymbolField" Orientation="Horizontal"  MouseMove="StkSymbolField_OnMouseMove">
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230">
                                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                             <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
@@ -331,7 +331,7 @@
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"/>
-                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details"/>
+                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details" Click="LsvMkt_miShowStockDetails_OnClick"/>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"/>
                 </ContextMenu>
             </ListView.ContextMenu>

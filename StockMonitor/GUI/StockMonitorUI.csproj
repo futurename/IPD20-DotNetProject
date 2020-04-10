@@ -200,6 +200,9 @@
     <Compile Include="Company.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="CompanyDetailDialog.xaml.cs">
+      <DependentUpon>CompanyDetailDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DbStockMonitorEntities.cs">
       <DependentUpon>StockMonitorModel.Context.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -277,6 +280,10 @@
       <DependentUpon>WatchListUserControl.xaml</DependentUpon>
     </Compile>
     <Page Include="CandleChartUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CompanyDetailDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

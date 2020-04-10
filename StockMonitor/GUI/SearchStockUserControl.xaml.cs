@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -667,7 +668,54 @@ namespace GUI
             tbSearchBox.Text = "@DS:";
             tbSearchBox.Select(tbSearchBox.Text.Length, 0);
         }
+
+        private void LsvMkt_miShowStockDetails_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = lsvMarketPreview.SelectedItem;
+            if (item != null)
+            {
+                UIComapnyRow companyRow = item as UIComapnyRow;
+                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
+                detailDialog.Owner = Application.Current.MainWindow;
+                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (detailDialog.ShowDialog() == true)
+                {
+
+                }
+            }
+        }
+
+      
+
+        private void StkSymbolField_OnMouseMove(object sender, MouseEventArgs e)
+        {
+            var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
+
+            // find ListViewItem (or null)
+            while (item != null && !(item is ListBoxItem))
+                item = VisualTreeHelper.GetParent(item);
+
+            if (item != null)
+            {
+                int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
+
+                UIComapnyRow companyRow = GlobalVariables.DefaultUICompanyRows.ToList()[i];
+                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
+                detailDialog.Owner = Application.Current.MainWindow;
+                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (detailDialog.ShowDialog() == true)
+                {
+
+                }
+            }
+        }
+
+      
+
+
     }
+
+
 
 
 
