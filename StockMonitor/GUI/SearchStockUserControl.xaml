@@ -226,8 +226,8 @@
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
                                                     <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard >
+                                                        <BeginStoryboard x:Name="redStroy">
+                                                            <Storyboard>
                                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3">
                                                                     <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
                                                                     <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
@@ -236,11 +236,14 @@
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </DataTrigger.EnterActions>
+                                                    <DataTrigger.ExitActions>
+                                                        <StopStoryboard BeginStoryboardName="redStroy"/>
+                                                    </DataTrigger.ExitActions>
                                                     <Setter Property="TextBlock.Foreground" Value="Red"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
                                                     <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
+                                                        <BeginStoryboard x:Name="greedStory">
                                                             <Storyboard >
                                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
                                                                     <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
@@ -250,11 +253,14 @@
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </DataTrigger.EnterActions>
+                                                    <DataTrigger.ExitActions>
+                                                        <StopStoryboard BeginStoryboardName="greedStory"/>
+                                                    </DataTrigger.ExitActions>
                                                     <Setter Property="TextBlock.Foreground" Value="Green"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
                                                     <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
+                                                        <BeginStoryboard x:Name="blackStory">
                                                             <Storyboard >
                                                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
                                                                     <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
@@ -264,6 +270,9 @@
                                                             </Storyboard>
                                                         </BeginStoryboard>
                                                     </DataTrigger.EnterActions>
+                                                    <DataTrigger.ExitActions>
+                                                        <StopStoryboard BeginStoryboardName="black"/>
+                                                    </DataTrigger.ExitActions>
                                                     <Setter Property="TextBlock.Foreground" Value="Black"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
