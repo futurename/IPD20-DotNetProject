@@ -142,19 +142,21 @@
                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
                         </Style>
                     </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Header="Symbol" Width="260">
+                    <GridViewColumn Header="Symbol" Width="290">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="190">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="140"/>
-                                            <TextBlock Text="{Binding Symbol}" FontSize="16" HorizontalAlignment="Center" Width="50" FontWeight="Bold"/>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="220">
+                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                            <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
+                                            <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" Foreground="DarkBlue" FontSize="12" Width="170"
+                                                       HorizontalAlignment="Center" Margin="0,5,0,0" />
                                         </StackPanel>
-                                        <TextBlock Text="{Binding CompanyName}" FontStyle="Italic" Foreground="DarkBlue" FontSize="13" Width="190"
-                                                HorizontalAlignment="Center" Height="20"/>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Symbol}" FontSize="18" Width="50" FontWeight="Bold" TextAlignment="Center"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Orientation="Vertical" Height="40" Width="70" Margin="0,0,5,2">
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Width="70" Margin="0,0,5,2">
                                         <Image   Height="12" Source="pack://application:,,,/Resources/bell.png" HorizontalAlignment="Center">
                                             <Image.Style>
                                                 <Style>
@@ -203,61 +205,63 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-
+                    
                     <GridViewColumn Header="Price" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock x:Name="tbPrice" TextAlignment="Center" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold">
-                                    <TextBlock.Style>
-                                        <Style>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
-                                                    <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard >
-                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3">
-                                                                    <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
-                                                                    <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
-                                                                    <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.EnterActions>
-                                                    <Setter Property="TextBlock.Foreground" Value="Red"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
-                                                    <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard >
-                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
-                                                                    <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
-                                                                    <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
-                                                                    <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.EnterActions>
-                                                    <Setter Property="TextBlock.Foreground" Value="Green"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
-                                                    <DataTrigger.EnterActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard >
-                                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
-                                                                    <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
-                                                                    <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
-                                                                    <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
-                                                                </DoubleAnimationUsingKeyFrames>
-                                                            </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.EnterActions>
-                                                    <Setter Property="TextBlock.Foreground" Value="Black"/>
-                                                </DataTrigger>
-
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
+                                
+                                    <TextBlock x:Name="tbPrice" Margin="0,20,0,0" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding Price, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold">
+                                        <TextBlock.Style>
+                                            <Style>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="RED">
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard >
+                                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3">
+                                                                        <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
+                                                                        <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
+                                                                        <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
+                                                                    </DoubleAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                        <Setter Property="TextBlock.Foreground" Value="Red"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="GREEN">
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard >
+                                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
+                                                                        <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
+                                                                        <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
+                                                                        <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
+                                                                    </DoubleAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                        <Setter Property="TextBlock.Foreground" Value="Green"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PriceChange, Converter={StaticResource PriceColorValueConverter}}" Value="BLACK">
+                                                        <DataTrigger.EnterActions>
+                                                            <BeginStoryboard>
+                                                                <Storyboard >
+                                                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="FontSize" Duration="0:0:0:3" >
+                                                                        <LinearDoubleKeyFrame Value="20" KeyTime="10%"/>
+                                                                        <LinearDoubleKeyFrame Value="18" KeyTime="30%"/>
+                                                                        <LinearDoubleKeyFrame Value="16" KeyTime="50%"/>
+                                                                    </DoubleAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </BeginStoryboard>
+                                                        </DataTrigger.EnterActions>
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                 
+                             
                             </DataTemplate>
 
                         </GridViewColumn.CellTemplate>
@@ -424,8 +428,8 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="57,336,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
-            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="56,394,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="-208,335,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
+            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="-208,395,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -435,7 +439,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="57,446,0,0" Click="btRestartRefresh_Click" Height="27" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-211,454,0,0" Click="btRestartRefresh_Click" Height="27" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>

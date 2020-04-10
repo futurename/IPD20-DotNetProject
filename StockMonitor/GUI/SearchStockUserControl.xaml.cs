@@ -49,7 +49,7 @@ namespace GUI
         private const int RealTimeInterval = 3000;
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
-
+        
         StockTrader StockTrader { get; set; }
         public SearchStockUserControl()
         {
