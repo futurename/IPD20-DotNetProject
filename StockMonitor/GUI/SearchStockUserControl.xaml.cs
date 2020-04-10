@@ -383,7 +383,7 @@ namespace GUI
             var item = lsvMarketPreview.SelectedItem;
             if (item != null)
             {
-                UIComapnyRow comapnyRow = item as UIComapnyRow;
+                UIComapnyRow comapnyRow = (UIComapnyRow) (item as UIComapnyRow).Clone();
                 try
                 {
                     List<UIComapnyRow> tempList = GlobalVariables.WatchListUICompanyRows.ToList();
@@ -397,35 +397,14 @@ namespace GUI
                     }
                     else
                     {
-                        int companyId = comapnyRow.CompanyId;
-                        Task t = GUIDataHelper.AddItemToWatchListTast(CurrentUserId, companyId);
-
-                        Task.WhenAll(t).ContinueWith(p =>
+                        GlobalVariables.WatchListUICompanyRows.Add(comapnyRow);
+                        Task.Run(() =>
                         {
-                            tempList.Add(comapnyRow);
-                            GlobalVariables.WatchListUICompanyRows =
-                                new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
-
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
-                            });
-                            Task.Run(async () =>
-                            {
-                                while (true)
+                            LoadAndRefreshWatchListRow(comapnyRow); 
+                            Dispatcher.Invoke(() =>
                                 {
-                                    try
-                                    {
-                                        RefreshRealTImePrice(comapnyRow);
-                                        //Thread.Sleep(RealTimeInterval);
-                                        await Task.Delay(RealTimeInterval);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.Out.WriteLine($"Watchlist loop thread exception {comapnyRow.Symbol} at {DateTime.Now}");
-                                    }
-                                }
-                            });
+                                    lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+                                });
                         });
                     }
                 }

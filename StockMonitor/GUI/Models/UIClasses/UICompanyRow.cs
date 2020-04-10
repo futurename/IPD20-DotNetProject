@@ -17,7 +17,7 @@ using GUI;
 namespace StockMonitor.Models.UIClasses
 
 {
-    public class UIComapnyRow : INotifyPropertyChanged
+    public class UIComapnyRow : INotifyPropertyChanged, ICloneable
     {
         public UIComapnyRow(//ex: FormatException
             string symbol,
@@ -188,6 +188,11 @@ namespace StockMonitor.Models.UIClasses
         public override string ToString()
         {
             return $"{Symbol}, {CompanyName}:{Price}, {ChangePercentage}%,{PriceChange}, High: {NotifyPriceHigh}, Low: {NotifyPriceLow}";
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
