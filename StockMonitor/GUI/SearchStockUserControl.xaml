@@ -164,8 +164,9 @@
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Width="40">
-                                        <Button Width="20" Height="20" Name="btNotification" Click="BtNotification_OnClick" Background="#673ab7">
-                                            <materialDesign:PackIcon Kind="NotificationsActive" />
+                                        <Button Width="20" Height="20" Name="btNotification"
+                                                Click="BtNotification_OnClick" Foreground="#673ab7" Background="White" BorderThickness="0">
+                                            <materialDesign:PackIcon Kind="NotificationsActive"/>
                                             <Button.Style>
                                                 <Style>
                                                     <Style.Triggers>
@@ -184,7 +185,6 @@
                                         <TextBlock HorizontalAlignment="Center"  FontWeight="Bold" FontSize="9" Text="{Binding NotifyPriceHigh, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                                             <TextBlock.Style>
                                                 <Style>
-
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding NotifyPriceHigh, Converter={StaticResource NotifySettingValueConverter}}" Value="false">
                                                             <Setter Property="UIElement.Visibility" Value="Hidden"/>
@@ -431,15 +431,13 @@
                 </ListView.View>
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem x:Name="lsvWatch_miAddToWatchList" Header="Add to watch list" Click="LsvWatch_miAddToWatchList_OnClick"/>
                         <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"/>
-                        <MenuItem x:Name="lsvWatch_SetTargetPrice" Header="Set price notification" Click="LsvWatch_SetTargetPrice_OnClick"/>
                         <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Click="LsvWatch_miTradeStock_OnClick" />
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="-208,335,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
-            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="-208,395,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="-216,335,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
+            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="-216,395,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -449,7 +447,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-207,452,0,0" Click="btRestartRefresh_Click" Height="28" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-215,452,0,0" Click="btRestartRefresh_Click" Height="28" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>

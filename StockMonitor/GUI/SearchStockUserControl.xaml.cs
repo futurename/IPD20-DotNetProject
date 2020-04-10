@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -341,12 +342,7 @@ namespace GUI
                     $"\n!!! RefreshRealtimePrice exception for {comapnyRow.Symbol} at {DateTime.Now} for {ex.Message}");
             }
         }
-
-        private void LsvWatch_miAddToWatchList_OnClick(object sender, RoutedEventArgs e)
-        {
-            tbSearchBox.Focus();
-        }
-
+        
         private void LsvWatch_miDeleteFromWatchList_OnClick(object sender, RoutedEventArgs e)
         {
             var item = lsvWatchList.SelectedItem;
@@ -431,20 +427,6 @@ namespace GUI
             cfg.Dispatcher = Application.Current.Dispatcher;
         });
 
-
-        private void LsvWatch_SetTargetPrice_OnClick(object sender, RoutedEventArgs e)
-        {
-            var item = lsvMarketPreview.SelectedItem;
-            if (item != null)
-            {
-                UIComapnyRow companyRow = item as UIComapnyRow;
-                PriceNotificationDialog priceDialgo = new PriceNotificationDialog(companyRow);
-                if (priceDialgo.ShowDialog() == true)
-                {
-
-                }
-            }
-        }
 
         CancellationTokenSource chartTokenSource;
         private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -691,7 +673,7 @@ namespace GUI
             {
                 int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
 
-                UIComapnyRow companyRow = GlobalVariables.DefaultUICompanyRows.ToList()[i];
+                UIComapnyRow companyRow = lsvMarketPreview.Items.ToDynamicList()[i];
                 CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
                 detailDialog.Owner = Application.Current.MainWindow;
                 detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;

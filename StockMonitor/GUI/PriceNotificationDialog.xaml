@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         xmlns:uiClasses="clr-namespace:StockMonitor.Models.UIClasses"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Set price notification" Height="350" Width="360" ResizeMode="NoResize">
     <StackPanel Name="spDialogPanel" Orientation="Vertical" DataContext="{Binding UICompanyRow}">
@@ -34,17 +35,25 @@
             </TextBlock.Style>
         </TextBlock>
         <StackPanel Orientation="Horizontal">
-            <Label Content="Target high:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
-            <TextBox Name="tbTargetHigh"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
-            <Button Name="btHighRoundDown" Click="BtHighRoundDown_OnClick" Content="Down" FontSize="10" Margin="10,5,0,5" Width="60" Background="Red" Foreground="White" FontWeight="Bold"></Button>
-            <Button x:Name="btHighRoundup" Click="BtHighRoundup_OnClick" Content="Up" FontSize="10" Margin="10,5,0,5" Width="60" Background="Green" Foreground="White" FontWeight="Bold" />
+            <Label Content="Target high:" Margin="30,0,10,0" Width="80" VerticalAlignment="Center" FontWeight="Bold"></Label>
+            <TextBox x:Name="tbTargetHigh" FontWeight="Bold" Width="60" Margin="10,0,0,0" VerticalAlignment="Center" TextAlignment="Center" />
+            <Button Name="btHighRoundDown" Click="BtHighRoundDown_OnClick"   Background="White"  Foreground="Red" BorderThickness="0" Margin="15,5,0,5">
+                <materialDesign:PackIcon Kind="ArrowDownDropCircleOutline" Height="26" Width="26"/>
+            </Button>
+            <Button x:Name="btHighRoundup" Click="BtHighRoundup_OnClick"  Margin="10,5,0,5"  Background="White" Foreground="Green" BorderThickness="0" >
+                <materialDesign:PackIcon Kind="ArrowUpDropCircleOutline" Height="26" Width="26"/>
+            </Button>
 
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-            <Label Content="Target low:" Margin="30,0,0,0" Width="80" VerticalAlignment="Center"></Label>
-            <TextBox Name="tbTargetLow"  Width="60" Margin="20,0,0,0" VerticalAlignment="Center" TextAlignment="Right" />
-            <Button Name="btLowRoundUp" Click="BtLowRoundUp_OnClick" Content="Up" FontSize="10" Margin="10,5,0,5" Width="60" Foreground="White" FontWeight="Bold" Background="Green"/>
-            <Button Name="btLowRoundDown" Click="BtLowRoundDown_OnClick" Content="Down" FontSize="10" Margin="10,5,0,5" Width="60" Foreground="White" FontWeight="Bold" Background="Red"/>
+            <Label Content="Target low:" Margin="30,0,10,0" Width="80" VerticalAlignment="Center" FontWeight="Bold"></Label>
+            <TextBox FontWeight="Bold" Name="tbTargetLow"  Width="60" Margin="10,0,0,0" VerticalAlignment="Center" TextAlignment="Center" />
+            <Button Name="btLowRoundUp" Click="BtLowRoundUp_OnClick"  Margin="15,5,0,5"  Foreground="Green"  Background="White" BorderThickness="0">
+                <materialDesign:PackIcon Kind="ArrowUpDropCircleOutline" Height="26" Width="26"/>
+            </Button>
+            <Button Name="btLowRoundDown" Click="BtLowRoundDown_OnClick" Margin="10,5,0,5"  Foreground="Red" Background="White" BorderThickness="0">
+                <materialDesign:PackIcon Kind="ArrowDownDropCircleOutline" Height="26" Width="26"/>
+            </Button>
 
         </StackPanel>
         <Button  x:Name="btClearSetting" Content="Clear setting" Width="120" HorizontalAlignment="Center" Margin="0,20,0,0" Click="BtClearSetting_OnClick"/>

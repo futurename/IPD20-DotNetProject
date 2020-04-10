@@ -87,25 +87,25 @@ namespace GUI
         private void BtHighRoundDown_OnClick(object sender, RoutedEventArgs e)
         {
             double price = double.Parse(tbTargetHigh.Text);
-            tbTargetHigh.Text = Math.Round(price * 99 / 100).ToString("N2");
+            tbTargetHigh.Text = (price * 99 / 100).ToString("N2");
         }
 
         private void BtHighRoundup_OnClick(object sender, RoutedEventArgs e)
         {
             double price = double.Parse(tbTargetHigh.Text);
-            tbTargetHigh.Text = Math.Round(price * 101 / 100).ToString("N2");
+            tbTargetHigh.Text = (price * 101 / 100).ToString("N2");
         }
 
         private void BtLowRoundUp_OnClick(object sender, RoutedEventArgs e)
         {
             double price = double.Parse(tbTargetLow.Text);
-            tbTargetLow.Text = Math.Round(price * 101 / 100).ToString("N2");
+            tbTargetLow.Text = (price * 101 / 100).ToString("N2");
         }
 
         private void BtLowRoundDown_OnClick(object sender, RoutedEventArgs e)
         {
             double price = double.Parse(tbTargetLow.Text);
-            tbTargetLow.Text = Math.Round(price * 99 / 100).ToString("N2");
+            tbTargetLow.Text = (price * 99 / 100).ToString("N2");
         }
     }
 }
