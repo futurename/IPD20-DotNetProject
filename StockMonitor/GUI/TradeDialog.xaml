@@ -131,6 +131,11 @@
                         <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime}"/>
                     </GridView>
                 </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="lvReservedTrading_miDelete" Header="Delete" Click="lvReservedTrading_miDelete_Click" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
         </Grid>
     </Grid>

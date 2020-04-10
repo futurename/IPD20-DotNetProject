@@ -2,6 +2,8 @@
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +36,18 @@ namespace GUI
 
             InitializeComponent();
 
-            lvReservedTrading.ItemsSource = GUIDataHelper.GetReservedList(UserId);
+            try
+            {
+                lvReservedTrading.ItemsSource = GUIDataHelper.GetReservedList(UserId);//ex InvalidOperationException,IOException
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Internel Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("Cannot Connect Database", "Internel Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             this.DataContext = this;
         }
@@ -42,7 +55,6 @@ namespace GUI
         private void btTrade_Click(object sender, RoutedEventArgs e)
         {
             try {
-            //TODO: validations
                 TradeEnum trade;
                 if (rbBuy.IsChecked == true) { trade = TradeEnum.Buy; }
                 else if(rbSell.IsChecked == true) { trade = TradeEnum.Sell; }
@@ -60,8 +72,7 @@ namespace GUI
                     Company.CompanyId, UserId, trade, quantityStr, minPriceStr, maxPriceStr, pickDate, pickTime
                 );
 
-                GUIDataHelper.InsertReservedTrading(newReservedTrading);
-                //ex IOException, InvalidOperationException
+                GUIDataHelper.InsertReservedTrading(newReservedTrading);//ex DateException, InvalidOperationException
 
                 this.DialogResult = true;
             }
@@ -73,7 +84,7 @@ namespace GUI
             {
                 MessageBox.Show(this, ex.Message, "Trade Reservation Fail");
             }
-            catch (SystemException ex)
+            catch (DataException ex)
             {
                 MessageBox.Show(this,
                     "Internal Error",
@@ -87,6 +98,24 @@ namespace GUI
         private void btCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void lvReservedTrading_miDelete_Click(object sender, RoutedEventArgs e)
+        {
+            ReservedTrading selTrading = (ReservedTrading)lvReservedTrading.SelectedItem;
+
+            if(selTrading == null) { return; }
+
+            try
+            {
+                GUIDataHelper.DeleteReservedTrading(selTrading); //ex InvalidOperationException
+
+                lvReservedTrading.ItemsSource = GUIDataHelper.GetReservedList(UserId);//ex InvalidOperationException
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Internel Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
