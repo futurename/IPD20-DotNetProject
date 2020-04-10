@@ -71,6 +71,7 @@ namespace StockMonitor.Models.UIClasses
             CompanyId = company.Id;
             CompanyName = company.CompanyName;
             CEO = company.CEO;
+           
         }
 
         public int Id { get; set; }

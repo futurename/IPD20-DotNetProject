@@ -399,8 +399,9 @@ namespace GUI
                     }
                     else
                     {
+                        Task.WhenAll(GUIDataHelper.AddItemToWatchListTast(CurrentUserId, comapnyRow.CompanyId));
                         GlobalVariables.WatchListUICompanyRows.Add(comapnyRow);
-                        Task.Run(() =>
+                         Task.Run(() =>
                         {
                             LoadAndRefreshWatchListRow(comapnyRow); 
                             Dispatcher.Invoke(() =>
@@ -432,32 +433,29 @@ namespace GUI
 
             cfg.Dispatcher = Application.Current.Dispatcher;
         });
+        
+       
 
-
-        CancellationTokenSource chartTokenSource;
         private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
+            var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
 
-            if (selCompany == null)
+            // find ListViewItem (or null)
+            while (item != null && !(item is ListBoxItem))
+                item = VisualTreeHelper.GetParent(item);
+
+            if (item != null)
             {
-                return;
-            }
+                int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
 
-            chartTokenSource = new CancellationTokenSource();
+                UIComapnyRow companyRow = lsvMarketPreview.Items.ToDynamicList()[i];
+                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
+                detailDialog.Owner = Application.Current.MainWindow;
+                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (detailDialog.ShowDialog() == true)
+                {
 
-            try
-            {
-                RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany, chartTokenSource.Token);
-
-                realTimeChart.Owner = Application.Current.MainWindow;
-                realTimeChart.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                realTimeChart.ShowDialog();
-            }
-            catch (OperationCanceledException)
-            {
-                Console.WriteLine("RealTime Chart canceled");
-                chartTokenSource.Dispose();
+                }
             }
         }
 
@@ -667,31 +665,7 @@ namespace GUI
         }
 
         
-        private void StkSymbolField_OnMouseMove(object sender, MouseEventArgs e)
-        {
-            var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
-
-            // find ListViewItem (or null)
-            while (item != null && !(item is ListBoxItem))
-                item = VisualTreeHelper.GetParent(item);
-
-            if (item != null)
-            {
-                int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
-
-                UIComapnyRow companyRow = lsvMarketPreview.Items.ToDynamicList()[i];
-                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
-                detailDialog.Owner = Application.Current.MainWindow;
-                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                if (detailDialog.ShowDialog() == true)
-                {
-
-                }
-            }
-        }
-
-
-        private void TgbDataSourceSwitch_OnClick(object sender, RoutedEventArgs e)
+     private void TgbDataSourceSwitch_OnClick(object sender, RoutedEventArgs e)
         {
             GlobalVariables.IsPseudoDataSource = tgbDataSourceSwitch.IsChecked == true;
             MessageBox.Show("Data mocking: " + GlobalVariables.IsPseudoDataSource.ToString());
@@ -720,11 +694,37 @@ namespace GUI
             }
         }
 
+        CancellationTokenSource chartTokenSource;
+        private void LsvMkt_miRealTimeGraph_OnClick(object sender, RoutedEventArgs e)
+        {
+            UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
 
+            if (selCompany == null)
+            {
+                return;
+            }
 
+            chartTokenSource = new CancellationTokenSource();
 
+            try
+            {
+                RealTimePriceChart realTimeChart = new RealTimePriceChart(selCompany, chartTokenSource.Token);
 
-
+                realTimeChart.Owner = Application.Current.MainWindow;
+                realTimeChart.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                realTimeChart.ShowDialog();
+            }
+            catch (OperationCanceledException)
+            {
+                Console.WriteLine("RealTime Chart canceled");
+                chartTokenSource.Dispose();
+            }
+        }
     }
 
+
+
+    
+
+  
 }
