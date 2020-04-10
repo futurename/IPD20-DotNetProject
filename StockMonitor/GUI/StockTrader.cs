@@ -3,6 +3,7 @@ using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -40,18 +41,34 @@ namespace GUI
             {
                 Thread.Sleep(1000);
             }
-            Task.Factory.StartNew(TradeTask);
+
+            try
+            {
+                Task.Factory.StartNew(TradeTask); //ex InvalidOperationException, OperationCanceledException, DataException
+            }
+            catch(InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Trading Canceled", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (OperationCanceledException ex)
+            {
+                MessageBox.Show(ex.Message, "Trading Canceled(Task Canceled)", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DataException ex)
+            {
+                MessageBox.Show(ex.Message, "Trading Canceled(Database Error)", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        public void TradeTask()
+        public void TradeTask()//ex InvalidOperationException, OperationCanceledException, DataException
         {
             while (true)
             {
                 if (_ct.IsCancellationRequested) { return; }
 
-                var reservedTradingList = TradeDatabaseHelper.GetReservedTradingList(UserId);
-                
-                if(reservedTradingList.Count == 0)
+                var reservedTradingList = TradeDatabaseHelper.GetReservedTradingList(UserId); //ex InvalidOperationException
+
+                if (reservedTradingList.Count == 0)
                 {
                     while (!IsUpdated) { Thread.Sleep(3000); }
                     IsUpdated = false;
@@ -98,7 +115,7 @@ namespace GUI
 
                 //Time Over
                 if(!IsUpdated) {
-                    GUIDataHelper.DeleteReservedTrading(reservedTrading);
+                    GUIDataHelper.DeleteReservedTrading(reservedTrading); //ex DataException,InvalidOperationException
                 }
 
                 IsUpdated = false;
@@ -112,7 +129,6 @@ namespace GUI
 
             //TODO: Alert trade information
 
-            Console.WriteLine(tradingRecord);
             //if (IsTest) { Console.WriteLine(tradingRecord); }
             //else { GlobalVariables.notifier.ShowSuccess(tradingRecord.ToString()); }
         }

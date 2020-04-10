@@ -229,23 +229,23 @@ namespace StockMonitor.Helpers
             }
         }
 
-        public static void InsertReservedTrading(ReservedTrading reservedTrading)//ex
+        public static void InsertReservedTrading(ReservedTrading reservedTrading)//ex DateException, InvalidOperationException
         {
-            TradeDatabaseHelper.InsertReservedTrading(reservedTrading);//ex IOException, InvalidOperationException
-            }
+            TradeDatabaseHelper.InsertReservedTrading(reservedTrading);//ex DateException, InvalidOperationException
+        }
 
-        public static List<ReservedTrading> GetReservedList(int userId)
+        public static List<ReservedTrading> GetReservedList(int userId)//ex InvalidOperationException
         {
-            return TradeDatabaseHelper.GetReservedTradingList(userId);
+            return TradeDatabaseHelper.GetReservedTradingList(userId);//ex InvalidOperationException
         }
 
         public static void AddTradingRecord(TradingRecord tradingRecord)
         {
             TradeDatabaseHelper.AddTradingRecord(tradingRecord);
         }
-        public static void DeleteReservedTrading(ReservedTrading reservedTrading)
+        public static void DeleteReservedTrading(ReservedTrading reservedTrading)//ex DataException,InvalidOperationException
         {
-            TradeDatabaseHelper.DeleteReservedTrading(reservedTrading);
+            TradeDatabaseHelper.DeleteReservedTrading(reservedTrading);//ex DataException,InvalidOperationException
         }
 
 
