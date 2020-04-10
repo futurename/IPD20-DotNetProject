@@ -27,10 +27,19 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        public void SnackbarMessage(string message)
+        {
+            //use the message queue to send a message.
+            var messageQueue = SnackbarTrading.MessageQueue;
+
+            //the message queue can be called from any thread
+            Task.Factory.StartNew(() => messageQueue.Enqueue(message));
+        }
         public MainWindow()
         {
             InitializeComponent();
 
+            GlobalVariables.MainWindow = this;
         }
 
     }

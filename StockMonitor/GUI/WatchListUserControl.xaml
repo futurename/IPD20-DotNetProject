@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GUI"
+             FontSize="14"
              mc:Ignorable="d"
              d:DesignHeight="604" d:DesignWidth="1229"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
@@ -64,7 +65,7 @@
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
-                
+
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
                     <Label Content="Open Price:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBlock x:Name="txtOpenPrice" HorizontalAlignment="Left" TextWrapping="Wrap" Text="-" VerticalAlignment="Top" Margin="0,5,0,0"/>
@@ -84,10 +85,23 @@
             </Grid>
         </Grid>
         <Grid Grid.Column="2">
-            <StackPanel Margin="10,32,4.6,95" Orientation="Vertical">
-                <TextBlock x:Name="txtCompanyName" Margin="0,0,19.6,0" TextWrapping="Wrap" Text="Company Name" VerticalAlignment="Top" FontSize="30"/>
-                <TextBlock x:Name="txtIndustry" Margin="0,0,9.8,0" TextWrapping="Wrap" Text="Industry" VerticalAlignment="Top" FontSize="16" Foreground="Gray" Height="24"/>
-                <TextBlock x:Name="txtDescription" Margin="0,0,14.6,0" TextWrapping="Wrap" Text="Description" VerticalAlignment="Top" Height="200"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0">
+                <TextBlock x:Name="txtCompanyName" Margin="10" TextWrapping="Wrap" Text="Company Name" FontSize="30"/>
+                <TextBlock x:Name="txtIndustry" Margin="10" TextWrapping="Wrap" Text="Industry" FontSize="16" Foreground="Gray"/>
+                <TextBlock x:Name="txtDescription" Margin="10" TextWrapping="WrapWithOverflow"  Text="Description"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="Trading Frequancy" Margin="10" FontSize="20" />
+                <Wpf:PieChart
+                    Name="pieChartTrading" 
+                    LegendLocation="Bottom"
+                    AnimationsSpeed="0:0:0.5"
+                    Hoverable="False"
+                    DataTooltip="{x:Null}" Height="250"/>
             </StackPanel>
         </Grid>
     </Grid>

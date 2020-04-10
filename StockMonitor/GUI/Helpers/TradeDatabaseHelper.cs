@@ -66,5 +66,31 @@ namespace GUI.Helpers
                 _dbContext.SaveChanges();//ex DataException,InvalidOperationException
             }
         }
+
+        public static Dictionary<string, int> GetTradingRecordList(int userId)
+        {
+            StockMonitorEntities _dbContext = new StockMonitorEntities();
+
+            Dictionary<string, int> tradeHistory = new Dictionary<string, int>();
+
+            User tradingUser = (from user in _dbContext.Users.Include("ReservedTradings")
+                                where user.Id == userId
+                                select user).FirstOrDefault();
+
+            foreach(var listItem in tradingUser.WatchListItems)
+            {
+                int count = (from reservedTrading in tradingUser.TradingRecords
+                             where reservedTrading.CompanyId == listItem.CompanyId
+                             select reservedTrading).Count();
+                tradeHistory.Add(listItem.Company.Symbol, count);
+            }
+
+            var reservedTradingsList = tradingUser.ReservedTradings;
+
+
+
+
+            return tradeHistory;
+        }
     }
 }

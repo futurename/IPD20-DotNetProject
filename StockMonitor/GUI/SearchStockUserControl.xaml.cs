@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Math.EC.Endo;
 using StockMonitor;
 using StockMonitor.Helpers;
@@ -58,7 +59,8 @@ namespace GUI
             GlobalVariables.IsPseudoDataSource = tgbDataSourceSwitch.IsChecked == true;
             StockTrader = new StockTrader(CurrentUserId);
             StockTrader.StartTrade();
-
+            GlobalVariables.Notifier = notifier;
+            GlobalVariables.SearchStockUserControl = this; 
         }
 
 
@@ -275,6 +277,10 @@ namespace GUI
                     ****************************************************/
                     comapnyRow.Volume += new Random().Next(50) * 1000;
                 }
+            }
+            catch (JsonSerializationException)
+            {
+                MessageBox.Show("API response is weak. Please try later", "API Connection Fail", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (SystemException ex)
             {
