@@ -165,7 +165,7 @@
                                     </StackPanel>
                                     <StackPanel Width="40">
                                         <Button Width="20" Height="20" Name="btNotification"
-                                                Click="BtNotification_OnClick" Foreground="#673ab7" Background="White" BorderThickness="0">
+                                                Click="BtNotification_OnClick" Foreground="#673ab7" Background="{x:Null}" BorderThickness="0">
                                             <materialDesign:PackIcon Kind="NotificationsActive"/>
                                             <Button.Style>
                                                 <Style>
@@ -333,9 +333,21 @@
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem x:Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Click="LsvMkt_miAddToWatchList_OnClick"/>
-                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Show stock details" Click="LsvMkt_miShowStockDetails_OnClick"/>
-                    <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Set price notification" Click="LsvMkt_miSetTargetPrice_OnClick"/>
+                    <MenuItem x:Name="lsvMkt_miAddToWatchList" Header="Add to watch list" Foreground="#673ab7" Click="LsvMkt_miAddToWatchList_OnClick">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Favorite" Foreground="#673ab7" Height="18" Width="17"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="lsvMkt_miShowStockDetails" Header="Company detail" Foreground="#673ab7" Click="LsvMkt_miShowStockDetails_OnClick">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Show" Foreground="#673ab7" Height="18" Width="17"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Price notification" Foreground="#673ab7" Click="LsvMkt_miSetTargetPrice_OnClick">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="NotificationsActive" Foreground="#673ab7" Height="18" Width="17"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
@@ -431,8 +443,16 @@
                 </ListView.View>
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete from watch list" Click="LsvWatch_miDeleteFromWatchList_OnClick"/>
-                        <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Click="LsvWatch_miTradeStock_OnClick" />
+                        <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete"  Foreground="#673ab7" Click="LsvWatch_miDeleteFromWatchList_OnClick">
+                        <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="DeleteOff" Foreground="#673ab7" Height="18" Width="17"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Foreground="#673ab7" Click="LsvWatch_miTradeStock_OnClick" >
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="AttachMoney" Foreground="#673ab7" Height="18" Width="17"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
