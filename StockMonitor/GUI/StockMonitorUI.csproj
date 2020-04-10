@@ -242,8 +242,8 @@
     <Compile Include="SearchStockUserControl.xaml.cs">
       <DependentUpon>SearchStockUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetTargetPriceNotificationDialog.xaml.cs">
-      <DependentUpon>SetTargetPriceNotificationDialog.xaml</DependentUpon>
+    <Compile Include="PriceNotificationDialog.xaml.cs">
+      <DependentUpon>PriceNotificationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="StockMonitorModel.Context.cs">
       <DependentUpon>StockMonitorModel.Context.tt</DependentUpon>
@@ -307,7 +307,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SetTargetPriceNotificationDialog.xaml">
+    <Page Include="PriceNotificationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

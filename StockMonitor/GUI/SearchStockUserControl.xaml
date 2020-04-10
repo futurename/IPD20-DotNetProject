@@ -19,7 +19,7 @@
 
     </UserControl.Resources>
 
-    <Grid Width="1440">
+    <Grid Width="1480">
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
@@ -48,14 +48,14 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <materialDesign:ColorZone Grid.Row="0" Grid.ColumnSpan="3"
+        <materialDesign:ColorZone Grid.Row="0" Grid.ColumnSpan="3" FontSize="12"
                 Mode="PrimaryMid"
                 Padding="16" VerticalAlignment="Stretch" Margin="1,0,0,10">
             <DockPanel>
                 <ToggleButton
-                        Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
-                        VerticalAlignment="Center"
-                        DockPanel.Dock="Right" />
+                        Style="{StaticResource MaterialDesignSwitchAccentToggleButton}" Name="tgbDataSourceSwitch" Click="TgbDataSourceSwitch_OnClick"
+                        VerticalAlignment="Bottom"
+                        DockPanel.Dock="Right" Margin="0,0,30,10" />
                 <StackPanel
                         Orientation="Horizontal"
                         materialDesign:RippleAssist.IsCentered="True">
@@ -63,7 +63,7 @@
                             Style="{DynamicResource MaterialDesignHamburgerToggleButton}" />
                     <ComboBox Name="cbSearchType"
                             SelectedIndex="0"
-                            Margin="8,2,0,10"
+                            Margin="8,4,0,8"
                             BorderThickness="0"
                             materialDesign:ColorZoneAssist.Mode="Standard"
                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource MaterialDesignPaper}"
@@ -95,8 +95,8 @@
                                         Kind="Magnify"
                                         Opacity=".56" />
                             </Button>
-                            <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" GotFocus="TbSearchBox_OnGotFocus" LostFocus="TbSearchBox_OnLostFocus"
-                                    Margin="24,4,-4,-4"
+                            <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" GotFocus="TbSearchBox_OnGotFocus" LostFocus="TbSearchBox_OnLostFocus" FontSize="16"
+                                    Margin="24,2,-4,-2"
                                     materialDesign:TextFieldAssist.HasClearButton="True" 
                                     materialDesign:HintAssist.Hint="@(CN|CEO|DS):{value};"
                                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
@@ -126,7 +126,7 @@
         </materialDesign:ColorZone>
 
 
-        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1190">
+        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1206">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="ItemContainerStyle">
@@ -152,8 +152,8 @@
                     <GridViewColumn Header="Symbol" Width="280">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Name="stkSymbolField" Orientation="Horizontal"  MouseMove="StkSymbolField_OnMouseMove">
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230">
+                                <StackPanel  Orientation="Horizontal"  >
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230" Name="stkSymbolField" MouseMove="StkSymbolField_OnMouseMove">
                                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                             <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
                                             <TextBlock Text="{Binding CompanyName}" TextDecorations="underline" FontStyle="Italic" Foreground="DarkBlue" TextWrapping="Wrap" FontSize="12" Width="170"
@@ -164,8 +164,9 @@
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Width="40">
-                                        <Image   Height="12" Source="pack://application:,,,/Resources/bell.png" HorizontalAlignment="Center">
-                                            <Image.Style>
+                                        <Button Width="20" Height="20" Name="btNotification" Click="BtNotification_OnClick" Background="#673ab7">
+                                            <materialDesign:PackIcon Kind="NotificationsActive" />
+                                            <Button.Style>
                                                 <Style>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding NotifyPriceHigh, Converter={StaticResource NotifySettingValueConverter}}" Value="false">
@@ -176,8 +177,10 @@
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </Image.Style>
-                                        </Image>
+                                            </Button.Style>
+
+                                        </Button>
+
                                         <TextBlock HorizontalAlignment="Center"  FontWeight="Bold" FontSize="9" Text="{Binding NotifyPriceHigh, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                                             <TextBlock.Style>
                                                 <Style>
@@ -337,7 +340,7 @@
             </ListView.ContextMenu>
         </ListView>
         <Grid Grid.Row="1" Grid.Column="2" Margin="247,0,10,0">
-            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="-248,-2,0,0" Height="316" HorizontalAlignment="Left" Width="233" >
+            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="-272,-6,0,0" Height="316" HorizontalAlignment="Left" Width="255" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -446,7 +449,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-211,454,0,0" Click="btRestartRefresh_Click" Height="27" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-207,452,0,0" Click="btRestartRefresh_Click" Height="28" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
