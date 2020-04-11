@@ -34,16 +34,27 @@
             <uiClasses:NotifySettingValueConverter x:Key="NotifySettingValueConverter"/>
         </Grid.Resources>
 
-        <ListBox x:Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" Height="171" Margin="140,58,0,0" VerticalAlignment="Top" Width="345" Foreground="Gray" Background="White" Panel.ZIndex="1" Grid.RowSpan="2">
+        <ListBox x:Name="lbSearchResult" Visibility="Hidden" HorizontalAlignment="Left" MaxHeight="500" Height="171" Margin="135,58,0,0" VerticalAlignment="Top" Width="345" Foreground="Gray" Background="White" Panel.ZIndex="1" Grid.RowSpan="2">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock x:Name="rtbSymbolResult" Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="60" VerticalAlignment="Center"/>
-                            <Image Source="{Binding Logo}" Height="22"/>
-                            <TextBlock Text="{Binding CompanyName}" FontSize="12" Foreground="DarkBlue" FontWeight="Bold" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
+                    <Button Background="Transparent" Margin="2,4,0,0" BorderThickness="0" Height="35">
+                        <StackPanel Orientation="Horizontal" Width="342">
+                            <TextBlock Margin="5,0,0,0" x:Name="rtbSymbolResult" Text="{Binding Symbol}" Foreground="Black" FontSize="14" FontWeight="Bold" Width="60" VerticalAlignment="Center"/>
+                            <Image Source="{Binding Logo}" Height="22" Margin="5,0,0,0"/>
+                            <TextBlock Text="{Binding CompanyName}" FontSize="12" Foreground="DarkBlue" FontWeight="Bold" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         </StackPanel>
-                    </Border>
+                    </Button>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -98,7 +109,7 @@
                             <TextBox Name="tbSearchBox" PreviewKeyUp="TbSearchBox_OnPreviewKeyUp" GotFocus="TbSearchBox_OnGotFocus" LostFocus="TbSearchBox_OnLostFocus" FontSize="16"
                                     Margin="24,2,-4,-2"
                                     materialDesign:TextFieldAssist.HasClearButton="True" 
-                                    materialDesign:HintAssist.Hint="@(CN|CEO|DS):{value};"
+                                    materialDesign:HintAssist.Hint="@(CN|CEO|IDT):{value}:{Limit};"
                                     materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                                     BorderThickness="0"
                                     MinWidth="200"
@@ -154,7 +165,7 @@
                             <DataTemplate>
                                 <StackPanel  Orientation="Horizontal"  >
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230" Name="stkSymbolField">
-                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Name="StpLogoArea" MouseMove="StpLogoArea_OnMouseMove">
                                             <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
                                             <TextBlock Text="{Binding CompanyName}" TextDecorations="underline" FontStyle="Italic" Foreground="DarkBlue" TextWrapping="Wrap" FontSize="12" Width="170"
                                                        HorizontalAlignment="Center" Margin="0,5,0,0" />

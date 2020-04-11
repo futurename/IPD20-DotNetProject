@@ -206,12 +206,16 @@ namespace StockMonitor.Helpers
                 using (DbStockMonitor _dbContext = new DbStockMonitor())
                 {
                     string[] splitStrings;
-                    string titleString, contentString;
+                    string titleString, contentString, limitString = "10";
                     if (searchString.Trim().StartsWith("@"))
                     {
                         splitStrings = Regex.Split(searchString,@"[\:\;]");
                         titleString = splitStrings[0].Substring(1, splitStrings[0].Length - 1);
                         contentString = splitStrings[1];
+                        if (splitStrings.Length == 4)
+                        {
+                            limitString = splitStrings[2];
+                        }
                     }
                     else
                     {
@@ -221,7 +225,7 @@ namespace StockMonitor.Helpers
 
                     string searchCondition = "c=>"+ GetSearchConditionString(titleString, contentString);
 
-                    var searchItems = _dbContext.Companies.AsNoTracking().Where(searchCondition).OrderBy(c => c.Symbol).Take(10).ToList();
+                    var searchItems = _dbContext.Companies.AsNoTracking().Where(searchCondition).OrderBy(c => c.Symbol).Take(int.Parse(limitString)).ToList();
                     if (searchItems.Count != 0)
                     {
                         return searchItems.Select(item => item as Company).ToList();
@@ -245,8 +249,8 @@ namespace StockMonitor.Helpers
                     return $"c.CompanyName.Contains(\"{contentString}\")";
                 case "CEO": 
                     return $"c.CEO.Contains(\"{contentString}\")";
-                case "DS":
-                    return $"c.Description.Contains(\"{contentString}\")";
+                case "IDT":
+                    return $"c.Industry.Contains(\"{contentString}\")";
                 case "Symbol":
                     return $"c.Symbol.Contains(\"{contentString}\")";
                 default:

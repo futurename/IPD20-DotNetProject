@@ -577,7 +577,7 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             lbSearchResult.ItemsSource = GlobalVariables.SearchResultCompanies;
-                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 45;
+                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 40;
                             lbSearchResult.Visibility = Visibility.Visible;
                         });
                     }
@@ -596,8 +596,9 @@ namespace GUI
 
         private void BrClearSearch_OnClick(object sender, RoutedEventArgs e)
         {
-            tbSearchBox.Text = "Search here...";
             cbSearchType.Text = "Symbol";
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(tbSearchBox), null);
+            Keyboard.ClearFocus();
             Task.Run(() =>
             {
 
@@ -621,6 +622,7 @@ namespace GUI
         private void TbSearchBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Text = "Search here...";
+            lbSearchResult.Visibility = Visibility.Hidden;
         }
 
         private void LsvWatch_miTradeStock_OnClick(object sender, RoutedEventArgs e)
@@ -653,7 +655,7 @@ namespace GUI
         private void CbSearchType_cbDescription_OnSelected(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Focus();
-            tbSearchBox.Text = "@DS:";
+            tbSearchBox.Text = "@IDT:";
             tbSearchBox.Select(tbSearchBox.Text.Length, 0);
         }
         
