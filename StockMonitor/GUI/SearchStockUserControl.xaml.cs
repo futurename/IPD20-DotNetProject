@@ -300,14 +300,15 @@ namespace GUI
                 else
                 {
                     quote = new FmgQuoteOnlyPrice() { Symbol = comapnyRow.Symbol, Price = comapnyRow.Price };
+                    /**************************************************
+                      following line simulate Price change during close hours.
+                     ****************************************************/
+                    Random rand = new Random();
+                    int randDirection = rand.Next(2) == 1 ? -1 : 1;
+                    quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
                 }
 
-                /**************************************************
-                    following line simulate Price change during close hours.
-                ****************************************************/
-                Random rand = new Random();
-                int randDirection = rand.Next(2) == 1 ? -1 : 1;
-                quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
+              
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {

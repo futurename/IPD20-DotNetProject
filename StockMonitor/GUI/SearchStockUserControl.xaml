@@ -405,7 +405,7 @@
                         <GridViewColumn Header="Chg%">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding ChangePercentage, StringFormat=N3, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock Text="{Binding ChangePercentage, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>
