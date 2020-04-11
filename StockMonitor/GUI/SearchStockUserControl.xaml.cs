@@ -37,7 +37,6 @@ namespace GUI
     /// </summary>
     public partial class SearchStockUserControl : UserControl
     {
-        
         public BlockingCollection<string> companyNames = new BlockingCollection<string>()
         {
             "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
@@ -525,7 +524,7 @@ namespace GUI
                 {
                     tbSearchBox.Text = "Search here...";
                     cbSearchType.Text = "Symbol";
-                    tbSearchBox.IsFocused = false;
+                    lsvMarketPreview.Focus();
                     BlockingCollection<UIComapnyRow> searchUIcompanyRows = new BlockingCollection<UIComapnyRow>();
                     lbSearchResult.Visibility = Visibility.Hidden;
 
