@@ -60,7 +60,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>08C2146F099D6FEB6F18A6C49533C6FD8E8F343A</ManifestCertificateThumbprint>
@@ -69,7 +69,7 @@
     <ManifestKeyFile>StockMonitorUI_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -389,7 +389,6 @@
     <None Include="StockMonitorModel.edmx.diagram">
       <DependentUpon>StockMonitorModel.edmx</DependentUpon>
     </None>
-    <None Include="StockMonitorUI_1_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
