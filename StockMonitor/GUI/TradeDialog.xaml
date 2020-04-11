@@ -69,27 +69,27 @@
                             IsChecked="False"
                             Content="SELL" />
             </StackPanel>
-            <TextBox Grid.Row="2" Grid.Column="0"
-                     Name="tbQuantity"
-                     materialDesign:HintAssist.Hint="Quantity"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     VerticalAlignment="Center" Height="44" Margin="0,2.6,9.4,16.6" Grid.ColumnSpan="2" />
-            <TextBox Grid.Row="2" Grid.Column="1" 
+            <TextBox Grid.Row="2" Grid.Column="0" 
                      Name="tbTargetPrice"
                      materialDesign:HintAssist.Hint="Target Price"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="9.2,3.6,0.4,17.6" />
+                     VerticalAlignment="Center"/>
+
+            <TextBox Grid.Row="2" Grid.Column="2"
+                     Name="tbQuantity"
+                     materialDesign:HintAssist.Hint="Quantity"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     VerticalAlignment="Center"/>
 
             <TextBlock Grid.Row="3" Grid.ColumnSpan="3" Text="Due Date"/>
             <DatePicker Grid.Row="3" Grid.Column="0"
                      Name="dpDueDateTime"
                      materialDesign:HintAssist.Hint="Pick Date"
                      DisplayDateStart="{x:Static sys:DateTime.Today}"
-                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Grid.ColumnSpan="2" Margin="0,22.4,9.4,3.8" />
-            <materialDesign:TimePicker Grid.Row="3" Grid.Column="1"
+                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+            <materialDesign:TimePicker Grid.Row="3" Grid.Column="1" 
                       Name="tpDueDateTime"
-                      Is24Hours="True"
-                      Margin="9.2,34.4,0.4,3.8" Grid.ColumnSpan="2" />
+                      Is24Hours="True" Grid.ColumnSpan="2" Margin="9.2,25.4,0.4,13.8" Height="24"/>
             <Button Grid.Row="4" Grid.Column="0"
                     Name="btTrade"
                       Style="{StaticResource MaterialDesignRaisedButton}"

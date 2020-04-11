@@ -102,7 +102,7 @@ namespace GUI.Helpers
                 throw new InvalidOperationException($"There is no User id[{userId}]");
             }
 
-            return tradingUser.TradingRecords.ToList();
+            return tradingUser.TradingRecords.Reverse().ToList();
         }
 
         public static void DeleteTradingRecord(TradingRecord tradingRecord)
