@@ -13,6 +13,13 @@ namespace GUI
 {
     class GlobalVariables
     {
+        public enum CurrentDataSource
+        {
+            Default,
+            SearchResult,
+            WatchList
+        };
+
         public static ConcurrentDictionary<string, string> ConcurentDictionary = new ConcurrentDictionary<string, string>();
         public static BlockingCollection<UIComapnyRow> WatchListUICompanyRows ;
         public static ConcurrentDictionary<string, CancellationTokenSource> WatchListTokenSourceDic;
@@ -27,4 +34,5 @@ namespace GUI
         public static SearchStockUserControl SearchStockUserControl { get; set; }
         public static MainWindow MainWindow { get; set; }
     }
+    
 }
