@@ -30,9 +30,9 @@ namespace StockMonitor.Helpers
                     Console.Out.WriteLine(company.ToString());
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new SystemException("InsertCompanyToDb exception: {symbol} > {ex.Message}");
+                throw new SystemException($"InsertCompanyToDb exception: {symbol} > {ex.Message}");
             }
         }
 

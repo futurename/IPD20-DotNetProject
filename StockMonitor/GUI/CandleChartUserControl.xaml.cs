@@ -104,7 +104,7 @@ namespace GUI
             }
             catch (IOException ex)
             {
-                MessageBox.Show("Cannot open file");
+                MessageBox.Show("Cannot open file: " + ex.Message);
                 return;
             }
 
