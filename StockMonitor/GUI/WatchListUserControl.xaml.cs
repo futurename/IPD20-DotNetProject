@@ -66,6 +66,8 @@ namespace GUI
 
             foreach(var trading in tradingDictionary)
             {
+                if(trading.Value == 0) { continue; }
+
                 var value = new ChartValues<int>();
                 value.Add(trading.Value);
 

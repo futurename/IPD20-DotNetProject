@@ -41,11 +41,7 @@ namespace GUI.Helpers
                 throw new InvalidOperationException($"There is no User id[{userId}]");
             }
 
-            var tradingList = tradingUser.ReservedTradings.ToList();
-
-            tradingList.Sort((t1, t2) => t1.DueDateTime.CompareTo(t2.DueDateTime));
-
-            return tradingList;
+            return tradingUser.ReservedTradings.ToList();
         }
 
         public static void AddTradingRecord(TradingRecord tradingRecord)//ex DataException 
@@ -91,6 +87,31 @@ namespace GUI.Helpers
 
 
             return tradeHistory;
+        }
+
+        public static List<TradingRecord> GetTradingResordList(int userId)//ex InvalidOperationException
+        {
+            StockMonitorEntities _dbContext = new StockMonitorEntities();
+
+            User tradingUser = (from user in _dbContext.Users.Include("ReservedTradings")
+                                where user.Id == userId
+                                select user).FirstOrDefault();
+
+            if (tradingUser == null)
+            {
+                throw new InvalidOperationException($"There is no User id[{userId}]");
+            }
+
+            return tradingUser.TradingRecords.ToList();
+        }
+
+        public static void DeleteTradingRecord(TradingRecord tradingRecord)
+        {//ex DataException,InvalidOperationException
+            StockMonitorEntities _dbContext = new StockMonitorEntities();
+
+            _dbContext.TradingRecords.Remove(tradingRecord);
+
+            _dbContext.SaveChanges();//ex DataException,InvalidOperationException
         }
     }
 }

@@ -18,7 +18,7 @@
         <AssociationConnector Association="StockContext.fk_Company_TradingRecord" ManuallyRouted="false" >
         </AssociationConnector>
         <AssociationConnector Association="StockContext.fk_User_TradingRecord1" />
-        <EntityTypeShape EntityType="StockContext.ReservedTrading" Width="1.5" PointX="6.625" PointY="0.5" />
+        <EntityTypeShape EntityType="StockContext.ReservedTrading" Width="1.5" PointX="6.5" PointY="0.5" />
         <AssociationConnector Association="StockContext.fk_Company_ReservedTradings" />
         <AssociationConnector Association="StockContext.fk_User_ReservedTradings" />
         </Diagram>

@@ -76,50 +76,37 @@ namespace GUI
                     continue;
                 }
 
-                ReservedTrading reservedTrading = reservedTradingList[0];//MAYBE : Fatch only one from database is better?
-                long tickDiff = reservedTrading.DueDateTime.Ticks - DateTime.Now.Ticks;
 
-                UIComapnyRow company = (from companyInWatchList in GlobalVariables.WatchListUICompanyRows
-                                        where companyInWatchList.CompanyId == reservedTrading.CompanyId
-                                        select companyInWatchList).FirstOrDefault();
-
-                if (company == null)
+                foreach (var resvTrading in reservedTradingList)
                 {
-                    throw new InvalidOperationException("[Internel Error]Reserved Trading is avaliable to companies in the WatchList");
-                }
-
-
-                while (tickDiff > -2000)//Take care of the case tickDiff is a little delayed(database response)
-                {
-                    if (_ct.IsCancellationRequested) { return; }
-
-                    //Check Price is in the range
-                    if (reservedTrading.MinPrice < company.Price && company.Price < reservedTrading.MaxPrice)
+                    if (resvTrading.DueDateTime.CompareTo(DateTime.Now) < 0)
                     {
-                        TradeStock(reservedTrading, company);
-                        break;
+                        GUIDataHelper.DeleteReservedTrading(resvTrading);
+                        continue;
                     }
 
-                    if (IsUpdated)
+                    UIComapnyRow company = (from companyInWatchList in GlobalVariables.WatchListUICompanyRows
+                                            where companyInWatchList.CompanyId == resvTrading.CompanyId
+                                            select companyInWatchList).FirstOrDefault();
+
+                    if (company == null)
                     {
-                        break;
+                        throw new InvalidOperationException("[Internel Error]Reserved Trading is avaliable to companies in the WatchList");
                     }
-                    else
+
+                    if (resvTrading.TradeType.Equals(TradeEnum.Buy.ToString())
+                        && company.Price <= resvTrading.TargetPrice)
                     {
-                        if (tickDiff > 5000) { Thread.Sleep(3000); }
-                        else { Thread.Sleep(1000); }
+                        TradeStock(resvTrading, company);
+                        GUIDataHelper.DeleteReservedTrading(resvTrading); //ex DataException,InvalidOperationException
                     }
-                    tickDiff = reservedTrading.DueDateTime.Ticks - DateTime.Now.Ticks;
+                    else if (resvTrading.TradeType.Equals(TradeEnum.Sell.ToString())
+                        && company.Price >= resvTrading.TargetPrice)
+                    {
+                        TradeStock(resvTrading, company);
+                        GUIDataHelper.DeleteReservedTrading(resvTrading); //ex DataException,InvalidOperationException
+                    }
                 }
-
-                if (_ct.IsCancellationRequested) { return; }
-
-                //Time Over
-                if(!IsUpdated) {
-                    GUIDataHelper.DeleteReservedTrading(reservedTrading); //ex DataException,InvalidOperationException
-                }
-
-                IsUpdated = false;
             }
         }
 

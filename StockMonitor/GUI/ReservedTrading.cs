@@ -13,45 +13,20 @@ namespace GUI
     using System.Collections.Generic;
     
     public partial class ReservedTrading
-    {   
+    {
         public ReservedTrading() { }
-        public ReservedTrading(int companyId,int userId, TradeEnum trade, string quantityStr,
-              string minPriceStr, string maxPriceStr,
-              DateTime pickDate, DateTime pickTime)
+        public ReservedTrading(int companyId, int userId, TradeEnum trade, string quantityStr,
+              string targetPriceStr, DateTime pickDate, DateTime pickTime)
         {
             CompanyId = companyId;
             UserId = userId;
             TradeType = trade.ToString();
-            SetMinMaxPrice(minPriceStr, maxPriceStr);
+            SetTargetPrice(targetPriceStr);
             SetDueDateTime(pickDate, pickTime);
             SetValume(quantityStr);
             DateTime = DateTime.Now;
         }
-        void SetMinMaxPrice(string minPriceStr, string maxPriceStr)
-        {
-            double minPrice;
-            if (!double.TryParse(minPriceStr, out minPrice))
-            {
-                throw new ArgumentException("MinPrice is not valid");
-            }
 
-            double maxPrice;
-            if (maxPriceStr == "") { maxPrice = double.MaxValue; }
-            else
-            {
-                if (!double.TryParse(maxPriceStr, out maxPrice))
-                {
-                    throw new ArgumentException("MaxPrice is not valid");
-                }
-                if(minPrice > maxPrice)
-                {
-                    throw new ArgumentException("MaxPrice must be smaller than MinPrice");
-                }
-            }
-
-            MinPrice = minPrice;
-            MaxPrice = maxPrice;
-        }
         void SetDueDateTime(DateTime pickDate, DateTime pickTime)
         {
             const int closingHour = 16;
@@ -71,22 +46,34 @@ namespace GUI
         void SetValume(string quantityStr)
         {
             int quantity;
-            if(!int.TryParse(quantityStr,out quantity))
+            if (!int.TryParse(quantityStr, out quantity))
             {
                 throw new ArgumentException("Quantity is not valid");
             }
-            if(quantity <= 0)
+            if (quantity <= 0)
             {
                 throw new ArgumentException("Quantity is not valid");
             }
             Volume = quantity;
         }
+        void SetTargetPrice(string targetPriceStr)
+        {
+            double targetPrice;
+            if (!double.TryParse(targetPriceStr, out targetPrice))
+            {
+                throw new ArgumentException("Quantity is not valid");
+            }
+            if (targetPrice <= 0)
+            {
+                throw new ArgumentException("Quantity is not valid");
+            }
+            TargetPrice = targetPrice;
+        }
 
         public int Id { get; set; }
         public int UserId { get; set; }
         public System.DateTime DateTime { get; set; }
-        public double MinPrice { get; set; }
-        public double MaxPrice { get; set; }
+        public double TargetPrice { get; set; }
         public long Volume { get; set; }
         public string TradeType { get; set; }
         public System.DateTime DueDateTime { get; set; }

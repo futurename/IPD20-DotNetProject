@@ -37,9 +37,9 @@ namespace GUI
         }
         public MainWindow()
         {
-            InitializeComponent();
-
             GlobalVariables.MainWindow = this;
+
+            InitializeComponent();
         }
 
     }

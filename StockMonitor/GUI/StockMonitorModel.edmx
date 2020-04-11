@@ -68,8 +68,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="DateTime" Type="datetime" Precision="0" Nullable="false" />
-          <Property Name="MinPrice" Type="double" Nullable="false" />
-          <Property Name="MaxPrice" Type="double" Nullable="false" />
+          <Property Name="TargetPrice" Type="double" Nullable="false" />
           <Property Name="Volume" Type="bigint" Nullable="false" />
           <Property Name="TradeType" Type="enum" Nullable="false" />
           <Property Name="DueDateTime" Type="datetime" Precision="0" Nullable="false" />
@@ -81,7 +80,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="DateTime" Type="date" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="Price" Type="double" Nullable="false" />
           <Property Name="Volume" Type="bigint" Nullable="false" />
           <Property Name="TradeType" Type="enum" Nullable="false" />
@@ -448,8 +447,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="DateTime" Type="DateTime" Nullable="false" />
-          <Property Name="MinPrice" Type="Double" Nullable="false" />
-          <Property Name="MaxPrice" Type="Double" Nullable="false" />
+          <Property Name="TargetPrice" Type="Double" Nullable="false" />
           <Property Name="Volume" Type="Int64" Nullable="false" />
           <Property Name="TradeType" Type="String" Nullable="false" MaxLength="65532" FixedLength="false" Unicode="false" />
           <Property Name="DueDateTime" Type="DateTime" Nullable="false" />
@@ -594,8 +592,7 @@
                 <ScalarProperty Name="DueDateTime" ColumnName="DueDateTime" />
                 <ScalarProperty Name="TradeType" ColumnName="TradeType" />
                 <ScalarProperty Name="Volume" ColumnName="Volume" />
-                <ScalarProperty Name="MaxPrice" ColumnName="MaxPrice" />
-                <ScalarProperty Name="MinPrice" ColumnName="MinPrice" />
+                <ScalarProperty Name="TargetPrice" ColumnName="TargetPrice" />
                 <ScalarProperty Name="DateTime" ColumnName="DateTime" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

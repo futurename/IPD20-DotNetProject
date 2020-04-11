@@ -18,7 +18,6 @@ namespace GUI
         public StockMonitorEntities()
             : base("name=StockMonitorEntities")
         {
-            this.Configuration.LazyLoadingEnabled = true;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

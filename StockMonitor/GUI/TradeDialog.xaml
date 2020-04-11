@@ -38,7 +38,6 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <materialDesign:Card
                     Grid.Row="0"
@@ -70,49 +69,33 @@
                             IsChecked="False"
                             Content="SELL" />
             </StackPanel>
-            <ComboBox Grid.Row="2" Grid.Column="0" 
-                      Name="comboOrderType" 
-                      materialDesign:HintAssist.Hint="Order Type" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="0,12.4" Width="97">
-                <ComboBoxItem>
-                    Limit Order
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Stop Order
-                </ComboBoxItem>
-            </ComboBox>
-            <TextBox Grid.Row="2" Grid.Column="2"
+            <TextBox Grid.Row="2" Grid.Column="0"
                      Name="tbQuantity"
                      materialDesign:HintAssist.Hint="Quantity"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     VerticalAlignment="Center" Height="44" Margin="0,3.6,0,18.8" />
-            
-            <TextBox Grid.Row="3" Grid.Column="0"   
-                     Name="tbMixPrice"
-                     materialDesign:HintAssist.Hint="Min Price"
+                     VerticalAlignment="Center" Height="44" Margin="0,4.4,9.4,4.4" Grid.ColumnSpan="2" />
+            <TextBox Grid.Row="2" Grid.Column="2" 
+                     Name="tbTargetPrice"
+                     materialDesign:HintAssist.Hint="Target Price"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      VerticalAlignment="Center" />
-            <TextBox Grid.Row="3" Grid.Column="2" 
-                     Name="tbMaxPrice"
-                     materialDesign:HintAssist.Hint="Max Price"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     VerticalAlignment="Center" />
-            
-            <DatePicker Grid.Row="4" Grid.Column="0"
+
+            <DatePicker Grid.Row="3" Grid.Column="0"
                      Name="dpDueDateTime"
                      materialDesign:HintAssist.Hint="Pick Date"
                      DisplayDateStart="{x:Static sys:DateTime.Today}"
                      Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-            <materialDesign:TimePicker Grid.Row="4" Grid.Column="2"
+            <materialDesign:TimePicker Grid.Row="3" Grid.Column="2"
                       Name="tpDueDateTime"
                       Is24Hours="True"
                       Margin="0,18.4,0,6.2" />
-            <Button Grid.Row="5" Grid.Column="0"
+            <Button Grid.Row="4" Grid.Column="0"
                     Name="btTrade"
                       Style="{StaticResource MaterialDesignRaisedButton}"
                       Width="100"
                       ToolTip="Resource name: MaterialDesignRaisedButton"
                       Content="Trade" Click="btTrade_Click" />
-            <Button Grid.Row="5" Grid.Column="2"
+            <Button Grid.Row="4" Grid.Column="2"
                     Name="btCancel"
                       Style="{StaticResource MaterialDesignRaisedLightButton}"
                       Width="100"
@@ -121,22 +104,49 @@
         </Grid>
 
         <Grid Grid.Column="1" Margin="10">
-            <ListView Name="lvReservedTrading">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
-                        <GridViewColumn Header="Trade" DisplayMemberBinding="{Binding TradeType}"/>
-                        <GridViewColumn Header="Min" DisplayMemberBinding="{Binding MinPrice, StringFormat=N2}"/>
-                        <GridViewColumn Header="Max" DisplayMemberBinding="{Binding MaxPrice, StringFormat=N2}"/>
-                        <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime}"/>
-                    </GridView>
-                </ListView.View>
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem x:Name="lvReservedTrading_miDelete" Header="Delete" Click="lvReservedTrading_miDelete_Click" />
-                    </ContextMenu>
-                </ListView.ContextMenu>
-            </ListView>
+            
+            <TabControl HorizontalAlignment="Left" Height="304" VerticalAlignment="Top" Width="424">
+                <TabItem Header="Reserved Trading">
+                    <Grid Background="#FFE5E5E5">
+                        <ListView x:Name="lvReservedTrading">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
+                                    <GridViewColumn Header="Trade" DisplayMemberBinding="{Binding TradeType}"/>
+                                    <GridViewColumn Header="TargetPrice" DisplayMemberBinding="{Binding TargetPrice, StringFormat=N2}"/>
+                                    <GridViewColumn Header="Valume" DisplayMemberBinding="{Binding Valume, StringFormat=N2}"/>
+                                    <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime, StringFormat=yyyy-MM-dd hh:mm}"/>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem x:Name="lvReservedTrading_miDelete" Header="Delete" Click="lvReservedTrading_miDelete_Click" />
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Trading History">
+                    <Grid Background="#FFE5E5E5">
+                        <ListView Name="lvTradingRecord">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
+                                    <GridViewColumn Header="Trade" DisplayMemberBinding="{Binding TradeType}"/>
+                                    <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, StringFormat=N2}"/>
+                                    <GridViewColumn Header="Valume" DisplayMemberBinding="{Binding Valume, StringFormat=N2}"/>
+                                    <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime, StringFormat='yyyy-MM-dd hh:mm'}"/>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem x:Name="lvTradingRecord_miDelete" Header="Delete" Click="lvTradingRecord_miDelete_Click"  />
+                                </ContextMenu>
+                            </ListView.ContextMenu>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

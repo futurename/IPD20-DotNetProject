@@ -229,6 +229,7 @@ namespace StockMonitor.Helpers
             }
         }
 
+
         public static void InsertReservedTrading(ReservedTrading reservedTrading)//ex DateException, InvalidOperationException
         {
             TradeDatabaseHelper.InsertReservedTrading(reservedTrading);//ex DateException, InvalidOperationException
@@ -252,9 +253,23 @@ namespace StockMonitor.Helpers
         {
             return TradeDatabaseHelper.GetTradingRecordList(userId);//ex DataException,InvalidOperationException
         }
-        
+
+        public static void DeleteTradingRecord(TradingRecord tradingRecord)//ex DataException,InvalidOperationException
+        {
+            TradeDatabaseHelper.DeleteTradingRecord(tradingRecord);//ex DataException,InvalidOperationException
+        }
+
+        public static List<TradingRecord> GetTradingResordList(int userId)//ex InvalidOperationException
+        {
+            return TradeDatabaseHelper.GetTradingResordList(userId);//ex InvalidOperationException
+        }
 
 
+
+        public static List<QuoteDaily> GetQuoteDailyListFromDb(string symbol)
+        {
+            return DatabaseHelper.GetQuoteDailyListFromDb(symbol);
+        }
 
     }
 }

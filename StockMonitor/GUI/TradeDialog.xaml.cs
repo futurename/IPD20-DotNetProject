@@ -39,6 +39,7 @@ namespace GUI
             try
             {
                 lvReservedTrading.ItemsSource = GUIDataHelper.GetReservedList(UserId);//ex InvalidOperationException,IOException
+                lvTradingRecord.ItemsSource = GUIDataHelper.GetTradingResordList(UserId);//ex InvalidOperationException
             }
             catch (InvalidOperationException ex)
             {
@@ -62,14 +63,13 @@ namespace GUI
 
                 string quantityStr = tbQuantity.Text;
 
-                string minPriceStr = tbMixPrice.Text;
-                string maxPriceStr = tbMaxPrice.Text;
+                string targetPriceStr = tbTargetPrice.Text;
 
                 DateTime pickDate = dpDueDateTime.SelectedDate.GetValueOrDefault();
                 DateTime pickTime = tpDueDateTime.SelectedTime.GetValueOrDefault();
 
                 ReservedTrading newReservedTrading = new ReservedTrading(
-                    Company.CompanyId, UserId, trade, quantityStr, minPriceStr, maxPriceStr, pickDate, pickTime
+                    Company.CompanyId, UserId, trade, quantityStr, targetPriceStr, pickDate, pickTime
                 );
 
                 GUIDataHelper.InsertReservedTrading(newReservedTrading);//ex DateException, InvalidOperationException
@@ -111,6 +111,23 @@ namespace GUI
                 GUIDataHelper.DeleteReservedTrading(selTrading); //ex InvalidOperationException
 
                 lvReservedTrading.ItemsSource = GUIDataHelper.GetReservedList(UserId);//ex InvalidOperationException
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Internel Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void lvTradingRecord_miDelete_Click(object sender, RoutedEventArgs e)
+        {
+            TradingRecord selRecord = (TradingRecord)lvTradingRecord.SelectedItem;
+            if(selRecord == null) { return; }
+
+            try
+            {
+                GUIDataHelper.DeleteTradingRecord(selRecord); //ex InvalidOperationException
+
+                lvTradingRecord.ItemsSource = GUIDataHelper.GetTradingResordList(UserId);//ex InvalidOperationException
             }
             catch (InvalidOperationException ex)
             {

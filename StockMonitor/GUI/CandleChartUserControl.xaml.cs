@@ -5,6 +5,7 @@ using LiveCharts.Wpf;
 using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
+using StockMonitor.Models.JSONModels;
 using StockMonitor.Models.UIClasses;
 using System;
 using System.Collections.Concurrent;
@@ -68,7 +69,7 @@ namespace GUI
                 await Task.Delay(200);  
             }
 
-            List<Fmg1MinQuote> valueList;
+            List<QuoteDaily> valueList;
             List<string> labelList;
 
             int numOfVal = (int)(gridChartContainer.ActualWidth * NumberOfValuesPerPixel);
@@ -80,15 +81,24 @@ namespace GUI
                     string symbol;
                     while(!GlobalVariables.ConcurentDictionary.TryGetValue("symbol",out symbol)) {
                         ct.ThrowIfCancellationRequested();
-                        await Task.Delay(200); 
+                        await Task.Delay(4000); 
                     }
-                    var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
 
-                    valueList = (from fmg1MinQuote in minValueList.Take(50)
-                                 orderby fmg1MinQuote.Date
-                                 select fmg1MinQuote
-                                 ).ToList<Fmg1MinQuote>();
-                    labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
+                    //var minValueList = await RetrieveJsonDataHelper.RetrieveAllFmg1MinQuote(symbol); // Task(thread)
+
+                    //valueList = (from fmg1MinQuote in minValueList.Take(50)
+                    //             orderby fmg1MinQuote.Date
+                    //             select fmg1MinQuote
+                    //             ).ToList<Fmg1MinQuote>();
+                    //labelList = (from value in valueList select value.Date.ToString("hh:mm")).ToList<string>();
+
+
+
+                    valueList = (from dailyPrice in GUIDataHelper.GetQuoteDailyListFromDb(symbol)
+                                 orderby dailyPrice.Date descending
+                                    select dailyPrice).Take(100).ToList<QuoteDaily>();
+                    valueList.Reverse();
+                    labelList = (from value in valueList select value.Date.ToString("yyyy-MM-dd")).ToList<string>();
                     Labels = labelList.ToArray();
                 }
             }
