@@ -85,16 +85,16 @@
         </Grid>
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="4*"/>
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0">
-                <TextBlock x:Name="txtCompanyName" Margin="10" TextWrapping="Wrap" Text="Company Name" FontSize="30"/>
-                <TextBlock x:Name="txtIndustry" Margin="10" TextWrapping="Wrap" Text="Industry" FontSize="16" Foreground="Gray"/>
-                <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="10" >
-                    <TextBlock x:Name="txtDescription" TextWrapping="WrapWithOverflow" ScrollViewer.VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Text="Description"/>
-                </ScrollViewer>
-            </StackPanel>
+            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible" Padding="10" >
+                <StackPanel>
+                    <TextBlock x:Name="txtCompanyName" Padding="10" TextWrapping="Wrap" Text="Company Name" FontSize="30"/>
+                    <TextBlock x:Name="txtIndustry" Padding="10,0,10,0" TextWrapping="Wrap" Text="Industry" FontSize="16" Foreground="Gray"/>
+                    <TextBlock x:Name="txtDescription" Padding="10" TextWrapping="WrapWithOverflow" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="Description"/>
+                </StackPanel>
+            </ScrollViewer>
             <StackPanel Grid.Row="1">
                 <TextBlock Text="Trading Frequancy" Margin="10" FontSize="20" />
                 <Wpf:PieChart

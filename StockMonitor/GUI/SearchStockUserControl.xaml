@@ -352,6 +352,11 @@
                             <materialDesign:PackIcon Kind="TrendingUp" Foreground="#673ab7" Height="18" Width="17"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem x:Name="lsvMkt_miHistoricalGraph" Header="Historical graph" Foreground="#673ab7" Click="lsvMkt_miHistoricalGraph_Click" >
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="TrendingUp" Foreground="#673ab7" Height="18" Width="17"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Price notification" Foreground="#673ab7" Click="LsvMkt_miSetTargetPrice_OnClick">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="NotificationsActive" Foreground="#673ab7" Height="18" Width="17"/>

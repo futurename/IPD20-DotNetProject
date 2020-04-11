@@ -25,7 +25,7 @@
             <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Margin="0,0,40,0">
             <StackPanel  HorizontalAlignment="Left"  Margin="10,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
                 <TextBlock Text="Stock Price: $"/>
                 <TextBlock Name="txtPrice"/>
@@ -44,7 +44,7 @@
                     MouseMove="ChartMouseMove"
                     MouseEnter="ChartMouseEnter" 
                     MouseLeave="ChartMouseLeave"
-                    ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,1.8,31,16.8">
+                    ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,1.8,30,16.8">
             <Wpf:CartesianChart.AxisX>
                 <Wpf:Axis Labels="{Binding Labels}" 
                             RangeChanged="Ax_RangeChanged"
@@ -54,7 +54,8 @@
         <ProgressBar Name="progBarChart" IsIndeterminate="True" Margin="0" Grid.Row="1" VerticalAlignment="Bottom" Visibility="Hidden" />
         <Label Name="lbl_Y_Axis" Margin="35,205.8,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Grid.Row="2" Visibility="Hidden" />
         <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,31.8,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Grid.Row="2" Visibility="Hidden"/>
-        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,254.8,0,-0.2" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Background="White" Opacity="0.8" Grid.Row="2" Visibility="Hidden" />
+
+        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,254.8,0,-0.2" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Background="Gray" Opacity="0.8" Grid.Row="2" Visibility="Hidden" Foreground="#FFE4E4E4" />
     </Grid>
 
 </UserControl>

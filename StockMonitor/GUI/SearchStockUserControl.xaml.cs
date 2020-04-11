@@ -721,6 +721,26 @@ namespace GUI
                 chartTokenSource.Dispose();
             }
         }
+
+        private void lsvMkt_miHistoricalGraph_Click(object sender, RoutedEventArgs e)
+        {
+            UIComapnyRow selCompany = (UIComapnyRow)lsvMarketPreview.SelectedItem;
+
+            if (selCompany == null)
+            {
+                return;
+            }
+
+            GlobalVariables.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Symbol, (k, v) => selCompany.Symbol);
+
+            Window historicalDialog = new Window
+            {
+                Title = $"{selCompany.Symbol}'s Daily Price Candle Chart",
+                Content = new CandleChartUserControl { SelectedSymbol = selCompany.Symbol }
+            };
+
+            historicalDialog.ShowDialog();
+        }
     }
 
 
