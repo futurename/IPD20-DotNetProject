@@ -21,7 +21,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using LiveCharts;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Math.EC.Endo;
 using StockMonitor;
 using StockMonitor.Helpers;
 using StockMonitor.Models.ApiModels;
@@ -49,6 +48,7 @@ namespace GUI
         private const int RealTimeInterval = 3000;
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
+        private GlobalVariables.CurrentDataSource curDataSource;
 
         StockTrader StockTrader { get; set; }
         public SearchStockUserControl()
@@ -60,7 +60,8 @@ namespace GUI
             StockTrader = new StockTrader(CurrentUserId);
             StockTrader.StartTrade();
             GlobalVariables.Notifier = notifier;
-            GlobalVariables.SearchStockUserControl = this; 
+            GlobalVariables.SearchStockUserControl = this;
+            tbSearchBox.Text = "Search here...";
         }
 
 
@@ -72,6 +73,7 @@ namespace GUI
             GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
             GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
             GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
+            
             Task.Run(() => LoadAndRefreshWatchListManager(CurrentUserId));
             Task.Run(() => LoadAndRefreshDefaultListManager());
         }
@@ -90,8 +92,8 @@ namespace GUI
             Dispatcher.Invoke(() =>
             {
                 lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
-
-                Console.Out.WriteLine($"{lsvMarketPreview.Items.Count}:{GlobalVariables.DefaultUICompanyRows.Count}");
+                
+                Console.Out.WriteLine($"{lsvWatchList.Items.Count}:{GlobalVariables.WatchListUICompanyRows.Count}");
             });
 
             foreach (var watchUICompanyRow in GlobalVariables.WatchListUICompanyRows)
@@ -121,7 +123,7 @@ namespace GUI
                 Dispatcher.Invoke(() =>
                 {
                     lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows.ToList();
-
+                    curDataSource = GlobalVariables.CurrentDataSource.Default;
                     Console.Out.WriteLine(
                         $"\n%%%%% total: {lsvMarketPreview.Items.Count}:{GlobalVariables.DefaultUICompanyRows.Count}, cur: {companyRow.ToString()}");
                 });
@@ -441,21 +443,18 @@ namespace GUI
         {
             var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
 
-            // find ListViewItem (or null)
             while (item != null && !(item is ListBoxItem))
                 item = VisualTreeHelper.GetParent(item);
-
             if (item != null)
             {
                 int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
-
                 UIComapnyRow companyRow = lsvMarketPreview.Items.ToDynamicList()[i];
                 CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
                 detailDialog.Owner = Application.Current.MainWindow;
                 detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                 if (detailDialog.ShowDialog() == true)
                 {
-
+                    //nothing to do;
                 }
             }
         }
@@ -526,12 +525,12 @@ namespace GUI
                 {
                     tbSearchBox.Text = "Search here...";
                     cbSearchType.Text = "Symbol";
+                    tbSearchBox.IsFocused = false;
                     BlockingCollection<UIComapnyRow> searchUIcompanyRows = new BlockingCollection<UIComapnyRow>();
-                    tbSearchBox.Text = "";
                     lbSearchResult.Visibility = Visibility.Hidden;
 
                     if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
-                        @"^@(CN|CEO|DS):[A-Za-z][A-Za-z ]{1,20};$"))
+                        @"^@(CN|CEO|IDT):[A-Za-z][A-Za-z ]{1,20};|(CN|CEO|IDT):[A-Za-z][A-Za-z ]{1,20}:[1-9]+[0-9]?;$"))
                     {
                         Task t = Task.Run(async () =>
                         {
@@ -549,6 +548,7 @@ namespace GUI
                             {
                                 GlobalVariables.SearchResultUICompanyRows = searchUIcompanyRows;
                                 lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
+                                curDataSource = GlobalVariables.CurrentDataSource.SearchResult;
                             });
                             LoadAndRefreshSearchResultRows();
                         });
@@ -568,7 +568,7 @@ namespace GUI
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
             else if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
-                @"^@(CN|CEO|DS):[A-Za-z][A-Za-z ]{1,20};$"))
+                @"^@(CN|CEO|IDT):[A-Za-z][A-Za-z ]{1,20};|(CN|CEO|IDT):[A-Za-z][A-Za-z ]{1,20}:[1-9]+[0-9]?;$"))
             {
                 Task.Run(async () =>
                 {
@@ -578,7 +578,7 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             lbSearchResult.ItemsSource = GlobalVariables.SearchResultCompanies;
-                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 39;
+                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 45;
                             lbSearchResult.Visibility = Visibility.Visible;
                         });
                     }
@@ -601,7 +601,16 @@ namespace GUI
             cbSearchType.Text = "Symbol";
             Task.Run(() =>
             {
-                this.Dispatcher.Invoke(() => { lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows; });
+
+                Dispatcher.Invoke(() =>
+                {
+                    if (curDataSource == GlobalVariables.CurrentDataSource.SearchResult)
+                    {
+                        GlobalVariables.SearchResultCancellationTokenSource.Cancel(true);
+                    }
+                    lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows;
+                    curDataSource = GlobalVariables.CurrentDataSource.Default;
+                });
             });
         }
 
@@ -648,22 +657,7 @@ namespace GUI
             tbSearchBox.Text = "@DS:";
             tbSearchBox.Select(tbSearchBox.Text.Length, 0);
         }
-
-        private void LsvMkt_miShowStockDetails_OnClick(object sender, RoutedEventArgs e)
-        {
-            var item = lsvMarketPreview.SelectedItem;
-            if (item != null)
-            {
-                UIComapnyRow companyRow = item as UIComapnyRow;
-                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
-                detailDialog.Owner = Application.Current.MainWindow;
-                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                if (detailDialog.ShowDialog() == true)
-                {
-
-                }
-            }
-        }
+        
 
         
      private void TgbDataSourceSwitch_OnClick(object sender, RoutedEventArgs e)
@@ -674,17 +668,11 @@ namespace GUI
 
         private void BtNotification_OnClick(object sender, RoutedEventArgs e)
         {
-            var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
-
-            // find ListViewItem (or null)
-            while (item != null && !(item is ListBoxItem))
-                item = VisualTreeHelper.GetParent(item);
+            var item = lsvMarketPreview.SelectedItem;
 
             if (item != null)
             {
-                int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
-
-                UIComapnyRow companyRow = GlobalVariables.DefaultUICompanyRows.ToList()[i];
+                UIComapnyRow companyRow = item as UIComapnyRow;
                 PriceNotificationDialog notificationDialog = new PriceNotificationDialog(companyRow);
                 notificationDialog.Owner = Application.Current.MainWindow;
                 notificationDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -719,6 +707,62 @@ namespace GUI
             {
                 Console.WriteLine("RealTime Chart canceled");
                 chartTokenSource.Dispose();
+            }
+        }
+
+        private void StpLogoArea_OnMouseMove(object sender, MouseEventArgs e)
+        {
+            var item = VisualTreeHelper.HitTest(lsvMarketPreview, Mouse.GetPosition(lsvMarketPreview)).VisualHit;
+
+            // find ListViewItem (or null)
+            while (item != null && !(item is ListBoxItem))
+                item = VisualTreeHelper.GetParent(item);
+
+            if (item != null)
+            {
+                int i = lsvMarketPreview.Items.IndexOf(((ListViewItem)item).DataContext);
+
+                UIComapnyRow companyRow = lsvMarketPreview.ItemsSource.ToDynamicList()[i];
+                CompanyDetailDialog detailDialog = new CompanyDetailDialog(companyRow);
+                detailDialog.Owner = Application.Current.MainWindow;
+                detailDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                if (detailDialog.ShowDialog() == true)
+                {
+
+                }
+            }
+        }
+        
+        private async void Lb_bt_stpCompany_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = VisualTreeHelper.HitTest(lbSearchResult, Mouse.GetPosition(lbSearchResult)).VisualHit;
+
+            // find ListViewItem (or null)
+            while (item != null && !(item is ListBoxItem))
+                item = VisualTreeHelper.GetParent(item);
+
+            if (item != null)
+            {
+                int i = lbSearchResult.Items.IndexOf(((ListBoxItem)item).DataContext);
+
+                Company companyRow = GlobalVariables.SearchResultCompanies.ToList()[i];
+
+                Task<UIComapnyRow> task =  GUIDataHelper.GetUICompanyRowTaskBySymbol(companyRow.Symbol);
+                UIComapnyRow uiCompanyRow = await task;
+
+                lbSearchResult.Visibility = Visibility.Hidden;
+                tbSearchBox.Text = "Search here...";
+                
+                Dispatcher.Invoke(() =>
+                {
+                    BlockingCollection<UIComapnyRow> selUICompanyList = new BlockingCollection<UIComapnyRow>();
+                    selUICompanyList.Add(uiCompanyRow);
+                    GlobalVariables.SearchResultUICompanyRows = selUICompanyList;
+                    lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
+                    curDataSource = GlobalVariables.CurrentDataSource.SearchResult;
+                    LoadAndRefreshSearchResultRows();
+                });
+
             }
         }
     }
