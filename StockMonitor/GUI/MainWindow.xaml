@@ -29,7 +29,7 @@
         
         <smtx:XamlDisplay VerticalContentAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="2">
             <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}"
-                                                 x:Name="SnackbarTrading" />
+                                                 x:Name="SnackbarTrading" Margin="0,26,0,-0.4" VerticalAlignment="Stretch" />
         </smtx:XamlDisplay>
     </Grid>
 

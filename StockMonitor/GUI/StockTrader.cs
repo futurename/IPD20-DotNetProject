@@ -22,11 +22,8 @@ namespace GUI
         private CancellationToken _ct;
         public bool IsUpdated { get; set; }
         public int UserId { get; set; }
-        private bool IsTest { get; set; } 
-        public StockTrader(int userId, bool isTest = false)
+        public StockTrader(int userId)
         {
-            IsTest = isTest;
-
             TokenSource = new CancellationTokenSource();
 
             _ct = TokenSource.Token;
@@ -117,18 +114,15 @@ namespace GUI
 
             //TODO: Alert trade information
 
-            if (IsTest) { Console.WriteLine(tradingRecord); }
-            else {
-                GlobalVariables.MainWindow.Dispatcher.Invoke(() =>
-                {
-                    GlobalVariables.MainWindow.SnackbarMessage($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
-                });
+            GlobalVariables.MainWindow.Dispatcher.Invoke(() =>
+            {
+                GlobalVariables.MainWindow.SnackbarMessage($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
+            });
                 
-                //GlobalVariables.SearchStockUserControl.Dispatcher.Invoke(() =>
-                //{
-                //    GlobalVariables.Notifier.ShowSuccess($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
-                //});
-            }
+            //GlobalVariables.SearchStockUserControl.Dispatcher.Invoke(() =>
+            //{
+            //    GlobalVariables.Notifier.ShowSuccess($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
+            //});
         }
     }
 }

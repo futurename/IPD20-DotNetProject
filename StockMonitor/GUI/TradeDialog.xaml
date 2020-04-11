@@ -114,7 +114,7 @@
                                     <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
                                     <GridViewColumn Header="Trade" DisplayMemberBinding="{Binding TradeType}"/>
                                     <GridViewColumn Header="TargetPrice" DisplayMemberBinding="{Binding TargetPrice, StringFormat=N2}"/>
-                                    <GridViewColumn Header="Valume" DisplayMemberBinding="{Binding Valume, StringFormat=N2}"/>
+                                    <GridViewColumn Header="Valume" DisplayMemberBinding="{Binding Volume}"/>
                                     <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime, StringFormat=yyyy-MM-dd hh:mm}"/>
                                 </GridView>
                             </ListView.View>
@@ -134,7 +134,7 @@
                                     <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
                                     <GridViewColumn Header="Trade" DisplayMemberBinding="{Binding TradeType}"/>
                                     <GridViewColumn Header="Price" DisplayMemberBinding="{Binding Price, StringFormat=N2}"/>
-                                    <GridViewColumn Header="Valume" DisplayMemberBinding="{Binding Valume, StringFormat=N2}"/>
+                                    <GridViewColumn Header="Valume" DisplayMemberBinding="{Binding Volume}"/>
                                     <GridViewColumn Header="Time" DisplayMemberBinding="{Binding DateTime, StringFormat='yyyy-MM-dd hh:mm'}"/>
                                 </GridView>
                             </ListView.View>

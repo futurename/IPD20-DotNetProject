@@ -29,13 +29,12 @@ namespace GUI
 
         void SetDueDateTime(DateTime pickDate, DateTime pickTime)
         {
-            const int closingHour = 16;
             if (pickDate == null) { throw new ArgumentException("Choose Date"); }
             //if (pickDate.CompareTo(DateTime.Now.Date) < 0) { throw new ArgumentException("Choose Date(today or later)"); }
 
-            if (pickTime == null)
+            if (pickTime.Ticks == 0)
             {
-                DueDateTime = pickDate.AddHours(closingHour);
+                DueDateTime = pickDate.AddHours(23).AddMinutes(59);
             }
             else
             {
