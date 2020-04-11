@@ -117,7 +117,7 @@
                             materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                             
                             Margin="22,4,41,2" >
-                            <materialDesign:PackIcon Kind="Restart" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <materialDesign:PackIcon Kind="Reload" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Button>
 
                     </Grid>
@@ -149,7 +149,7 @@
                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
                         </Style>
                     </GridView.ColumnHeaderContainerStyle>
-                    <GridViewColumn Header="Symbol" Width="280">
+                    <GridViewColumn Header="Symbol" Width="285">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel  Orientation="Horizontal"  >
@@ -160,7 +160,7 @@
                                                        HorizontalAlignment="Center" Margin="0,5,0,0" />
                                         </StackPanel>
                                         <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding Symbol}"  FontSize="18" Width="50" FontWeight="Bold" TextAlignment="Center"/>
+                                            <TextBlock Text="{Binding Symbol}"  FontSize="18" Width="55" FontWeight="Bold" TextAlignment="Center"/>
                                         </StackPanel>
                                     </StackPanel>
                                     <StackPanel Width="40">
@@ -405,7 +405,7 @@
                         <GridViewColumn Header="Chg%">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding ChangePercentage, StringFormat=N3, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBlock Text="{Binding ChangePercentage, StringFormat=N2, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBlock.Style>
                                             <Style>
                                                 <Style.Triggers>

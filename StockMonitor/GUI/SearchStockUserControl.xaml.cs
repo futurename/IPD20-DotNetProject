@@ -300,14 +300,15 @@ namespace GUI
                 else
                 {
                     quote = new FmgQuoteOnlyPrice() { Symbol = comapnyRow.Symbol, Price = comapnyRow.Price };
+                    /**************************************************
+                      following line simulate Price change during close hours.
+                     ****************************************************/
+                    Random rand = new Random();
+                    int randDirection = rand.Next(2) == 1 ? -1 : 1;
+                    quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
                 }
 
-                /**************************************************
-                    following line simulate Price change during close hours.
-                ****************************************************/
-                Random rand = new Random();
-                int randDirection = rand.Next(2) == 1 ? -1 : 1;
-                quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
+              
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
@@ -530,7 +531,7 @@ namespace GUI
                     lbSearchResult.Visibility = Visibility.Hidden;
 
                     if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
-                        @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+                        @"^@(CN|CEO|DS):[A-Za-z][A-Za-z ]{1,20};$"))
                     {
                         Task t = Task.Run(async () =>
                         {
@@ -567,7 +568,7 @@ namespace GUI
                 lbSearchResult.Visibility = Visibility.Hidden;
             }
             else if (Regex.IsMatch(searchString, @"^[A-Z]{1,5}$") || Regex.IsMatch(searchString,
-                @"^@(CN|CEO|DS):[A-Za-z]{1,20};|(@PE:)(<|>|=)[0-9]+[.]?[0-9]*;$"))
+                @"^@(CN|CEO|DS):[A-Za-z][A-Za-z ]{1,20};$"))
             {
                 Task.Run(async () =>
                 {
