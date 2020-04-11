@@ -167,7 +167,7 @@ namespace GUI
             var dfe = chartStockPrice.Model;
 
             lbl_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top , 0, 0);
-            txt_X_Axis.Margin = new Thickness(pointMouse.X, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
+            txt_X_Axis.Margin = new Thickness(pointMouse.X - chartMargin.Left, chartMargin.Top + lbl_X_Axis.Height, 0, 0);
             lbl_Y_Axis.Margin = new Thickness(chartMargin.Left, pointMouse.Y, 0, 0);
 
             if (pointMouse.X < chartMargin.Left || pointMouse.X > chartMargin.Width + chartMargin.Left

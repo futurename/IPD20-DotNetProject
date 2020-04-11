@@ -73,22 +73,23 @@
                      Name="tbQuantity"
                      materialDesign:HintAssist.Hint="Quantity"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     VerticalAlignment="Center" Height="44" Margin="0,4.4,9.4,4.4" Grid.ColumnSpan="2" />
-            <TextBox Grid.Row="2" Grid.Column="2" 
+                     VerticalAlignment="Center" Height="44" Margin="0,2.6,9.4,16.6" Grid.ColumnSpan="2" />
+            <TextBox Grid.Row="2" Grid.Column="1" 
                      Name="tbTargetPrice"
                      materialDesign:HintAssist.Hint="Target Price"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     VerticalAlignment="Center" />
+                     VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="9.2,3.6,0.4,17.6" />
 
+            <TextBlock Grid.Row="3" Grid.ColumnSpan="3" Text="Due Date"/>
             <DatePicker Grid.Row="3" Grid.Column="0"
                      Name="dpDueDateTime"
                      materialDesign:HintAssist.Hint="Pick Date"
                      DisplayDateStart="{x:Static sys:DateTime.Today}"
-                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-            <materialDesign:TimePicker Grid.Row="3" Grid.Column="2"
+                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Grid.ColumnSpan="2" Margin="0,22.4,9.4,3.8" />
+            <materialDesign:TimePicker Grid.Row="3" Grid.Column="1"
                       Name="tpDueDateTime"
                       Is24Hours="True"
-                      Margin="0,18.4,0,6.2" />
+                      Margin="9.2,34.4,0.4,3.8" Grid.ColumnSpan="2" />
             <Button Grid.Row="4" Grid.Column="0"
                     Name="btTrade"
                       Style="{StaticResource MaterialDesignRaisedButton}"
@@ -104,7 +105,7 @@
         </Grid>
 
         <Grid Grid.Column="1" Margin="10">
-            
+
             <TabControl HorizontalAlignment="Left" Height="304" VerticalAlignment="Top" Width="424">
                 <TabItem Header="Reserved Trading">
                     <Grid Background="#FFE5E5E5">

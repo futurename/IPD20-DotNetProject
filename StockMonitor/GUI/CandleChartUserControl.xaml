@@ -25,13 +25,13 @@
             <RowDefinition Height="30" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" >
-            <StackPanel  HorizontalAlignment="Left" Orientation="Horizontal">
+        <Grid Grid.Row="0">
+            <StackPanel  HorizontalAlignment="Left"  Margin="10,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
                 <TextBlock Text="Stock Price: $"/>
                 <TextBlock Name="txtPrice"/>
             </StackPanel>
             <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}" Margin="0,0,150,0" VerticalAlignment="Center" HorizontalAlignment="Right" TargetUpdated="txtSymbol_TargetUpdated"/>
-            <Button Name="btReload" Grid.Row="0" Content="Reload" Margin="464,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btReload_Click" FontSize="10" Width="100"/>
+            <Button Name="btReload" Grid.Row="0" Content="Reload" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btReload_Click" FontSize="10" Width="100"/>
         </Grid>
 
         <Wpf:CartesianChart x:Name="chartStockPrice"
@@ -52,9 +52,9 @@
             </Wpf:CartesianChart.AxisX>
         </Wpf:CartesianChart>
         <ProgressBar Name="progBarChart" IsIndeterminate="True" Margin="0" Grid.Row="1" VerticalAlignment="Bottom" Visibility="Hidden" />
-        <Label Name="lbl_Y_Axis" Margin="35,205.8,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Width="500" Grid.Row="2" Visibility="Hidden" />
-        <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,31.8,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Height="215" Grid.Row="2" Visibility="Hidden"/>
-        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,254.8,0,-0.2" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Foreground="Black" Width="62" Background="White" Opacity="0.8" Grid.Row="2" Visibility="Hidden" />
+        <Label Name="lbl_Y_Axis" Margin="35,205.8,0,0" VerticalAlignment="Top" Foreground="Gray" Background="Gray" BorderBrush="Gray" Height="1" Panel.ZIndex="-1" HorizontalAlignment="Left" Grid.Row="2" Visibility="Hidden" />
+        <Label Name="lbl_X_Axis" HorizontalAlignment="Left" Margin="200,31.8,0,0" VerticalAlignment="Top" Width="1" Foreground="Gray" Background="Gray" BorderBrush="Gray"  Panel.ZIndex="-1" Grid.Row="2" Visibility="Hidden"/>
+        <TextBlock Name="txt_X_Axis" HorizontalAlignment="Left" Height="15" Margin="200,254.8,0,-0.2" TextWrapping="Wrap" Text="0000-00-00" VerticalAlignment="Top" Background="White" Opacity="0.8" Grid.Row="2" Visibility="Hidden" />
     </Grid>
 
 </UserControl>
