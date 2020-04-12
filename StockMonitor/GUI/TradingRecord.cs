@@ -14,20 +14,6 @@ namespace GUI
     
     public partial class TradingRecord
     {
-        public TradingRecord() { }
-        public TradingRecord(ReservedTrading reservedTrading, double price)
-        {
-            UserId = reservedTrading.UserId;
-            DateTime = DateTime.Now;
-            Price = price;
-            Volume = reservedTrading.Volume;
-            TradeType = reservedTrading.TradeType.ToString();
-            CompanyId = reservedTrading.CompanyId;
-        }
-        public override string ToString()
-        {
-            return $"{TradeType}  Price: ${Price.ToString("N2")}, Valume: {Volume}";
-        }
         public int Id { get; set; }
         public int UserId { get; set; }
         public System.DateTime DateTime { get; set; }
