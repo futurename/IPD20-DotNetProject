@@ -42,22 +42,22 @@ namespace GUI
             "AAPL", "AMZN", "GOOG", "FB", "AAXN", "MSFT",
             "T", "VZ", "GM", "OKE", "IRBT", "NFLX"
         };
-        
+
 
         private const int RealTimeInterval = 3000;
         private const int OneMinTimeInterval = 6000;
         private const int CurrentUserId = 3;
         private GlobalVariables.CurrentDataSource curDataSource;
 
-        
+        StockTrader StockTrader { get; set; }
         public SearchStockUserControl()
         {
             InitListViewDataSource();
 
             InitializeComponent();
             GlobalVariables.IsPseudoDataSource = tgbDataSourceSwitch.IsChecked == true;
-            GlobalVariables.StockTrader = new StockTrader(CurrentUserId);
-            GlobalVariables.StockTrader.StartTrade();
+            StockTrader = new StockTrader(CurrentUserId);
+            StockTrader.StartTrade();
             GlobalVariables.Notifier = notifier;
             GlobalVariables.SearchStockUserControl = this;
             tbSearchBox.Text = "Search here...";
@@ -72,7 +72,7 @@ namespace GUI
             GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
             GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();
             GlobalVariables.WatchListUICompanyRows = new BlockingCollection<UIComapnyRow>();
-            
+
             Task.Run(() => LoadAndRefreshWatchListManager(CurrentUserId));
             Task.Run(() => LoadAndRefreshDefaultListManager());
         }
@@ -91,7 +91,7 @@ namespace GUI
             Dispatcher.Invoke(() =>
             {
                 lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
-                GlobalVariables.WatchListUserControl.IsUpdated = true;
+
                 Console.Out.WriteLine($"{lsvWatchList.Items.Count}:{GlobalVariables.WatchListUICompanyRows.Count}");
             });
 
@@ -127,7 +127,7 @@ namespace GUI
                         $"\n%%%%% total: {lsvMarketPreview.Items.Count}:{GlobalVariables.DefaultUICompanyRows.Count}, cur: {companyRow.ToString()}");
                 });
 
-                 RefreshOneDefaultCompanyRow(companyRow);
+                RefreshOneDefaultCompanyRow(companyRow);
             }
             catch (SystemException ex)
             {
@@ -231,21 +231,29 @@ namespace GUI
                         {
                             RefreshRealTImePrice(companyRow);
                             Console.Out.WriteLine(
-                                $"\n REFRESH Search result REAL TIME: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                                $"\n REFRESH Search result REAL TIME: {curThreadId}:{companyRow.Symbol} {companyRow.Price}: {GlobalVariables.SearchResultCancellationTokenSource.IsCancellationRequested}\n");
                             await Task.Delay(RealTimeInterval);
                         }
                     }, GlobalVariables.SearchResultCancellationTokenSource.Token);
+                }
+                catch (SystemException ex)
+                {
+                    Console.Out.WriteLine(
+                        $"******************{Thread.CurrentThread.ManagedThreadId}: Search result threads was cancelled! {ex.Message}");
+                }
 
-
+                try
+                {
                     Task.Run(async () =>
                     {
                         int curThreadId = Thread.CurrentThread.ManagedThreadId;
 
                         while (!(GlobalVariables.SearchResultCancellationTokenSource.IsCancellationRequested))
                         {
+
                             Refresh1MinData(companyRow);
                             Console.Out.WriteLine(
-                                $"\n REFRESH Search result One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                                $"\n REFRESH Search result One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}: {GlobalVariables.SearchResultCancellationTokenSource.IsCancellationRequested}\n");
                             await Task.Delay(OneMinTimeInterval);
                         }
                     }, GlobalVariables.SearchResultCancellationTokenSource.Token);
@@ -253,7 +261,7 @@ namespace GUI
                 catch (SystemException ex)
                 {
                     Console.Out.WriteLine(
-                        $"{Thread.CurrentThread.ManagedThreadId}: Search result threads was cancelled! {ex.Message}");
+                        $"******************{Thread.CurrentThread.ManagedThreadId}: Search result threads was cancelled! {ex.Message}");
                 }
             }
         }
@@ -285,7 +293,7 @@ namespace GUI
             }
             catch (SystemException ex)
             {
-                Console.Out.WriteLine($"\n!!! Refresh1Mindata exception for {comapnyRow.Symbol} at {DateTime.Now}");
+                Console.Out.WriteLine($"\n!!! Refresh1Mindata exception for {comapnyRow.Symbol} at {DateTime.Now}: {ex.Message}");
             }
         }
 
@@ -309,7 +317,7 @@ namespace GUI
                     quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
                 }
 
-              
+
 
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
@@ -318,8 +326,8 @@ namespace GUI
                 }
                 else
                 {
-                    Console.Out.WriteLine(
-                        $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                  /*  Console.Out.WriteLine(
+                        $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");*/
                     comapnyRow.Price = quote.Price;
                     double change = comapnyRow.Price - comapnyRow.Open;
                     double changePercentage = change / comapnyRow.Open * 100;
@@ -350,7 +358,7 @@ namespace GUI
                     $"\n!!! RefreshRealtimePrice exception for {comapnyRow.Symbol} at {DateTime.Now} for {ex.Message}");
             }
         }
-        
+
         private void LsvWatch_miDeleteFromWatchList_OnClick(object sender, RoutedEventArgs e)
         {
             var item = lsvWatchList.SelectedItem;
@@ -371,7 +379,6 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
-                            GlobalVariables.WatchListUserControl.IsUpdated = true;
                         });
                         //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
@@ -388,7 +395,7 @@ namespace GUI
             var item = lsvMarketPreview.SelectedItem;
             if (item != null)
             {
-                UIComapnyRow comapnyRow = (UIComapnyRow) (item as UIComapnyRow).Clone();
+                UIComapnyRow comapnyRow = (UIComapnyRow)(item as UIComapnyRow).Clone();
                 try
                 {
                     List<UIComapnyRow> tempList = GlobalVariables.WatchListUICompanyRows.ToList();
@@ -404,15 +411,14 @@ namespace GUI
                     {
                         Task.WhenAll(GUIDataHelper.AddItemToWatchListTast(CurrentUserId, comapnyRow.CompanyId));
                         GlobalVariables.WatchListUICompanyRows.Add(comapnyRow);
-                         Task.Run(() =>
-                        {
-                            LoadAndRefreshWatchListRow(comapnyRow); 
-                            Dispatcher.Invoke(() =>
-                                {
-                                    lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
-                                    GlobalVariables.WatchListUserControl.IsUpdated = true;
-                                });
-                        });
+                        Task.Run(() =>
+                       {
+                           LoadAndRefreshWatchListRow(comapnyRow);
+                           Dispatcher.Invoke(() =>
+                               {
+                                   lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
+                               });
+                       });
                     }
                 }
                 catch (SystemException ex)
@@ -437,8 +443,8 @@ namespace GUI
 
             cfg.Dispatcher = Application.Current.Dispatcher;
         });
-        
-       
+
+
 
         private void lsvMarketPreview_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -486,7 +492,7 @@ namespace GUI
 
             foreach (var companyRow in GlobalVariables.WatchListUICompanyRows)
             {
-                await Task.Run(()=>{ LoadAndRefreshWatchListRow(companyRow); });
+                await Task.Run(() => { LoadAndRefreshWatchListRow(companyRow); });
             }
         }
 
@@ -579,7 +585,7 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             lbSearchResult.ItemsSource = GlobalVariables.SearchResultCompanies;
-                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 45;
+                            lbSearchResult.Height = GlobalVariables.SearchResultCompanies.Count * 40;
                             lbSearchResult.Visibility = Visibility.Visible;
                         });
                     }
@@ -598,17 +604,30 @@ namespace GUI
 
         private void BrClearSearch_OnClick(object sender, RoutedEventArgs e)
         {
-            tbSearchBox.Text = "Search here...";
             cbSearchType.Text = "Symbol";
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(tbSearchBox), null);
+            Keyboard.ClearFocus();
             Task.Run(() =>
             {
 
                 Dispatcher.Invoke(() =>
                 {
-                    if (curDataSource == GlobalVariables.CurrentDataSource.SearchResult)
+                    switch (curDataSource)
                     {
-                        GlobalVariables.SearchResultCancellationTokenSource.Cancel(true);
+                        case GlobalVariables.CurrentDataSource.WatchList:
+                            foreach (var cancellationTokenSource in GlobalVariables.WatchListTokenSourceDic)
+                            {
+                                cancellationTokenSource.Value.Cancel(true);
+                            }
+                            break;
+                        case GlobalVariables.CurrentDataSource.SearchResult:
+                            GlobalVariables.SearchResultCancellationTokenSource.Cancel(true);
+                            break;
+                        default:
+                            Console.Out.WriteLine($"No such type for cancellation: " + curDataSource);
+                            break;
                     }
+
                     lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows;
                     curDataSource = GlobalVariables.CurrentDataSource.Default;
                 });
@@ -623,6 +642,7 @@ namespace GUI
         private void TbSearchBox_OnLostFocus(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Text = "Search here...";
+            lbSearchResult.Visibility = Visibility.Hidden;
         }
 
         private void LsvWatch_miTradeStock_OnClick(object sender, RoutedEventArgs e)
@@ -633,7 +653,7 @@ namespace GUI
             TradeDialog tradeDialog = new TradeDialog(CurrentUserId, item);
             if (tradeDialog.ShowDialog() == true)
             {
-                GlobalVariables.StockTrader.IsUpdated = true;
+                StockTrader.IsUpdated = true;
             }
         }
 
@@ -655,13 +675,13 @@ namespace GUI
         private void CbSearchType_cbDescription_OnSelected(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Focus();
-            tbSearchBox.Text = "@DS:";
+            tbSearchBox.Text = "@IDT:";
             tbSearchBox.Select(tbSearchBox.Text.Length, 0);
         }
-        
 
-        
-     private void TgbDataSourceSwitch_OnClick(object sender, RoutedEventArgs e)
+
+
+        private void TgbDataSourceSwitch_OnClick(object sender, RoutedEventArgs e)
         {
             GlobalVariables.IsPseudoDataSource = tgbDataSourceSwitch.IsChecked == true;
             MessageBox.Show("Data mocking: " + GlobalVariables.IsPseudoDataSource.ToString());
@@ -733,39 +753,7 @@ namespace GUI
                 }
             }
         }
-        
-        private async void Lb_bt_stpCompany_OnClick(object sender, RoutedEventArgs e)
-        {
-            var item = VisualTreeHelper.HitTest(lbSearchResult, Mouse.GetPosition(lbSearchResult)).VisualHit;
 
-            // find ListViewItem (or null)
-            while (item != null && !(item is ListBoxItem))
-                item = VisualTreeHelper.GetParent(item);
-
-            if (item != null)
-            {
-                int i = lbSearchResult.Items.IndexOf(((ListBoxItem)item).DataContext);
-
-                Company companyRow = GlobalVariables.SearchResultCompanies.ToList()[i];
-
-                Task<UIComapnyRow> task =  GUIDataHelper.GetUICompanyRowTaskBySymbol(companyRow.Symbol);
-                UIComapnyRow uiCompanyRow = await task;
-
-                lbSearchResult.Visibility = Visibility.Hidden;
-                tbSearchBox.Text = "Search here...";
-                
-                Dispatcher.Invoke(() =>
-                {
-                    BlockingCollection<UIComapnyRow> selUICompanyList = new BlockingCollection<UIComapnyRow>();
-                    selUICompanyList.Add(uiCompanyRow);
-                    GlobalVariables.SearchResultUICompanyRows = selUICompanyList;
-                    lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
-                    curDataSource = GlobalVariables.CurrentDataSource.SearchResult;
-                    LoadAndRefreshSearchResultRows();
-                });
-
-            }
-        }
 
         private void lsvMkt_miHistoricalGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -781,10 +769,43 @@ namespace GUI
             Window historicalDialog = new Window
             {
                 Title = $"{selCompany.Symbol}'s Daily Price Candle Chart",
-                Content = new CandleChartUserControl() { Symbol = selCompany.Symbol },
+                Content = new CandleChartUserControl { SelectedSymbol = selCompany.Symbol }
             };
 
             historicalDialog.ShowDialog();
+        }
+
+
+        private async void Lb_btCompanyRow_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = VisualTreeHelper.HitTest(lbSearchResult, Mouse.GetPosition(lbSearchResult)).VisualHit;
+
+            // find ListViewItem (or null)
+            while (item != null && !(item is ListBoxItem))
+                item = VisualTreeHelper.GetParent(item);
+
+            if (item != null)
+            {
+                int i = lbSearchResult.Items.IndexOf(((ListBoxItem)item).DataContext);
+
+                Company companyRow = GlobalVariables.SearchResultCompanies.ToList()[i];
+
+                Task<UIComapnyRow> task = GUIDataHelper.GetUICompanyRowTaskBySymbol(companyRow.Symbol);
+                UIComapnyRow uiCompanyRow = await task;
+
+                lbSearchResult.Visibility = Visibility.Hidden;
+                tbSearchBox.Text = "Search here...";
+
+                Dispatcher.Invoke(() =>
+                {
+                    BlockingCollection<UIComapnyRow> selUICompanyList = new BlockingCollection<UIComapnyRow>();
+                    selUICompanyList.Add(uiCompanyRow);
+                    GlobalVariables.SearchResultUICompanyRows = selUICompanyList;
+                    lsvMarketPreview.ItemsSource = GlobalVariables.SearchResultUICompanyRows;
+                    curDataSource = GlobalVariables.CurrentDataSource.SearchResult;
+                    LoadAndRefreshSearchResultRows();
+                });
+            }
         }
     }
 }
