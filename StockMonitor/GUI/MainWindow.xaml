@@ -17,20 +17,22 @@
         Width="1480" Height="800"
         Title="MainWindow">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="time..." VerticalAlignment="Top" Height="15" Width="102"/>
         <TabControl Margin="10,10,10,44" >
             <TabItem Header="Stock Market" Height="65" Width="200" Margin="150,-1,-150,0.8" FontSize="22" FontWeight="Bold" Foreground="#673ab7">
                 <local:SearchStockUserControl Margin="0,0,-2,-2" Height="646" VerticalAlignment="Top"/>
             </TabItem>
-            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" FontSize="22" FontWeight="Bold" Foreground="#673ab7">
+            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" FontSize="22"  FontWeight="Bold" Foreground="#673ab7">
                 <local:WatchListUserControl Margin="-11,0,-5,-13"/>
             </TabItem>
         </TabControl>
-        
+
         <smtx:XamlDisplay VerticalContentAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="2">
             <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}"
                                                  x:Name="SnackbarTrading" Margin="0,26,0,-0.4" VerticalAlignment="Stretch" />
         </smtx:XamlDisplay>
+        <Button HorizontalAlignment="Left" Margin="1063,34,0,0" VerticalAlignment="Top" Width="158" Height="44" Background="Transparent" Name="btTimerControl" BorderThickness="0" Click="BtTimerControl_OnClick">
+            <TextBlock Name="tbTimer" Text="11:11:00" Foreground="#673ab7" FontWeight="Bold" FontSize="30" FontStyle="Italic" FontFamily="Digital-7 Mono" Width="123"></TextBlock>
+        </Button>
     </Grid>
 
 </Window>

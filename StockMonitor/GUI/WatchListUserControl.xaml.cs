@@ -1,4 +1,4 @@
-﻿using LiveCharts;
+﻿ using LiveCharts;
 using LiveCharts.Wpf;
 using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;

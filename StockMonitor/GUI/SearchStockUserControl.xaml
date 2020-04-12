@@ -82,7 +82,7 @@
                         <ComboBoxItem Content="Symbol" Name="cbSearchType_cbiSymbol"/>
                         <ComboBoxItem Content="Company Name" Name="cbSearchType_cbCompanyName" Selected="CbSearchType_cbCompanyName_OnSelected"/>
                         <ComboBoxItem Content="CEO" Name="cbSearchType_cbCEO" Selected="CbSearchType_cbCEO_OnSelected"/>
-                        <ComboBoxItem Content="Description" Name="cbSearchType_cbDescription" Selected="CbSearchType_cbDescription_OnSelected" />
+                        <ComboBoxItem Content="Industry" Name="cbSearchType_cbIndustry" Selected="CbSearchType_cbIndustry_OnSelected" />
                     </ComboBox>
                     <materialDesign:ColorZone
                             Mode="Standard"
@@ -117,10 +117,9 @@
                             <Grid Margin="0,-2,100,2"/>
                         </Grid>
                     </materialDesign:ColorZone>
-                    <Grid
-                        Width="124">
+                    <Grid Width="124">
                         <Button
-                            Style="{StaticResource MaterialDesignOutlinedButton}" Name="brClearSearch" Click="BrClearSearch_OnClick"
+                            Style="{StaticResource MaterialDesignOutlinedButton}" Name="btClearSearch" Click="BtClearSearch_OnClick"
                             Foreground="White"
                             BorderBrush="White"
                             materialDesign:ButtonProgressAssist.Value="-1"
@@ -131,6 +130,22 @@
                             <materialDesign:PackIcon Kind="Reload" Height="30" Width="30" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </Button>
 
+                    </Grid>
+                    <Grid Width="80">
+                        <ToggleButton
+                            Style="{StaticResource MaterialDesignActionToggleButton}"
+                            Name="tbnSwitchMarketWatchList"
+                            Click="TbnSwitchMarketWatchList_OnClick"
+                            ToolTip="MaterialDesignActionLightToggleButton">
+                            <ToggleButton.Content>
+                                <materialDesign:PackIcon
+                                    Kind="Favourite" Width ="30" Height="30"/>
+                            </ToggleButton.Content>
+                            <materialDesign:ToggleButtonAssist.OnContent>
+                                <materialDesign:PackIcon
+                                    Kind="ChartBellCurve" Width="30" Height="30"/>
+                            </materialDesign:ToggleButtonAssist.OnContent>
+                        </ToggleButton>
                     </Grid>
                 </StackPanel>
             </DockPanel>
@@ -360,12 +375,12 @@
                     </MenuItem>
                     <MenuItem x:Name="lsvMkt_miRealTimeGraph" Header="Real-time graph" Foreground="#673ab7" Click="LsvMkt_miRealTimeGraph_OnClick">
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="TrendingUp" Foreground="#673ab7" Height="18" Width="17"/>
+                            <materialDesign:PackIcon Kind="ChartLine" Foreground="#673ab7" Height="18" Width="17"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="lsvMkt_miHistoricalGraph" Header="Historical graph" Foreground="#673ab7" Click="lsvMkt_miHistoricalGraph_Click" >
                         <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="TrendingUp" Foreground="#673ab7" Height="18" Width="17"/>
+                            <materialDesign:PackIcon Kind="ChartBar" Foreground="#673ab7" Height="18" Width="17"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="lsvMkt_miSetTargetPrice" Header="Price notification" Foreground="#673ab7" Click="LsvMkt_miSetTargetPrice_OnClick">
@@ -377,7 +392,7 @@
             </ListView.ContextMenu>
         </ListView>
         <Grid Grid.Row="1" Grid.Column="2" Margin="247,0,10,0">
-            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="-272,-6,0,0" Height="316" HorizontalAlignment="Left" Width="255" >
+            <ListView x:Name="lsvWatchList" VerticalAlignment="Top" Margin="-276,-6,0,0" Height="320" MaxHeight="320" HorizontalAlignment="Left" Width="259" SelectionMode="Single" >
                 <ListView.Resources>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -469,7 +484,7 @@
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete"  Foreground="#673ab7" Click="LsvWatch_miDeleteFromWatchList_OnClick">
-                        <MenuItem.Icon>
+                            <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="DeleteOff" Foreground="#673ab7" Height="18" Width="17"/>
                             </MenuItem.Icon>
                         </MenuItem>
@@ -481,8 +496,8 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="-216,335,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
-            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="-216,395,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btCancelDefaultThreads" Content="Cancel Default" Margin="-220,372,0,0" VerticalAlignment="Top" Click="btCancelDefaultThreads_Click" HorizontalAlignment="Left" Width="134"/>
+            <Button x:Name="btCancelWatchlistThreads" Content="Cancel Watchlist" Margin="-221,420,0,0" VerticalAlignment="Top" Click="btCancelWatchlistThreads_Click" RenderTransformOrigin="0.671,2.585" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -492,7 +507,7 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-215,452,0,0" Click="btRestartRefresh_Click" Height="28" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
+            <Button x:Name="btRestartRefresh" Content="Restart All" Margin="-219,467,0,0" Click="btRestartRefresh_Click" Height="28" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="133">
                 <Button.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
