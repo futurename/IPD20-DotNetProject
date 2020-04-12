@@ -8,6 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="604" d:DesignWidth="1229"
              xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" Height="611.807"
              xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              x:Name="watchList">
     <UserControl.Resources>
@@ -36,7 +37,9 @@
                     <TextBlock Text="{Binding Path=PriceChange, FallbackValue=PriceChange, StringFormat=N2}"/>
                 </StackPanel>
             </Grid>
+            
         </DataTemplate>
+        
     </UserControl.Resources>
 
     <Grid>
@@ -45,7 +48,28 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <ListBox Name="lstWatch" Grid.Column="0" ItemTemplate="{DynamicResource lstWatch_DataTemplate}" SelectionChanged="lstWatch_SelectionChanged"/>
+        <Grid Name="gridGrayOut" Grid.ColumnSpan="3" Background="Black" Panel.ZIndex="2"  Opacity="0.8" >
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <TextBlock Foreground="White" FontSize="50" TextAlignment="Center" Margin="0,0,0,30" Text="There is no Company in Your Watch List."/>
+                <TextBlock Foreground="White" FontSize="50" TextAlignment="Center" Text="Please Add some Company!" />
+            </StackPanel>
+        </Grid>
+        <ListBox Name="lstWatch" Grid.Column="0" ItemTemplate="{DynamicResource lstWatch_DataTemplate}" SelectionChanged="lstWatch_SelectionChanged">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="lsvWatch_miDeleteFromWatchList" Header="Delete"  Foreground="#673ab7" Click="LsvWatch_miDeleteFromWatchList_OnClick">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="DeleteOff" Foreground="#673ab7" Height="18" Width="17"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="lsvWatch_miTradeStock" Header="Trade Stock" Foreground="#673ab7" Click="LsvWatch_miTradeStock_OnClick" >
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="AttachMoney" Foreground="#673ab7" Height="18" Width="17"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -53,7 +77,7 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Grid Name="gridCandleChart" Grid.Row="0" >
-                <local:CandleChartUserControl SelectedSymbol="{Binding Symbol, ElementName=watchList}" />
+                <local:CandleChartUserControl/>
             </Grid>
             <Grid Grid.Row="1" Margin="0,10,0,0">
                 <Grid.ColumnDefinitions>

@@ -49,15 +49,14 @@ namespace GUI
         private const int CurrentUserId = 3;
         private GlobalVariables.CurrentDataSource curDataSource;
 
-        StockTrader StockTrader { get; set; }
         public SearchStockUserControl()
         {
             InitListViewDataSource();
 
             InitializeComponent();
             GlobalVariables.IsPseudoDataSource = tgbDataSourceSwitch.IsChecked == true;
-            StockTrader = new StockTrader(CurrentUserId);
-            StockTrader.StartTrade();
+            GlobalVariables.StockTrader = new StockTrader(CurrentUserId);
+            GlobalVariables.StockTrader.StartTrade();
             GlobalVariables.Notifier = notifier;
             GlobalVariables.SearchStockUserControl = this;
             tbSearchBox.Text = "Search here...";
@@ -91,6 +90,7 @@ namespace GUI
             Dispatcher.Invoke(() =>
             {
                 lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
+                GlobalVariables.WatchListUserControl.IsUpdated = true;
 
                 Console.Out.WriteLine($"{lsvWatchList.Items.Count}:{GlobalVariables.WatchListUICompanyRows.Count}");
             });
@@ -379,6 +379,7 @@ namespace GUI
                         this.Dispatcher.Invoke(() =>
                         {
                             lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+                            GlobalVariables.WatchListUserControl.IsUpdated = true;
                         });
                         //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
                     });
@@ -417,6 +418,7 @@ namespace GUI
                            Dispatcher.Invoke(() =>
                                {
                                    lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
+                                   GlobalVariables.WatchListUserControl.IsUpdated = true;
                                });
                        });
                     }
@@ -654,7 +656,7 @@ namespace GUI
             TradeDialog tradeDialog = new TradeDialog(CurrentUserId, item);
             if (tradeDialog.ShowDialog() == true)
             {
-                StockTrader.IsUpdated = true;
+                GlobalVariables.StockTrader.IsUpdated = true;
             }
         }
 
@@ -770,7 +772,7 @@ namespace GUI
             Window historicalDialog = new Window
             {
                 Title = $"{selCompany.Symbol}'s Daily Price Candle Chart",
-                Content = new CandleChartUserControl { SelectedSymbol = selCompany.Symbol }
+                Content = new CandleChartUserControl { Symbol = selCompany.Symbol }
             };
 
             historicalDialog.ShowDialog();
