@@ -630,6 +630,7 @@ namespace GUI
 
                     lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows;
                     curDataSource = GlobalVariables.CurrentDataSource.Default;
+                    lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
                 });
             });
         }
