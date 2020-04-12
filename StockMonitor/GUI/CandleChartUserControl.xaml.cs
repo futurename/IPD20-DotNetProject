@@ -139,9 +139,9 @@ namespace GUI
 
                 SetAxisLimits(priceList.Last().Date,priceList.First().Date);
             }
-            catch (IOException)
+            catch (IOException ex)
             {
-                MessageBox.Show("[Internel Error]Cannot load data");
+                MessageBox.Show("Cannot open file: " + ex.Message);
                 return;
             }
         }
