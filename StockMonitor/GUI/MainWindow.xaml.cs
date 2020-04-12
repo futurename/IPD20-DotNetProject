@@ -27,6 +27,8 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        bool isTimerRunning;
+        private CancellationTokenSource timerTokenSource;
         public void SnackbarMessage(string message)
         {
             //use the message queue to send a message.
@@ -40,7 +42,50 @@ namespace GUI
             GlobalVariables.MainWindow = this;
 
             InitializeComponent();
+
+            timerTokenSource = new CancellationTokenSource();
+
+            StartTimer();
         }
 
+        private void StartTimer()
+        {
+            try
+            {
+                Task.Run(() =>
+                {
+                    isTimerRunning = true;
+                    while (!timerTokenSource.IsCancellationRequested)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            tbTimer.Text = DateTime.Now.ToString("HH:mm:ss");
+                            Task.Delay(1000);
+                        });
+                    }
+                }, timerTokenSource.Token);
+            }
+            catch (TaskCanceledException ex)
+            {
+                Console.Out.WriteLine(
+                    $"TIMER thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}");
+            }
+        }
+
+        private void BtTimerControl_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (isTimerRunning == true)
+            {
+                timerTokenSource.Cancel(true);
+                isTimerRunning = false;
+            }
+            else
+            {
+                timerTokenSource = new CancellationTokenSource();
+                isTimerRunning = true;
+                StartTimer();
+            }
+
+        }
     }
 }
