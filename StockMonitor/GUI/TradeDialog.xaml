@@ -6,6 +6,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:GUI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
         xmlns:smtx="clr-namespace:ShowMeTheXAML;assembly=ShowMeTheXAML"
         mc:Ignorable="d"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
@@ -106,10 +108,10 @@
 
         <Grid Grid.Column="1" Margin="10">
 
-            <TabControl HorizontalAlignment="Left" Height="304" VerticalAlignment="Top" Width="424">
+            <TabControl HorizontalAlignment="Left" Height="304" VerticalAlignment="Top" Width="424" Background="{x:Null}">
                 <TabItem Header="Reserved Trading">
-                    <Grid Background="#FFE5E5E5">
-                        <ListView x:Name="lvReservedTrading">
+                    <Grid>
+                        <ListView x:Name="lvReservedTrading" Background="{x:Null}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Symbol" DisplayMemberBinding="{Binding Company.Symbol}"/>
@@ -128,7 +130,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Trading History">
-                    <Grid Background="#FFE5E5E5">
+                    <Grid>
                         <ListView Name="lvTradingRecord">
                             <ListView.View>
                                 <GridView>

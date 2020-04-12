@@ -251,7 +251,7 @@ namespace StockMonitor.Helpers
 
         public static Dictionary<string, int> GetTradingRecourdList(int userId)//ex DataException,InvalidOperationException
         {
-            return TradeDatabaseHelper.GetTradingRecordList(userId);//ex DataException,InvalidOperationException
+            return TradeDatabaseHelper.GetTradingRecordCountList(userId);//ex DataException,InvalidOperationException
         }
 
         public static void DeleteTradingRecord(TradingRecord tradingRecord)//ex DataException,InvalidOperationException
@@ -261,7 +261,7 @@ namespace StockMonitor.Helpers
 
         public static List<TradingRecord> GetTradingResordList(int userId)//ex InvalidOperationException
         {
-            return TradeDatabaseHelper.GetTradingResordList(userId);//ex InvalidOperationException
+            return TradeDatabaseHelper.GetTradingRecordList(userId);//ex InvalidOperationException
         }
 
 

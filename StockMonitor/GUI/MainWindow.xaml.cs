@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MaterialDesignThemes.Wpf;
 using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;
 using ToastNotifications;
@@ -92,6 +93,31 @@ namespace GUI
                 StartTimer();
             }
 
+        }
+
+
+
+        private void ChangeToLightTheme(object sender, RoutedEventArgs e)
+        {
+            ModifyTheme(theme => theme.SetBaseTheme(Theme.Light));
+            GlobalVariables.SearchStockUserControl.IsThemeDark = false;
+        }
+
+        private void ChangeToDarkTheme(object sender, RoutedEventArgs e)
+        {
+            ModifyTheme(theme => theme.SetBaseTheme(Theme.Dark));
+            GlobalVariables.SearchStockUserControl.IsThemeDark = true;
+        }
+
+
+        private static void ModifyTheme(Action<ITheme> modificationAction)
+        {
+            PaletteHelper paletteHelper = new PaletteHelper();
+            ITheme theme = paletteHelper.GetTheme();
+
+            modificationAction?.Invoke(theme);
+
+            paletteHelper.SetTheme(theme);
         }
     }
 }

@@ -152,7 +152,7 @@
         </materialDesign:ColorZone>
 
 
-        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1206">
+        <ListView Grid.Column="0" SelectionMode="Single" x:Name="lsvMarketPreview" FontSize="14"  MouseDoubleClick="lsvMarketPreview_MouseDoubleClick" Margin="0,75,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="1206" Background="{x:Null}">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="ItemContainerStyle">
@@ -182,7 +182,7 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="230" Name="stkSymbolField">
                                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Name="StpLogoArea" MouseMove="StpLogoArea_OnMouseMove">
                                             <Image Source="{Binding Logo}" Height="20" HorizontalAlignment="Left" Width="80"/>
-                                            <TextBlock Text="{Binding CompanyName}" TextDecorations="underline" FontStyle="Italic" Foreground="DarkBlue" TextWrapping="Wrap" FontSize="12" Width="170"
+                                            <TextBlock Text="{Binding CompanyName}" TextDecorations="underline" FontStyle="Italic" TextWrapping="Wrap" FontSize="12" Width="170"
                                                        HorizontalAlignment="Center" Margin="0,5,0,0" />
                                         </StackPanel>
                                         <StackPanel VerticalAlignment="Center">

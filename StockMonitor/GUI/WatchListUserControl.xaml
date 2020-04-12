@@ -48,7 +48,7 @@
             <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <Grid Name="gridGrayOut" Grid.ColumnSpan="3" Background="Black" Panel.ZIndex="2"  Opacity="0.8" >
+        <Grid Name="gridGrayOut" Grid.ColumnSpan="3" Background="Black" Panel.ZIndex="2"  Opacity="0.8" Height="612" >
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <TextBlock Foreground="White" FontSize="50" TextAlignment="Center" Margin="0,0,0,30" Text="There is no Company in Your Watch List."/>
                 <TextBlock Foreground="White" FontSize="50" TextAlignment="Center" Text="Please Add some Company!" />
@@ -70,7 +70,6 @@
                 </ContextMenu>
             </ListBox.ContextMenu>
         </ListBox>
-
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*" />

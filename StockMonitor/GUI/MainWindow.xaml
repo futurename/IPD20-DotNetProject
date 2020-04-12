@@ -17,11 +17,18 @@
         Width="1480" Height="800"
         Title="MainWindow">
     <Grid>
-        <TabControl Margin="10,10,10,44" >
-            <TabItem Header="Stock Market" Height="65" Width="200" Margin="150,-1,-150,0.8" FontSize="22" FontWeight="Bold" Foreground="#673ab7">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="658,31,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Panel.ZIndex="10">
+            <TextBlock VerticalAlignment="Center" Margin="0,0,20,0">Theme : </TextBlock>
+            <TextBlock VerticalAlignment="Center">Light</TextBlock>
+            <ToggleButton Margin="8 0 16 0" IsChecked="False" Checked = "ChangeToDarkTheme" Unchecked = "ChangeToLightTheme" />
+            <TextBlock VerticalAlignment="Center">Dark</TextBlock>
+        </StackPanel>
+
+        <TabControl Margin="10,10,10,44" Background="{x:Null}" >
+            <TabItem Header="Stock Market" Height="65" Width="200" Margin="150,-1,-150,0.8" FontSize="22" FontWeight="Bold" Foreground="#673ab7" Background="{x:Null}">
                 <local:SearchStockUserControl Margin="0,0,-2,-2" Height="646" VerticalAlignment="Top"/>
             </TabItem>
-            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" FontSize="22"  FontWeight="Bold" Foreground="#673ab7">
+            <TabItem Header="Watch List" Height="65" Width="200" Margin="150,0,-150,-0.2" FontSize="22"  FontWeight="Bold" Foreground="#673ab7" Background="{x:Null}">
                 <local:WatchListUserControl Margin="-11,0,-5,-13"/>
             </TabItem>
         </TabControl>

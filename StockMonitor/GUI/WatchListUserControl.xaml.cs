@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MaterialDesignThemes.Wpf;
 
 namespace GUI
 {
@@ -49,11 +50,12 @@ namespace GUI
                 _isUpdated = false;
             }
         }
+        
         private int UserId { get; set; }
         public WatchListUserControl()
         {
             GlobalVariables.WatchListUserControl = this;
-
+            
             UserId = 3;//For Test
 
             InitializeComponent();
@@ -180,5 +182,6 @@ namespace GUI
                 GlobalVariables.StockTrader.IsUpdated = true;
             }
         }
+
     }
 }

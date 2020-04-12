@@ -63,7 +63,7 @@ namespace GUI.Helpers
             }
         }
 
-        public static Dictionary<string, int> GetTradingRecordList(int userId)
+        public static Dictionary<string, int> GetTradingRecordCountList(int userId)
         {
             StockMonitorEntities _dbContext = new StockMonitorEntities();
 
@@ -89,7 +89,7 @@ namespace GUI.Helpers
             return tradeHistory;
         }
 
-        public static List<TradingRecord> GetTradingResordList(int userId)//ex InvalidOperationException
+        public static List<TradingRecord> GetTradingRecordList(int userId)//ex InvalidOperationException
         {
             StockMonitorEntities _dbContext = new StockMonitorEntities();
 
@@ -109,7 +109,10 @@ namespace GUI.Helpers
         {//ex DataException,InvalidOperationException
             StockMonitorEntities _dbContext = new StockMonitorEntities();
 
-            _dbContext.TradingRecords.Remove(tradingRecord);
+            TradingRecord trading = _dbContext.TradingRecords.Find(tradingRecord.Id);//ex InvalidOperationException
+            if (trading == null) { throw new InvalidOperationException($"Cannot find TradingRecord[{tradingRecord.Id}]"); }
+
+            _dbContext.TradingRecords.Remove(trading);
 
             _dbContext.SaveChanges();//ex DataException,InvalidOperationException
         }

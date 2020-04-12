@@ -49,6 +49,24 @@ namespace GUI
         private const int CurrentUserId = 3;
         private GlobalVariables.CurrentDataSource curDataSource;
 
+        private bool _isThemeDark;
+        Brush WhiteBrush = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+        Brush DarkBlueBrush = new SolidColorBrush(Color.FromRgb(4, 34, 113));
+
+        public bool IsThemeDark {
+            get { return _isThemeDark; }
+            set
+            {
+                _isThemeDark = value;
+                if (value) {
+                    lsvMarketPreview.Foreground = WhiteBrush;
+                } else
+                {
+                    lsvMarketPreview.Foreground = DarkBlueBrush;
+                }
+
+            }
+        }
         public SearchStockUserControl()
         {
             InitListViewDataSource();
@@ -59,6 +77,8 @@ namespace GUI
             GlobalVariables.StockTrader.StartTrade();
             GlobalVariables.Notifier = notifier;
             GlobalVariables.SearchStockUserControl = this;
+            IsThemeDark = false;
+
             tbSearchBox.Text = "Search here...";
         }
 
