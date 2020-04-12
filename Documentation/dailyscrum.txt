@@ -1,0 +1,382 @@
+2020/03/27 Wang Wei
+1. Done since last scrum:
+- Finish Project proposer
+- Create 6 user stories in Trello
+- Create Github repository
+
+2. To do until next Scrum:
+- Review data structure
+- Test API
+- Retrieve data from API 
+
+3. Need assistance / figure things out
+- Solve async data request
+- Design POCO classes
+
+2020/03/27 Donghyeok Seo
+1. Done since last scrum
+- Finish Project proposer
+- Create 6 user stories in Trello
+- Create Github repository
+
+2. To do until next Scrum:
+- Design UI
+- Find framework for candlestick chart
+
+3. Need assistance / figure things out
+- Find out how to draw candlestick chart
+
+**************************************************
+2020/03/28 Wang Wei
+1. Done since last scrum:
+- Tested retrieving data from Finn and Fmg APIs.
+- Add retrieving and parsing Json data to POCO, implemented quote and company profile parts
+- Tested UI async data retrieval.
+
+2. To do until next Scrum:
+- Need implement retrieving data of Major indexes, company financial evaluation.
+- Need design database and create tables on remote server
+
+3. Need assistance / figure things out
+- In UI testing, it takes over 5 seconds to retrieving 5 stocks data, need find out how to improve speed.
+
+
+2020/03/28 Donghyeok Seo
+1. Done since last scrum
+- Find Framework for candlestick chart : LiveCharts
+
+2. To do until next Scrum:
+- Draw candlestick chart with simple data
+- Draw candlestick scalable
+- Display value on mouse cursor in the textbox
+
+3. Need assistance / figure things out
+- Learn how to draw candlestick chart using LiveCharts framework
+
+****************************************************
+2020/03/29 Wang Wei
+1. Done since last scrum:
+- Finish creating tables on remote server
+- Add EF to the project and import model from database with EF designer mode.
+- Add retrieving 1 miniute data, Major indexes, company financial evaluation and real-time quote from API.
+-
+
+2. To do until next Scrum:
+- Need test real-time quote for refreshing display on UI.
+- Need download historical stock data from API, reorganize it and insert into remote server database.
+
+3. Need assistance / figure things out
+- Need test and solve refresh rate of real-time quotes.
+
+
+2020/03/29 Donghyeok Seo
+1. Done since last scrum
+- Draw candlestick chart with simple data
+
+2. To do until next Scrum:
+- Make candlestick scalable
+- Display value on mouse cursor in the textbox
+
+3. Need assistance / figure things out
+- Set scale limit
+
+*******************************************************
+
+2020/03/30 Wang Wei
+1. Done since last scrum:
+- Finish retrieve company profile, filter data and insert into remote server.
+
+2. To do until next Scrum:
+- Need test real-time quote for refreshing display on UI.
+- Add CompanyDetail POCO
+- Implement retriveing daily data from API and insert into database.
+
+
+3. Need assistance / figure things out
+- Need test and solve refresh rate of real-time quotes.
+
+
+2020/03/30 Donghyeok Seo
+1. Done since last scrum
+- Make candlestick scalable
+- Display value on mouse cursor in the textbox
+
+2. To do until next Scrum:
+- Set graph scale limit
+- Gui Outline
+
+3. Need assistance / figure things out
+- Connect Github to Visual studio 
+- Solve Dependency problem - install Library "LiveCharts" to project
+
+*****************************************************
+
+
+2020/03/31 Wang Wei
+1. Done since last scrum:
+- Finish retriving, filtering company profile from API and insert into database.
+- Adding auto retrieving daily quote method and inserting into data, may need 10 hours for over 5 million records.
+
+2. To do until next Scrum:
+- Need test real-time quote for refreshing display on UI.
+- Add CompanyDetail POCO for displaying on major window
+
+3. Need assistance / figure things out
+- there exists 0 values in some records when using multi-threading for retrieving daily quote data, need test.
+
+
+2020/03/31 Donghyeok Seo
+1. Done since last scrum
+- Set graph scale limit(roughly)
+- Connect Github to Visual studio
+- Solve Dependency problem - install Library "LiveCharts" to project
+
+
+2. To do until next Scrum:
+- Set graph scale limit(fine tuning)
+- Draw graph with real data(Check Invalid data)
+- Check drawing time, optimize
+
+3. Need assistance / figure things out
+
+
+*****************************************************
+
+
+2020/04/01 Wang Wei
+1. Done since last scrum:
+- optimize EF query to improve reading speed from database
+- Finish retrieving daily data of all companies from API and inserting into database
+- prelimilarily test the bottle neck of app loading speed.
+
+2. To do until next Scrum:
+- Need test real-time quote for refreshing display on UI, need change the way we design for faster loading data
+- Add CompanyDetail POCO for displaying on major window
+- Continue testing and locate bottle neck of data retrieving issue
+
+3. Need assistance / figure things out
+- With entity framework, first query need take 5 more times (few secends) to load data, caching maybe a way to improve this or try raw SQL query, need test and compare.
+
+
+2020/04/01 Donghyeok Seo
+1. Done since last scrum
+- Set graph scale limit(fine tuning)
+- Draw graph with real data(Check Invalid data)
+- Check drawing time, optimize
+- Merge Test projects(Candle chart, Search stock) to StockMonitorUI project
+
+2. To do until next Scrum:
+- Search Company by name/ simbol
+- Sort company by name, price, ... when user click header of list view
+- Filter result of search by range of price, trend
+- Show company information(CEO, description ... ) when user click company
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/02 Wang Wei
+1. Done since last scrum:
+- Switch companyRow data source from /1min to /stock for Open price.
+- Find out API does not provide /stock data for some companies, write code to locate these companies in database and remove all daily records from db.
+- implement async refresh price for UICompanyRow
+- Add UICompanyRowDetail class and helper method
+2. To do until next Scrum:
+- Implement WatchList data integration with UI
+- Search for better way to refresh listview.
+3. Need assistance / figure things out
+- Refresh single item of listview and change the color during changing.
+
+
+2020/04/02 Donghyeok Seo
+1. Done since last scrum
+- Search Company by name/ simbol
+- Sort company by name, price, ... when user click header of list view
+- Filter result of search by range of price, trend
+- Show company information(CEO, description ... ) when user click company
+
+2. To do until next Scrum:
+-Set Candle chart pan/zoom boundary
+-Separate Code using UserControl
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/03 Wang Wei
+1. Done since last scrum:
+- implement refreshing listview item with INotifyPropertyChanged interface instead of listview.items.refresh()
+- add helper methods for get wishlist from database
+- add async methods to load wishlist when app starts.(bug exists)
+2. To do until next Scrum:
+- fully implement wishlist add/remove from db and UI
+- testing async manager for threads management
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+
+2020/04/03 Donghyeok Seo
+1. Done since last scrum
+-Set Candle chart pan/zoom boundary
+
+2. To do until next Scrum:
+-Debugging UserControl(Candle Chart disappears)
+-Draw candle stick dynamically
+
+3. Need assistance / figure things out
+-Separate Code using UserControl
+
+
+*****************************************************
+
+2020/04/04 Wang Wei
+1. Done since last scrum:
+- Impelment add items from lsvMkt to lsvWatchlist
+- Implement remove item from lsvWatchList
+- Implement add/remove watch list items to/from database.
+
+2. To do until next Scrum:
+- Solve items order in watch list when adding/removing
+- Implement search bar
+- Implement companyrow detail and major index display on right bottom block.
+
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+
+2020/04/04 Donghyeok Seo
+1. Done since last scrum
+-Debugging UserControl(Candle Chart disappears)
+-Draw candle stick dynamically
+
+2. To do until next Scrum:
+-Drawing Chart cancel when user select other watchlist
+-Drawing Chart cancel when user switch tab menu
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/05 Wang Wei
+1. Done since last scrum:
+- Implementing dynamically color change when price changing.
+- Implementing searching result and show instant result when inputing letters
+- Modify layout of market and watchlist views.
+- Implementing price notification window
+- Implementing popup notification when price reaches target number
+- Add text and icon mark for those which have set price notification
+
+2. To do until next Scrum:
+- prepare demo
+- review codes and fix bugs.
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+
+2020/04/05 Donghyeok Seo
+1. Done since last scrum
+-Drawing Chart cancel when user select other watchlist
+-Drawing Chart cancel when user switch tab menu
+
+2. To do until next Scrum:
+-Drawing real time price Chart when user double click company on the list
+-prepare demo
+-Study how to manage multithreading 
+
+3. Need assistance / figure things out
+
+***********************************************************
+2020/04/06 Wang Wei
+1. Done since last scrum:
+- Implement setting target high/low price dialog
+- Testing major functions which have been implemented for market tab
+2. To do until next Scrum:
+- modify database for storing target high/low price for user
+- begin implementing trading dialog
+3. Need assistance / figure things out
+- some issues need test for sync list of different async threads.
+
+2020/04/06 Donghyeok Seo
+1. Done since last scrum
+-Drawing real time price Chart when user double click company on the list
+-prepare demo
+-Study how to manage multithreading
+
+2. To do until next Scrum:
+- refactorying code
+- Add labrary MaterialDesign
+- Add Progress dialog
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/07 Wang Wei
+1. Done since last scrum:
+- Testing multithreads functions
+
+2. To do until next Scrum:
+- Implement multithread management
+
+3. Need assistance / figure things out
+
+2020/04/07 Donghyeok Seo
+1. Done since last scrum
+- Add labrary MaterialDesign
+- Fallow tutorial
+
+2. To do until next Scrum:
+- refactorying code
+- Add Progress dialog
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/08 Wang Wei
+1. Done since last scrum:
+- Refactor threads management part, add cancellation when refreshing threads are invalid.
+- adjust market windows datasource to pseudo methods for better demostration
+
+2. To do until next Scrum:
+- Implement search stocks by company name or related infomation
+- add user balance to right bottom part of market window.
+
+3. Need assistance / figure things out
+
+2020/04/08 Donghyeok Seo
+1. Done since last scrum
+- refactorying code
+- Add Progressbar
+- Trading window GUI
+
+2. To do until next Scrum:
+- Trading(Sell/Buy) feature
+- Add Transactions/PendingTransactions Tables in Database
+
+3. Need assistance / figure things out
+
+*****************************************************
+
+2020/04/09 Wang Wei
+1. Done since last scrum:
+- Add multiple search type such as company name, ceo and description
+- layout adjustment
+2. To do until next Scrum:
+- Active threads cancellation when switch tabs
+- Test buffering stocks at backend for display
+3. Need assistance / figure things out
+
+
+2020/04/09 Donghyeok Seo
+1. Done since last scrum
+- Trading(Sell/Buy) feature
+- Add Transactions/PendingTransactions Tables in Database
+- Create Unit test project
+
+2. To do until next Scrum:
+- Set actions when Reserved trading list updates
+- Test Trading feature.
+
+3. Need assistance / figure things out
+- In Memory database

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,22 +44,25 @@ namespace GUI
 
             InitializeComponent();
 
-            timerTokenSource = new CancellationTokenSource();
-
-            Task.Factory.StartNew(StartTimer);
+            StartTimer();
+            
         }
 
         private async void StartTimer()
         {
-            try
+            await Task.Run(() =>
             {
-                await Timer(timerTokenSource.Token);
-            }
-            catch (SystemException e)
-            {
-                Console.Out.WriteLine(
-                    $"TIMER out thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}: {e.Message}");
-            }
+                try
+                {
+                    timerTokenSource = new CancellationTokenSource();
+                    Timer(timerTokenSource.Token);
+                }
+                catch (SystemException e)
+                {
+                    Console.Out.WriteLine(
+                        $"TIMER out thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}: {e.Message}");
+                }
+            });
         }
 
         private Task Timer(CancellationToken ct)
@@ -76,7 +80,7 @@ namespace GUI
             }
         }
 
-        private void BtTimerControl_OnClick(object sender, RoutedEventArgs e)
+        private  void BtTimerControl_OnClick(object sender, RoutedEventArgs e)
         {
             if (isTimerRunning == true)
             {
@@ -86,7 +90,6 @@ namespace GUI
             }
             else
             {
-                timerTokenSource = new CancellationTokenSource();
                 isTimerRunning = true;
                 btTimerControl.Background = Brushes.Transparent;
                 StartTimer();
