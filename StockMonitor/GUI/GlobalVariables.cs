@@ -32,7 +32,10 @@ namespace GUI
 
         public static Notifier Notifier { get; set; }
         public static SearchStockUserControl SearchStockUserControl { get; set; }
+        public static WatchListUserControl WatchListUserControl { get; set; }
+        public static CandleChartUserControl CandleChartUserControl { get; set; }
         public static MainWindow MainWindow { get; set; }
+        public static StockTrader StockTrader { get; set; }
     }
     
 }

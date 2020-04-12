@@ -35,11 +35,6 @@ namespace GUI
 
         public void StartTrade()
         {
-            while (GlobalVariables.WatchListUICompanyRows.Count == 0)
-            {
-                Thread.Sleep(1000);
-            }
-
             try
             {
                 Task.Factory.StartNew(TradeTask); //ex InvalidOperationException, OperationCanceledException, DataException
@@ -63,6 +58,11 @@ namespace GUI
             while (true)
             {
                 if (_ct.IsCancellationRequested) { return; }
+
+                while (GlobalVariables.WatchListUICompanyRows.Count == 0)
+                {
+                    Thread.Sleep(1000);
+                }
 
                 var reservedTradingList = TradeDatabaseHelper.GetReservedTradingList(UserId); //ex InvalidOperationException
 
@@ -118,7 +118,12 @@ namespace GUI
             {
                 GlobalVariables.MainWindow.SnackbarMessage($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");
             });
-                
+
+            GlobalVariables.WatchListUserControl.Dispatcher.Invoke(() =>
+            {
+                GlobalVariables.WatchListUserControl.IsUpdated = true;
+            });
+
             //GlobalVariables.SearchStockUserControl.Dispatcher.Invoke(() =>
             //{
             //    GlobalVariables.Notifier.ShowSuccess($"Trade Succeed!\n[{company.Symbol}] {tradingRecord.ToString()}");

@@ -30,25 +30,35 @@
                 <TextBlock Text="Stock Price: $"/>
                 <TextBlock Name="txtPrice"/>
             </StackPanel>
-            <TextBlock Name="txtSymbol" Text="{Binding SelectedSymbol, NotifyOnTargetUpdated=true}" Margin="0,0,150,0" VerticalAlignment="Center" HorizontalAlignment="Right" TargetUpdated="txtSymbol_TargetUpdated"/>
+            <TextBlock Name="txtSymbol" Margin="0,0,150,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <Button Name="btReload" Grid.Row="0" Content="Reload" VerticalAlignment="Top" HorizontalAlignment="Right" Click="btReload_Click" FontSize="10" Width="100"/>
         </Grid>
-
         <Wpf:CartesianChart x:Name="chartStockPrice"
+                    Grid.Row="1"
                     Zoom="X"
-                    Grid.Row="1" 
-                    Hoverable="False" 
+                    Hoverable="False"
                     DataTooltip="{x:Null}"
-                    DataClick="ChartOnDataClick"
-                    DataHover="Chart_OnDataHover" 
                     MouseMove="ChartMouseMove"
                     MouseEnter="ChartMouseEnter" 
                     MouseLeave="ChartMouseLeave"
                     ZoomingSpeed="0.2" Cursor="Cross" AnimationsSpeed="0:0:0.5" Margin="0,1.8,30,16.8">
+            <Wpf:CartesianChart.Series>
+                <Wpf:CandleSeries Values="{Binding ChartValues}"
+                                StrokeThickness="1" 
+                                Fill="Transparent"/>
+            </Wpf:CartesianChart.Series>
             <Wpf:CartesianChart.AxisX>
-                <Wpf:Axis Labels="{Binding Labels}" 
-                            RangeChanged="Ax_RangeChanged"
-                            PreviewRangeChanged="Axis_OnPreviewRangeChanged" Foreground="#FF5F5F5F"/>
+                <Wpf:Axis LabelFormatter="{Binding DateTimeFormatter}"
+                          MaxValue="{Binding AxisMax}"
+                          MinValue="{Binding AxisMin}"
+                          Unit="{Binding AxisUnit}"
+                          RangeChanged="Ax_RangeChanged"
+                          PreviewRangeChanged="Axis_OnPreviewRangeChanged" 
+                          Foreground="#FF5F5F5F">
+                    <Wpf:Axis.Separator>
+                        <Wpf:Separator Step="{Binding AxisStep}"/>
+                    </Wpf:Axis.Separator>
+                </Wpf:Axis>
             </Wpf:CartesianChart.AxisX>
         </Wpf:CartesianChart>
         <ProgressBar Name="progBarChart" IsIndeterminate="True" Margin="0" Grid.Row="1" VerticalAlignment="Bottom" Visibility="Hidden" />

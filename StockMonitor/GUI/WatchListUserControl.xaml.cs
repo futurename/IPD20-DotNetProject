@@ -3,6 +3,7 @@ using LiveCharts.Wpf;
 using StockMonitor.Helpers;
 using StockMonitor.Models.UIClasses;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,37 +25,57 @@ namespace GUI
     /// </summary>
     public partial class WatchListUserControl : UserControl
     {
-        List<UIComapnyRow> companyList;
-
-        public static readonly DependencyProperty SymbolProperty =
-        DependencyProperty.Register("Symbol", typeof(string), typeof(UserControl), new FrameworkPropertyMetadata(null));
-
-        private string Symbol
-        {
-            get { return (string)GetValue(SymbolProperty); }
-            set { SetValue(SymbolProperty, value); }
-        }
-
         public Func<ChartPoint, string> PointLabel { get; set; }
 
+        private bool _isUpdated;
+        public bool IsUpdated
+        {
+            set
+            {
+                _isUpdated = value;
+
+                if(GlobalVariables.WatchListUICompanyRows.Count == 0) 
+                {
+                    gridGrayOut.Visibility = Visibility.Visible;
+                    GlobalVariables.CandleChartUserControl.Symbol = ""; 
+                }
+                else
+                {
+                    DrawPieChart();
+                    lstWatch.ItemsSource = GlobalVariables.WatchListUICompanyRows.ToList();
+                    gridGrayOut.Visibility = Visibility.Collapsed;
+                    lstWatch.SelectedIndex = 0;
+                }
+                _isUpdated = false;
+            }
+        }
         private int UserId { get; set; }
         public WatchListUserControl()
         {
+            GlobalVariables.WatchListUserControl = this;
+
             UserId = 3;//For Test
 
             InitializeComponent();
 
             //Task.Factory.StartNew(LoadWatchList); //For Test
 
+            this.DataContext = this;
+
+            if (GlobalVariables.WatchListUICompanyRows.Count == 0) { 
+                gridGrayOut.Visibility = Visibility.Visible;
+                return; 
+            }
+
             lstWatch.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+            gridGrayOut.Visibility = Visibility.Collapsed;
 
             lstWatch.SelectedIndex = 0;
 
-            Symbol = ((UIComapnyRow)lstWatch.Items[0]).Symbol;
+            GlobalVariables.CandleChartUserControl.Symbol = ((UIComapnyRow)lstWatch.Items[0]).Symbol;
 
             DrawPieChart();
             
-            this.DataContext = this;
         }
 
         private void DrawPieChart()
@@ -63,7 +84,7 @@ namespace GUI
                 string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
             var tradingDictionary = GUIDataHelper.GetTradingRecourdList(UserId);
-
+            pieChartTrading.Series.Clear();
             foreach(var trading in tradingDictionary)
             {
                 if(trading.Value == 0) { continue; }
@@ -86,37 +107,22 @@ namespace GUI
 
         }
 
-        private async void LoadWatchList()// TODO: sync -> async
-        {
-            int userId = 3;
-            companyList = new List<UIComapnyRow>();
-            var watchListRowTasks = GUIDataHelper.GetWatchUICompanyRowTaskList(userId);
-            foreach (Task<UIComapnyRow> task in watchListRowTasks)
-            {
-                UIComapnyRow comapnyRow = await task;
-
-                companyList.Add(comapnyRow);
-            }
-
-            this.Dispatcher.Invoke(() =>
-            {
-                lstWatch.ItemsSource = companyList;
-                if(companyList.Count != 0)
-                {
-                    lstWatch.SelectedIndex = 0;
-                    Symbol = ((UIComapnyRow)lstWatch.Items[0]).Symbol;
-                }
-            });
-        }
-
         private void lstWatch_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UIComapnyRow selCompany = (UIComapnyRow)lstWatch.SelectedItem;
-            if (selCompany == null) { return; }
+            if (selCompany == null) {
+                txtOpenPrice.Text = "-";
+                txtMarketCapital.Text = "-";
+                txtEarningRatio.Text = "-";
+                txtSalesRatio.Text = "-";
+                txtCompanyName.Text ="Company Name";
+                txtIndustry.Text = "Industry";
+                txtDescription.Text = "Description";
+                GlobalVariables.CandleChartUserControl.Symbol = "";
+                return; 
+            }
 
-            GlobalVariables.ConcurentDictionary.AddOrUpdate("symbol", selCompany.Symbol, (k, v) => selCompany.Symbol);
-
-            Symbol = selCompany.Symbol;
+            GlobalVariables.CandleChartUserControl.Symbol = selCompany.Symbol;
 
             txtOpenPrice.Text = selCompany.Open.ToString("N2");
             txtMarketCapital.Text = selCompany.MarketCapital.ToString("#,##0,,M");
@@ -125,6 +131,54 @@ namespace GUI
             txtCompanyName.Text = selCompany.CompanyName;
             txtIndustry.Text = selCompany.Industry;
             txtDescription.Text = selCompany.Description;
+        }
+
+
+        //Same Method from SearchStockUserControl
+        private void LsvWatch_miDeleteFromWatchList_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = lstWatch.SelectedItem;
+            if (item != null)
+            {
+                UIComapnyRow companyRow = item as UIComapnyRow;
+                try
+                {
+                    Task t = GUIDataHelper.DeleteFromWatchListTask(UserId, companyRow.CompanyId);
+                    Task.WhenAll(t).ContinueWith(p =>
+                    {
+                        List<UIComapnyRow> tempList = GlobalVariables.WatchListUICompanyRows.ToList();
+                        tempList.Remove(companyRow);
+
+                        GlobalVariables.WatchListUICompanyRows =
+                            new BlockingCollection<UIComapnyRow>(new ConcurrentQueue<UIComapnyRow>(tempList));
+
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            IsUpdated = true;
+                            GlobalVariables.SearchStockUserControl.lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+                        });
+                        
+                        
+                        //MessageBox.Show($"after delete, view: {lsvWatchList.Items.Count}, list:{watchList.Count}");
+                    });
+                }
+                catch (SystemException ex)
+                {
+                    Console.Out.WriteLine($"!!! Delete item from watchlist failed: {ex.Message}");
+                }
+            }
+        }
+
+        private void LsvWatch_miTradeStock_OnClick(object sender, RoutedEventArgs e)
+        {
+            var item = (UIComapnyRow)lstWatch.SelectedItem;
+            if (item == null) { return; }
+
+            TradeDialog tradeDialog = new TradeDialog(UserId, item);
+            if (tradeDialog.ShowDialog() == true)
+            {
+                GlobalVariables.StockTrader.IsUpdated = true;
+            }
         }
     }
 }
