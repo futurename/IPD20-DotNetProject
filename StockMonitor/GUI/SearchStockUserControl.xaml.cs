@@ -326,8 +326,8 @@ namespace GUI
                 }
                 else
                 {
-                  /*  Console.Out.WriteLine(
-                        $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");*/
+                    /*  Console.Out.WriteLine(
+                          $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");*/
                     comapnyRow.Price = quote.Price;
                     double change = comapnyRow.Price - comapnyRow.Open;
                     double changePercentage = change / comapnyRow.Open * 100;
@@ -602,7 +602,7 @@ namespace GUI
         }
 
 
-        private void BrClearSearch_OnClick(object sender, RoutedEventArgs e)
+        private void BtClearSearch_OnClick(object sender, RoutedEventArgs e)
         {
             cbSearchType.Text = "Symbol";
             FocusManager.SetFocusedElement(FocusManager.GetFocusScope(tbSearchBox), null);
@@ -672,7 +672,7 @@ namespace GUI
             tbSearchBox.Select(tbSearchBox.Text.Length, 0);
         }
 
-        private void CbSearchType_cbDescription_OnSelected(object sender, RoutedEventArgs e)
+        private void CbSearchType_cbIndustry_OnSelected(object sender, RoutedEventArgs e)
         {
             tbSearchBox.Focus();
             tbSearchBox.Text = "@IDT:";
@@ -805,6 +805,29 @@ namespace GUI
                     curDataSource = GlobalVariables.CurrentDataSource.SearchResult;
                     LoadAndRefreshSearchResultRows();
                 });
+            }
+        }
+
+        private void TbnSwitchMarketWatchList_OnClick(object sender, RoutedEventArgs e)
+        {
+            switch (curDataSource)
+            {
+                case GlobalVariables.CurrentDataSource.WatchList:
+                    Dispatcher.Invoke(() =>
+                    {
+                        lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows;
+                        lsvWatchList.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+                        curDataSource = GlobalVariables.CurrentDataSource.Default;
+                    });
+                    break;
+                case GlobalVariables.CurrentDataSource.Default:
+                    Dispatcher.Invoke(() =>
+                    {
+                        lsvMarketPreview.ItemsSource = GlobalVariables.WatchListUICompanyRows;
+                        lsvWatchList.ItemsSource = GlobalVariables.DefaultUICompanyRows;
+                        curDataSource = GlobalVariables.CurrentDataSource.WatchList;
+                    });
+                    break;
             }
         }
     }
