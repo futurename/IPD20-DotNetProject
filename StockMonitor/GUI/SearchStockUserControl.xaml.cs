@@ -231,21 +231,29 @@ namespace GUI
                         {
                             RefreshRealTImePrice(companyRow);
                             Console.Out.WriteLine(
-                                $"\n REFRESH Search result REAL TIME: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                                $"\n REFRESH Search result REAL TIME: {curThreadId}:{companyRow.Symbol} {companyRow.Price}: {GlobalVariables.SearchResultCancellationTokenSource.IsCancellationRequested}\n");
                             await Task.Delay(RealTimeInterval);
                         }
                     }, GlobalVariables.SearchResultCancellationTokenSource.Token);
+                }
+                catch (SystemException ex)
+                {
+                    Console.Out.WriteLine(
+                        $"******************{Thread.CurrentThread.ManagedThreadId}: Search result threads was cancelled! {ex.Message}");
+                }
 
-
+                try
+                {
                     Task.Run(async () =>
                     {
                         int curThreadId = Thread.CurrentThread.ManagedThreadId;
 
                         while (!(GlobalVariables.SearchResultCancellationTokenSource.IsCancellationRequested))
                         {
+
                             Refresh1MinData(companyRow);
                             Console.Out.WriteLine(
-                                $"\n REFRESH Search result One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}\n");
+                                $"\n REFRESH Search result One Min: {curThreadId}:{companyRow.Symbol} {companyRow.Price}: {GlobalVariables.SearchResultCancellationTokenSource.IsCancellationRequested}\n");
                             await Task.Delay(OneMinTimeInterval);
                         }
                     }, GlobalVariables.SearchResultCancellationTokenSource.Token);
@@ -253,7 +261,7 @@ namespace GUI
                 catch (SystemException ex)
                 {
                     Console.Out.WriteLine(
-                        $"{Thread.CurrentThread.ManagedThreadId}: Search result threads was cancelled! {ex.Message}");
+                        $"******************{Thread.CurrentThread.ManagedThreadId}: Search result threads was cancelled! {ex.Message}");
                 }
             }
         }
@@ -318,8 +326,8 @@ namespace GUI
                 }
                 else
                 {
-                    Console.Out.WriteLine(
-                        $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");
+                  /*  Console.Out.WriteLine(
+                        $"{comapnyRow.Symbol} Price CHANGEd, old: {comapnyRow.Price}, new: {quote.Price}, {DateTime.Now}");*/
                     comapnyRow.Price = quote.Price;
                     double change = comapnyRow.Price - comapnyRow.Open;
                     double changePercentage = change / comapnyRow.Open * 100;
@@ -604,10 +612,22 @@ namespace GUI
 
                 Dispatcher.Invoke(() =>
                 {
-                    if (curDataSource == GlobalVariables.CurrentDataSource.SearchResult)
+                    switch (curDataSource)
                     {
-                        GlobalVariables.SearchResultCancellationTokenSource.Cancel(true);
+                        case GlobalVariables.CurrentDataSource.WatchList:
+                            foreach (var cancellationTokenSource in GlobalVariables.WatchListTokenSourceDic)
+                            {
+                                cancellationTokenSource.Value.Cancel(true);
+                            }
+                            break;
+                        case GlobalVariables.CurrentDataSource.SearchResult:
+                            GlobalVariables.SearchResultCancellationTokenSource.Cancel(true);
+                            break;
+                        default:
+                            Console.Out.WriteLine($"No such type for cancellation: " + curDataSource);
+                            break;
                     }
+
                     lsvMarketPreview.ItemsSource = GlobalVariables.DefaultUICompanyRows;
                     curDataSource = GlobalVariables.CurrentDataSource.Default;
                 });
@@ -758,7 +778,6 @@ namespace GUI
 
         private async void Lb_btCompanyRow_OnClick(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Button click!");
             var item = VisualTreeHelper.HitTest(lbSearchResult, Mouse.GetPosition(lbSearchResult)).VisualHit;
 
             // find ListViewItem (or null)
@@ -786,7 +805,6 @@ namespace GUI
                     curDataSource = GlobalVariables.CurrentDataSource.SearchResult;
                     LoadAndRefreshSearchResultRows();
                 });
-
             }
         }
     }
