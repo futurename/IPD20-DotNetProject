@@ -156,7 +156,7 @@ namespace GUI
             }
         }
 
-        private void RefreshOneDefaultCompanyRow(UIComapnyRow companyRow)
+        public void RefreshOneDefaultCompanyRow(UIComapnyRow companyRow)
         {
             Task.Run(async () =>
             {
@@ -181,7 +181,7 @@ namespace GUI
             }, GlobalVariables.DefaultTaskTokenSource.Token);
         }
 
-        private void LoadAndRefreshWatchListRow(UIComapnyRow companyRow)
+        public  void LoadAndRefreshWatchListRow(UIComapnyRow companyRow)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace GUI
             }
         }
 
-        private async void Refresh1MinData(UIComapnyRow comapnyRow)
+        private static async void Refresh1MinData(UIComapnyRow comapnyRow)
         {
             try
             {
@@ -337,8 +337,6 @@ namespace GUI
                     quote.Price += rand.NextDouble() * randDirection * quote.Price / 50;
                 }
 
-
-
                 if (Math.Abs(comapnyRow.Price - quote.Price) < 0.001)
                 {
                     Console.Out.WriteLine(
@@ -355,7 +353,7 @@ namespace GUI
                     comapnyRow.ChangePercentage = changePercentage;
                     if ((comapnyRow.NotifyPriceHigh != 0 && comapnyRow.Price > comapnyRow.NotifyPriceHigh))
                     {
-                        this.Dispatcher.Invoke(() =>
+                        Dispatcher.Invoke(() =>
                         {
                             notifier.ShowSuccess(
                                 $"Higher price warning:\n{comapnyRow.CompanyName} : {comapnyRow.Symbol} \nNow: {comapnyRow.Price:N2} Target high: {comapnyRow.NotifyPriceHigh:N2}\nTime: {DateTime.Now:HH: mm: ss}");
@@ -364,7 +362,7 @@ namespace GUI
 
                     if ((comapnyRow.NotifyPriceLow != 0 && comapnyRow.Price < comapnyRow.NotifyPriceLow))
                     {
-                        this.Dispatcher.Invoke(() =>
+                        Dispatcher.Invoke(() =>
                         {
                             notifier.ShowError(
                                 $"Lower price warning:\n{comapnyRow.CompanyName} : {comapnyRow.Symbol} \nNow: {comapnyRow.Price:N2} Target low: {comapnyRow.NotifyPriceLow:N2}\nTime: {DateTime.Now:HH:mm:ss}");
@@ -502,7 +500,7 @@ namespace GUI
             }
         }
 
-        private async void btRestartRefresh_Click(object sender, RoutedEventArgs e)
+        private  async void btRestartRefresh_Click(object sender, RoutedEventArgs e)
         {
             GlobalVariables.DefaultTaskTokenSource = new CancellationTokenSource();
             GlobalVariables.WatchListTokenSourceDic = new ConcurrentDictionary<string, CancellationTokenSource>();

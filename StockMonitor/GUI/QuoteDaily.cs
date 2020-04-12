@@ -24,5 +24,8 @@ namespace GUI
         public string Volume { get; set; }
         public double Vwap { get; set; }
         public double ChangeOverTime { get; set; }
+        public int CompanyId { get; set; }
+    
+        public virtual Company Company { get; set; }
     }
 }

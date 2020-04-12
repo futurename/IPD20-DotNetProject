@@ -29,8 +29,6 @@ namespace StockMonitor
         }
     
         public virtual DbSet<Company> Companies { get; set; }
-        public virtual DbSet<HoldingShare> HoldingShares { get; set; }
-        public virtual DbSet<Quote1Min> Quote1Min { get; set; }
         public virtual DbSet<QuoteDaily> QuoteDailies { get; set; }
         public virtual DbSet<TradingRecord> TradingRecords { get; set; }
         public virtual DbSet<WatchListItem> WatchListItems { get; set; }

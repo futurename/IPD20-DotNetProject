@@ -6,21 +6,19 @@
     <edmx:Diagrams>
       <Diagram DiagramId="2cd2fa8f75834edc8a206c466a58f4b3" Name="Diagram1" ZoomLevel="64">
         <EntityTypeShape EntityType="StockContext.Company" Width="1.5" PointX="4.125" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.HoldingShare" Width="1.5" PointX="10.625" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.Quote1Min" Width="1.5" PointX="2.375" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.QuoteDaily" Width="1.5" PointX="0.5" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="StockContext.User" Width="1.5" PointX="9.375" PointY="1.75" IsExpanded="true" />
-        <AssociationConnector Association="StockContext.HoldingShares_ibfk_1" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="StockContext.WatchListItem" Width="1.5" PointX="6.75" PointY="6.625" />
+        <EntityTypeShape EntityType="StockContext.QuoteDaily" Width="1.5" PointX="1.5" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.User" Width="1.5" PointX="9.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="StockContext.WatchListItem" Width="1.5" PointX="8.875" PointY="5.625" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_2" />
         <AssociationConnector Association="StockContext.WatchListItem_ibfk_1" />
-        <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="6.625" PointY="3.875" />
+        <EntityTypeShape EntityType="StockContext.TradingRecord" Width="1.5" PointX="6.5" PointY="3.75" />
         <AssociationConnector Association="StockContext.fk_Company_TradingRecord" ManuallyRouted="false" >
         </AssociationConnector>
         <AssociationConnector Association="StockContext.fk_User_TradingRecord1" />
         <EntityTypeShape EntityType="StockContext.ReservedTrading" Width="1.5" PointX="6.5" PointY="0.5" />
         <AssociationConnector Association="StockContext.fk_Company_ReservedTradings" />
         <AssociationConnector Association="StockContext.fk_User_ReservedTradings" />
+        <AssociationConnector Association="StockContext.CompanyQuoteDaily" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
