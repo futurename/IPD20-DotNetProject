@@ -17,7 +17,6 @@ namespace GUI
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.HoldingShares = new HashSet<HoldingShare>();
             this.WatchListItems = new HashSet<WatchListItem>();
             this.TradingRecords = new HashSet<TradingRecord>();
             this.ReservedTradings = new HashSet<ReservedTrading>();
@@ -32,8 +31,6 @@ namespace GUI
         public double Balance { get; set; }
         public byte[] Photo { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HoldingShare> HoldingShares { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WatchListItem> WatchListItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

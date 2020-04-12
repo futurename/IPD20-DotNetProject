@@ -243,9 +243,6 @@
     <Compile Include="Helpers\GUIDataHelper.cs" />
     <Compile Include="Helpers\RetrieveJsonDataHelper.cs" />
     <Compile Include="Helpers\TradeDatabaseHelper.cs" />
-    <Compile Include="HoldingShare.cs">
-      <DependentUpon>StockMonitorModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ApiModels\Fmg1MinQuote.cs" />
     <Compile Include="Models\ApiModels\FmgCompanyProfile.cs" />
     <Compile Include="Models\ApiModels\FmgInvestmentValuationRatios.cs" />
@@ -256,9 +253,6 @@
     <Compile Include="Models\ApiModels\FmgStockListEntity.cs" />
     <Compile Include="Models\UIClasses\UICompanyRow.cs" />
     <Compile Include="Models\UIClasses\UICompanyRowDetail.cs" />
-    <Compile Include="Quote1Min.cs">
-      <DependentUpon>StockMonitorModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="QuoteDaily.cs">
       <DependentUpon>StockMonitorModel.tt</DependentUpon>
     </Compile>

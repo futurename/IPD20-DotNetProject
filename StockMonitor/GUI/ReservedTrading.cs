@@ -16,7 +16,7 @@ namespace GUI
     {
         public ReservedTrading() { }
         public ReservedTrading(int companyId, int userId, TradeEnum trade, string quantityStr,
-              string targetPriceStr, DateTime pickDate, DateTime pickTime)
+            string targetPriceStr, DateTime pickDate, DateTime pickTime)
         {
             CompanyId = companyId;
             UserId = userId;
