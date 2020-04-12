@@ -59,16 +59,24 @@ namespace GUI
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            tbTimer.Text = DateTime.Now.ToString("HH:mm:ss");
-                            Task.Delay(1000);
+                            try
+                            {
+                                tbTimer.Text = DateTime.Now.ToString("HH:mm:ss");
+
+                                Task.Delay(1000, timerTokenSource.Token);
+                            }
+                            catch (SystemException e)
+                            {
+                                Console.Out.WriteLine(
+                                    $"TIMER inner thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}: {e.Message}");
+                            }
                         });
                     }
                 }, timerTokenSource.Token);
-            }
-            catch (TaskCanceledException ex)
+            }catch (SystemException e)
             {
                 Console.Out.WriteLine(
-                    $"TIMER thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}");
+                    $"TIMER out thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}: {e.Message}");
             }
         }
 
@@ -78,11 +86,13 @@ namespace GUI
             {
                 timerTokenSource.Cancel(true);
                 isTimerRunning = false;
+                btTimerControl.Background = Brushes.Gray;
             }
             else
             {
                 timerTokenSource = new CancellationTokenSource();
                 isTimerRunning = true;
+                btTimerControl.Background = Brushes.Transparent;
                 StartTimer();
             }
 
