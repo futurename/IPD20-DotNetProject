@@ -45,38 +45,34 @@ namespace GUI
 
             timerTokenSource = new CancellationTokenSource();
 
-            StartTimer();
+            Task.Factory.StartNew(StartTimer);
         }
 
-        private void StartTimer()
+        private async void StartTimer()
         {
             try
             {
-                Task.Run(() =>
-                {
-                    isTimerRunning = true;
-                    while (!timerTokenSource.IsCancellationRequested)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            try
-                            {
-                                tbTimer.Text = DateTime.Now.ToString("HH:mm:ss");
-
-                                Task.Delay(1000, timerTokenSource.Token);
-                            }
-                            catch (SystemException e)
-                            {
-                                Console.Out.WriteLine(
-                                    $"TIMER inner thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}: {e.Message}");
-                            }
-                        });
-                    }
-                }, timerTokenSource.Token);
-            }catch (SystemException e)
+                await Timer(timerTokenSource.Token);
+            }
+            catch (SystemException e)
             {
                 Console.Out.WriteLine(
                     $"TIMER out thread is CANCELLED: {timerTokenSource.IsCancellationRequested} at: {DateTime.Now}: {e.Message}");
+            }
+        }
+
+        private Task Timer(CancellationToken ct)
+        {
+            isTimerRunning = true;
+            while (true)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                Dispatcher.Invoke(() =>
+                {
+                    tbTimer.Text = DateTime.Now.ToString("HH:mm:ss");
+                });
+                Task.Delay(1000, ct);
             }
         }
 

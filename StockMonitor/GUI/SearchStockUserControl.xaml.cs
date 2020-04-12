@@ -289,7 +289,7 @@ namespace GUI
             }
             catch (JsonSerializationException)
             {
-                MessageBox.Show("API response is weak. Please try later", "API Connection Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.Out.WriteLine("API response is weak. Please try later", "API Connection Fail", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (SystemException ex)
             {

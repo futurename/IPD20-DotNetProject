@@ -380,3 +380,85 @@
 
 3. Need assistance / figure things out
 - In Memory database
+
+
+*****************************************************
+2020/04/10 Wang Wei
+1. Done since last scrum:
+- Add company detail window
+- add mouse event for displaying company detail
+- refactor restart all threads method for reusing previous list order.
+- fix some bugs.
+- adjust layout
+- modify notification image to theme icon and add click event for target price adjustment.
+2. To do until next Scrum:
+- Peer testing app
+- Add tests for the projects
+3. Need assistance / figure things out
+
+
+2020/04/10 Donghyeok Seo
+1. Done since last scrum
+- Set actions when Reserved trading list updates
+- Test Trading feature.
+
+2. To do until next Scrum:
+- Display ReservedTrading list on TradeDialog
+- WatchListUserControl - Draw Pie Chart(TradingRecord)  
+
+3. Need assistance / figure things out
+
+*****************************************************
+2020/04/11 Wang Wei
+1. Done since last scrum:
+- Refactor restart threads for reuse previous list order.
+- add icon to menuitems
+- fix bug: refresh watchlist after adding
+- Modify mocking data, can swith the data source between API and mocking result
+- adjust layout
+- Add company detail dialog when mouse ove the symbol or right-click menuitem.
+2. To do until next Scrum:
+- Prepare PPT
+- Test functions of app
+3. Need assistance / figure things out
+
+
+2020/04/11 Donghyeok Seo
+1. Done since last scrum
+- Display ReservedTrading list on TradeDialog
+- WatchListUserControl - Draw Pie Chart(TradingRecord)
+
+2. To do until next Scrum:  
+- Add Historical daily price on right click menu in SearchStack tab
+- Create installer *.msi file
+- Refactor CandleChartUserControl
+- bugFix: Refresh WatchList in WatchListUserControl
+
+3. Need assistance / figure things out
+
+*****************************************************
+2020/04/12 Wang Wei
+1. Done since last scrum:
+- Add switch button for switch list view between market and watch list views.
+- stop refreshing threads when reset search result to default list view.
+- Add click button to search result items, so each item can be directly selected by clicking.
+- Modify mocking data, can swith the data source between API and mocking result
+
+2. To do until next Scrum:
+- Prepare PPT
+- Test functions of app
+
+3. Need assistance / figure things out
+
+
+2020/04/12 Donghyeok Seo
+1. Done since last scrum
+- Add Historical daily price on right click menu in SearchStack tab
+- Create installer *.msi file
+- Refactor CandleChartUserControl
+- bugFix: Refresh WatchList in WatchListUserControl
+
+2. To do until next Scrum: 
+- Prepare PPT
+
+3. Need assistance / figure things out
