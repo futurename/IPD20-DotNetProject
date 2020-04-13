@@ -216,10 +216,11 @@ namespace StockMonitor.Models.UIClasses
                 {
                     return "RED";
                 }
-
-                return "GREEN";
+                else if (double.Parse(value.ToString()) > 0)
+                {
+                    return "GREEN";
+                }
             }
-
             return "BLACK";
         }
 

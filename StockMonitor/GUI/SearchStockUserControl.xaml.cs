@@ -83,8 +83,6 @@ namespace GUI
         }
 
 
-
-
         private void InitListViewDataSource()
         {
             GlobalVariables.DefaultUICompanyRows = new BlockingCollection<UIComapnyRow>();
@@ -121,11 +119,9 @@ namespace GUI
             }
         }
 
-
-
+        
         private void LoadAndRefreshDefaultListManager()
         {
-
             foreach (string symbol in companyNames)
             {
                 Task.Run(
