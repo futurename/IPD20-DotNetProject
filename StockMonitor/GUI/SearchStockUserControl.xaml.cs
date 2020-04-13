@@ -316,7 +316,7 @@ namespace GUI
                 Console.Out.WriteLine($"\n!!! Refresh1Mindata exception for {comapnyRow.Symbol} at {DateTime.Now}: {ex.Message}");
             }
         }
-
+        
         private async void RefreshRealTImePrice(UIComapnyRow comapnyRow)
         {
             try

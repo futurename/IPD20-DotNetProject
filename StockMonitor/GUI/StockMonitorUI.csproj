@@ -379,10 +379,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\star.png" />
-    <Resource Include="Resources\false.png" />
-    <Resource Include="Resources\bell.png" />
-    <Resource Include="Resources\bell1.jpg" />
     <Content Include="StockMonitorModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>StockMonitorModel.edmx</DependentUpon>

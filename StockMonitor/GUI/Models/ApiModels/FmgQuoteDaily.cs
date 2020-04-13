@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockMonitor.Models.JSONModels
 {
-    public class FmgCandleDaily
+    public class FmgQuoteDaily
     {
         public DateTime Date { get; set; }
         public double Open { get; set; }

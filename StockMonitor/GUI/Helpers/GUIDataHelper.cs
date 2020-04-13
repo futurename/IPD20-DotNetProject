@@ -89,7 +89,7 @@ namespace StockMonitor.Helpers
             try
             {
                 List<QuoteDaily> result = new List<QuoteDaily>();
-                List<FmgCandleDaily> quoteList = RetrieveJsonDataHelper.RetrieveFmgDataDaily(symbol);
+                List<FmgQuoteDaily> quoteList = RetrieveJsonDataHelper.RetrieveFmgDataDaily(symbol);
                 foreach (var dailyQuote in quoteList)
                 {
                     QuoteDaily quoteDaily = new QuoteDaily
@@ -208,7 +208,7 @@ namespace StockMonitor.Helpers
         {
             try
             {
-                await Task.Run(() => DatabaseHelper.AddItemToWatchList(userId, companyId));
+                await Task.Run(() => DatabaseHelper.InsertItemToWatchList(userId, companyId));
             }
             catch (SystemException ex)
             {

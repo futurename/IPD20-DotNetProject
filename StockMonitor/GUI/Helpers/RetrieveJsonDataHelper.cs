@@ -181,16 +181,16 @@ namespace StockMonitor.Helpers
         }
 
 
-        public static List<FmgCandleDaily> RetrieveFmgDataDaily(string companySymbol)
+        public static List<FmgQuoteDaily> RetrieveFmgDataDaily(string companySymbol)
         {
             string url = FmgBaseUrl + FmgDataDailyUrl + companySymbol;
-            List<FmgCandleDaily> resultTask = RequestFmgDataDaily(url).Result;
+            List<FmgQuoteDaily> resultTask = RequestFmgDataDaily(url).Result;
 
             return resultTask;
         }
 
 
-        private static async Task<List<FmgCandleDaily>> RequestFmgDataDaily(string url)
+        private static async Task<List<FmgQuoteDaily>> RequestFmgDataDaily(string url)
         {
             Task<string> responseTask = RetrieveFromUrl(url);
             string response = await responseTask;
@@ -230,12 +230,12 @@ namespace StockMonitor.Helpers
 
         }
 
-        private static List<FmgCandleDaily> ParseStringToFmgDataDaily(string response)
+        private static List<FmgQuoteDaily> ParseStringToFmgDataDaily(string response)
         {
             try
             {
                 var jsonSet = JsonConvert.DeserializeObject<JObject>(response);
-                var dataDailyList = jsonSet.Value<JArray>("historical").ToObject<List<FmgCandleDaily>>();
+                var dataDailyList = jsonSet.Value<JArray>("historical").ToObject<List<FmgQuoteDaily>>();
 
                 return dataDailyList;
             }

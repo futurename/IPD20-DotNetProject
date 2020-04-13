@@ -19,7 +19,26 @@ namespace StockMonitor.Models.UIClasses
 {
     public class UIComapnyRow : INotifyPropertyChanged, ICloneable
     {
-        public UIComapnyRow(//ex: FormatException
+        public event PropertyChangedEventHandler PropertyChanged;
+        public double Price
+        {
+            get => _price;
+            set
+            {
+                _price = value;
+                OnPropertyChanged("Price");
+                OnPropertyChanged("PriceChange");
+                OnPropertyChanged("ChangePercentage");
+            }
+        }
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+        public UIComapnyRow(
             string symbol,
             double price,
             double openPrice,
@@ -78,18 +97,7 @@ namespace StockMonitor.Models.UIClasses
         public string Symbol { get; set; }
         private double _price;
 
-        public double Price
-        {
-            get => _price;
-            set
-            {
-                _price = value;
-                OnPropertyChanged("Price");
-                OnPropertyChanged("PriceChange");
-                OnPropertyChanged("ChangePercentage");
-               
-            }
-        }
+      
         public int CompanyId { get; set; }
         public double ChangePercentage { get; set; }
         public double PriceChange { get; set; }
@@ -195,13 +203,7 @@ namespace StockMonitor.Models.UIClasses
         {
             return this.MemberwiseClone();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
     }
 
     public class PriceColorValueConverter : IValueConverter

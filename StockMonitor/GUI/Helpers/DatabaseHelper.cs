@@ -35,7 +35,6 @@ namespace StockMonitor.Helpers
                 throw new SystemException($"InsertCompanyToDb exception: {symbol} > {ex.Message}");
             }
         }
-
         public static Company GetCompanyFromDb(string symbol)
         {
             try
@@ -56,7 +55,6 @@ namespace StockMonitor.Helpers
                 throw new SystemException($"GetCompanyFromDb exception: {symbol} > {ex.Message}");
             }
         }
-
         public static List<QuoteDaily> GetQuoteDailyListFromDb(string symbol)
         {
             try
@@ -73,7 +71,6 @@ namespace StockMonitor.Helpers
                 throw new SystemException($"GetQuoteDailyListFromDb exception: {symbol} > {ex.Message}");
             }
         }
-
         public static TradingRecord GetTradingRecordFromDb(int recordId)
         {
             try
@@ -90,7 +87,6 @@ namespace StockMonitor.Helpers
                 throw new SystemException($"GetTradingRecordFromDb exception, id: {recordId} > {ex.Message}");
             }
         }
-
         private static List<int> GetWatchCompanyIdsFromDb(int userId)
         {
             try
@@ -115,7 +111,6 @@ namespace StockMonitor.Helpers
                 throw new SystemException($"GetWatListIdsFromDb exception, id: {userId} > {ex.Message}");
             }
         }
-
         public static List<Company> GetWatchListCompaniesFromDb(int userId)
         {
             try
@@ -139,8 +134,6 @@ namespace StockMonitor.Helpers
                 throw new SystemException($"GetWatchListSymbolsFromDb exception, id: {userId} > {ex.Message}");
             }
         }
-
-
         public static void DeleteFromWatchListById(int userId, int companyId)
         {
             try
@@ -169,8 +162,7 @@ namespace StockMonitor.Helpers
             }
 
         }
-
-        public static void AddItemToWatchList(int userId, int companyId)
+        public static void InsertItemToWatchList(int userId, int companyId)
         {
             try
             {
@@ -197,8 +189,6 @@ namespace StockMonitor.Helpers
             }
 
         }
-
-
         public static List<Company> SearchCompanyListBySymbol(string searchString)
         {
             try
