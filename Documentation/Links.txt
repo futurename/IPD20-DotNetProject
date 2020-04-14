@@ -1,0 +1,5 @@
+Git:	https://github.com/futurename/IPD20-DotNetProject
+
+Trello:    https://trello.com/b/FjltvIyB/ipd20dotnetproject
+
+	
