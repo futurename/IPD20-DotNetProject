@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\StockMonitor"
+    "\\Documentation",
+    "\\StockMonitor\\GUI",
+    "\\StockMonitor\\GUI\\Helpers"
   ],
+  "SelectedNode": "\\Documentation\\ProjectStockMonitor.pptx",
   "PreviewInSolutionExplorer": false
 }
